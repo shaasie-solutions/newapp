@@ -13,33 +13,33 @@ frappe.ui.form.on("Haulage Trip", {
 		if (frm.is_new()) {
 			return;
 		}
-		frm.add_custom_button(__("طباعة ورقة التشغيل"), () => {
+		frm.add_custom_button(__("Print dispatch sheet"), () => {
 			frappe.set_route("print", frm.doctype, frm.doc.name, "Haulage Trip Dispatch");
 		});
 		frm.add_custom_button(
-			__("إنشاء فاتورة بيع للشحنة"),
+			__("Create Sales Invoice for shipment"),
 			() => haulage_mgmt.trip.prompt_sales_invoice(frm),
-			__("الإيرادات"),
+			__("Revenue"),
 		);
 		if (!frm.doc.trip_journal_entry && frm.doc.trip_status !== "Cancelled") {
 			frm.add_custom_button(
-				__("إنشاء قيد مصروفات (مسودة)"),
+				__("Create expense journal (draft)"),
 				() => haulage_mgmt.trip.create_expense_je(frm),
-				__("المحاسبة"),
+				__("Accounting"),
 			);
 		}
 		if (frm.doc.trip_journal_entry) {
 			frm.add_custom_button(
-				__("فتح قيد المصروفات"),
+				__("Open expense journal"),
 				() => frappe.set_route("Form", "Journal Entry", frm.doc.trip_journal_entry),
-				__("المحاسبة"),
+				__("Accounting"),
 			);
 		}
-		frm.add_custom_button(__("بدء"), () => haulage_mgmt.trip.append_event(frm, "Start"), __("أحداث سريعة"));
-		frm.add_custom_button(__("وقف مؤقت"), () => haulage_mgmt.trip.append_event(frm, "Pause"), __("أحداث سريعة"));
-		frm.add_custom_button(__("استئناف"), () => haulage_mgmt.trip.append_event(frm, "Resume"), __("أحداث سريعة"));
-		frm.add_custom_button(__("وصول"), () => haulage_mgmt.trip.append_event(frm, "Arrival"), __("أحداث سريعة"));
-		frm.add_custom_button(__("رجوع"), () => haulage_mgmt.trip.append_event(frm, "Return"), __("أحداث سريعة"));
+		frm.add_custom_button(__("Start"), () => haulage_mgmt.trip.append_event(frm, "Start"), __("Quick events"));
+		frm.add_custom_button(__("Pause"), () => haulage_mgmt.trip.append_event(frm, "Pause"), __("Quick events"));
+		frm.add_custom_button(__("Resume"), () => haulage_mgmt.trip.append_event(frm, "Resume"), __("Quick events"));
+		frm.add_custom_button(__("Arrival"), () => haulage_mgmt.trip.append_event(frm, "Arrival"), __("Quick events"));
+		frm.add_custom_button(__("Return"), () => haulage_mgmt.trip.append_event(frm, "Return"), __("Quick events"));
 	},
 });
 
@@ -56,7 +56,7 @@ haulage_mgmt.trip.create_expense_je = function (frm) {
 		method: "haulage_mgmt.haulage_logistics.api.create_trip_expense_journal_entry",
 		args: { trip_name: frm.doc.name },
 		freeze: true,
-		freeze_message: __("جاري إنشاء القيد..."),
+		freeze_message: __("Creating journal entry..."),
 		callback(r) {
 			if (!r.exc && r.message && r.message.name) {
 				frm.reload_doc();
@@ -69,21 +69,21 @@ haulage_mgmt.trip.create_expense_je = function (frm) {
 haulage_mgmt.trip.prompt_sales_invoice = function (frm) {
 	const requests = (frm.doc.shipments || []).map((r) => r.shipping_request).filter(Boolean);
 	if (!requests.length) {
-		frappe.msgprint(__("لا توجد شحنات مرتبطة بالرحلة."));
+		frappe.msgprint(__("No shipments linked to this trip."));
 		return;
 	}
 	const d = new frappe.ui.Dialog({
-		title: __("اختر طلب الشحن"),
+		title: __("Select shipping request"),
 		fields: [
 			{
 				fieldname: "shipping_request",
 				fieldtype: "Select",
-				label: __("طلب الشحن"),
+				label: __("Shipping request"),
 				options: requests.join("\n"),
 				reqd: 1,
 			},
 		],
-		primary_action_label: __("إنشاء مسودة فاتورة"),
+		primary_action_label: __("Create draft invoice"),
 		primary_action(values) {
 			frappe.call({
 				method: "haulage_mgmt.haulage_logistics.api.create_sales_invoice_from_shipment",
@@ -92,7 +92,7 @@ haulage_mgmt.trip.prompt_sales_invoice = function (frm) {
 					shipping_request_name: values.shipping_request,
 				},
 				freeze: true,
-				freeze_message: __("جاري إنشاء الفاتورة..."),
+				freeze_message: __("Creating invoice..."),
 				callback(r) {
 					if (!r.exc && r.message && r.message.name) {
 						frappe.set_route("Form", "Sales Invoice", r.message.name);

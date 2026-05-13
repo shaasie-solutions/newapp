@@ -3,7 +3,7 @@
  "creation": "2026-05-13 12:00:00",
  "css": ".hm-box{border:1px solid #ccc;padding:10px;margin-bottom:10px}",
  "custom_format": 0,
- "default_print_language": "ar",
+ "default_print_language": "",
  "disabled": 0,
  "doc_type": "Haulage Trip",
  "docstatus": 0,
@@ -24,5 +24,5 @@
  "raw_printing": 0,
  "show_section_headings": 0,
  "standard": "Yes",
- "html": "<div class=\"hm-box\"><h2>ورقة تشغيل — {{ doc.name }}</h2><p><b>الحالة:</b> {{ doc.trip_status }}</p><p><b>خط السير:</b> {{ doc.shipping_route or '' }}</p><p><b>الشاحنة:</b> {{ doc.truck or '' }}</p><p><b>السائق:</b> {{ doc.driver or '' }}</p><p><b>الإقلاع:</b> {% if doc.departure_date %}{{ frappe.utils.format_datetime(doc.departure_date) }}{% else %}-{% endif %}</p></div><h4>الشحنات</h4><table class=\"table table-bordered\"><thead><tr><th>طلب الشحن</th></tr></thead><tbody>{% for r in doc.shipments %}<tr><td>{{ r.shipping_request }}</td></tr>{% endfor %}</tbody></table><h4>أحداث التنفيذ</h4><table class=\"table table-bordered\"><thead><tr><th>الحدث</th><th>الوقت</th></tr></thead><tbody>{% for ev in doc.trip_events %}<tr><td>{{ ev.event_type }}</td><td>{% if ev.event_datetime %}{{ frappe.utils.format_datetime(ev.event_datetime) }}{% endif %}</td></tr>{% endfor %}</tbody></table><h4>المصروفات</h4><table class=\"table table-bordered\"><thead><tr><th>النوع</th><th>المبلغ</th><th>التاريخ</th></tr></thead><tbody>{% for e in doc.trip_expenses %}<tr><td>{{ e.expense_type }}</td><td>{{ e.amount }}</td><td>{{ e.expense_date }}</td></tr>{% endfor %}</tbody></table>{% if doc.operational_notes %}<p><b>ملاحظات:</b> {{ doc.operational_notes }}</p>{% endif %}"
+ "html": "<div class=\"hm-box\"><h2>{{ _('Trip Sheet') }} — {{ doc.name }}</h2><p><b>{{ _('Status') }}:</b> {{ doc.trip_status }}</p><p><b>{{ _('Route') }}:</b> {{ doc.shipping_route or '' }}</p><p><b>{{ _('Truck') }}:</b> {{ doc.truck or '' }}</p><p><b>{{ _('Driver') }}:</b> {{ doc.driver or '' }}</p><p><b>{{ _('Departure') }}:</b> {% if doc.departure_date %}{{ frappe.utils.format_datetime(doc.departure_date) }}{% else %}-{% endif %}</p></div><h4>{{ _('Shipments') }}</h4><table class=\"table table-bordered\"><thead><tr><th>{{ _('Shipping Request') }}</th></tr></thead><tbody>{% for r in doc.shipments %}<tr><td>{{ r.shipping_request }}</td></tr>{% endfor %}</tbody></table><h4>{{ _('Execution events') }}</h4><table class=\"table table-bordered\"><thead><tr><th>{{ _('Event') }}</th><th>{{ _('Time') }}</th></tr></thead><tbody>{% for ev in doc.trip_events %}<tr><td>{{ ev.event_type }}</td><td>{% if ev.event_datetime %}{{ frappe.utils.format_datetime(ev.event_datetime) }}{% endif %}</td></tr>{% endfor %}</tbody></table><h4>{{ _('Expenses') }}</h4><table class=\"table table-bordered\"><thead><tr><th>{{ _('Type') }}</th><th>{{ _('Amount') }}</th><th>{{ _('Date') }}</th></tr></thead><tbody>{% for e in doc.trip_expenses %}<tr><td>{{ e.expense_type }}</td><td>{{ e.amount }}</td><td>{{ e.expense_date }}</td></tr>{% endfor %}</tbody></table>{% if doc.operational_notes %}<p><b>{{ _('Notes') }}:</b> {{ doc.operational_notes }}</p>{% endif %}"
 }

@@ -10,5 +10,5 @@ class HaulageExpenseType(Document):
         root_type = frappe.db.get_value("Account", self.account, "root_type")
         if root_type and root_type != "Expense":
             frappe.throw(
-                _("حقل الحساب يجب أن يشير إلى حساب من نوع «مصروف» (Expense) في دليل الحسابات.")
+                _("The account must be an Expense account in the Chart of Accounts.")
             )

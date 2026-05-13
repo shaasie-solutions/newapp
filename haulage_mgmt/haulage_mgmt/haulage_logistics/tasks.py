@@ -4,7 +4,7 @@ from frappe.utils import add_days, getdate, today
 
 
 def send_fleet_expiry_reminders():
-    """تذكير يومي عبر مهمة: وثائق شاحنات وسائقين تنتهي خلال 30 يوماً."""
+    """Daily reminders for truck and driver documents expiring within 30 days."""
     horizon = add_days(today(), 30)
     trucks = frappe.get_all(
         "Truck",
@@ -30,16 +30,16 @@ def send_fleet_expiry_reminders():
     for t in trucks:
         if t.license_end_date and getdate(t.license_end_date) <= getdate(horizon):
             lines.append(
-                _("شاحنة {0}: انتهاء الترخيص {1}").format(t.license_plate or t.name, t.license_end_date)
+                _("Truck {0}: license expires {1}").format(t.license_plate or t.name, t.license_end_date)
             )
         if t.insurance_end_date and getdate(t.insurance_end_date) <= getdate(horizon):
             lines.append(
-                _("شاحنة {0}: انتهاء التأمين {1}").format(t.license_plate or t.name, t.insurance_end_date)
+                _("Truck {0}: insurance expires {1}").format(t.license_plate or t.name, t.insurance_end_date)
             )
     for d in drivers:
         if d.license_expiry and getdate(d.license_expiry) <= getdate(horizon):
             lines.append(
-                _("سائق {0}: انتهاء الرخصة {1}").format(d.full_name or d.name, d.license_expiry)
+                _("Driver {0}: license expires {1}").format(d.full_name or d.name, d.license_expiry)
             )
 
     if not lines:
@@ -63,7 +63,7 @@ def send_fleet_expiry_reminders():
             continue
         try:
             td = frappe.new_doc("ToDo")
-            td.description = prefix + _("وثائق تنتهي قريباً:\n") + body
+            td.description = prefix + _("Documents expiring soon:\n") + body
             td.allocated_to = user
             td.status = "Open"
             td.priority = "Medium"

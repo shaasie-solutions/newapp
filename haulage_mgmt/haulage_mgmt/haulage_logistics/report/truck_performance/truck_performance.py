@@ -7,26 +7,26 @@ def get_filters():
     return [
         {
             "fieldname": "truck",
-            "label": _("الشاحنة"),
+            "label": _("Truck"),
             "fieldtype": "Link",
             "options": "Truck",
             "reqd": 0,
         },
         {
             "fieldname": "from_date",
-            "label": _("من تاريخ"),
+            "label": _("From date"),
             "fieldtype": "Date",
             "reqd": 0,
         },
         {
             "fieldname": "to_date",
-            "label": _("إلى تاريخ"),
+            "label": _("To date"),
             "fieldtype": "Date",
             "reqd": 0,
         },
         {
             "fieldname": "include_inactive",
-            "label": _("عرض من ليس لها رحلات في الفترة"),
+            "label": _("Include trucks with no trips in period"),
             "fieldtype": "Check",
             "default": 0,
         },
@@ -37,16 +37,16 @@ def execute(filters=None):
     filters = filters or {}
     columns = [
         {
-            "label": _("الشاحنة"),
+            "label": _("Truck"),
             "fieldname": "truck",
             "fieldtype": "Link",
             "options": "Truck",
             "width": 160,
         },
-        {"label": _("عدد الرحلات"), "fieldname": "trip_count", "fieldtype": "Int", "width": 100},
-        {"label": _("عدد الشحنات"), "fieldname": "shipment_count", "fieldtype": "Int", "width": 110},
-        {"label": _("إجمالي المصروفات"), "fieldname": "total_expenses", "fieldtype": "Currency", "width": 130},
-        {"label": _("إجمالي الإيرادات (متفق)"), "fieldname": "total_revenue", "fieldtype": "Currency", "width": 150},
+        {"label": _("Trip count"), "fieldname": "trip_count", "fieldtype": "Int", "width": 100},
+        {"label": _("Shipment count"), "fieldname": "shipment_count", "fieldtype": "Int", "width": 110},
+        {"label": _("Total expenses"), "fieldname": "total_expenses", "fieldtype": "Currency", "width": 130},
+        {"label": _("Total agreed revenue"), "fieldname": "total_revenue", "fieldtype": "Currency", "width": 150},
     ]
 
     inner_where = ["1=1"]

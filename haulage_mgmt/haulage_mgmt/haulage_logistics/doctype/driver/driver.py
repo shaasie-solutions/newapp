@@ -8,7 +8,7 @@ class Driver(Document):
     def validate(self):
         if self.license_expiry and getdate(self.license_expiry) < getdate(today()):
             frappe.msgprint(
-                _("تاريخ انتهاء رخصة القيادة منتهٍ أو منقضٍ."),
+                _("Driver license appears expired or past."),
                 indicator="red",
-                title=_("رخصة السائق"),
+                title=_("Driver license"),
             )

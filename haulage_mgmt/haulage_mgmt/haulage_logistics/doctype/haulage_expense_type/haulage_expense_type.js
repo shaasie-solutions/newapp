@@ -2,7 +2,7 @@ frappe.ui.form.on("Haulage Expense Type", {
 	refresh(frm) {
 		if (frm.doc.account) {
 			frm.add_custom_button(
-				__("فتح الحساب"),
+				__("Open Account"),
 				() => frappe.set_route("Form", "Account", frm.doc.account),
 				__("ERPNext"),
 			);

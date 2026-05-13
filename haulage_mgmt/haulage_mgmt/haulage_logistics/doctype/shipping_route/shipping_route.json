@@ -18,7 +18,7 @@
    "fieldname": "route_name",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "اسم المسار",
+   "label": "Route Name",
    "reqd": 1,
    "unique": 1
   },
@@ -26,30 +26,30 @@
    "fieldname": "loading_city",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "مدينة التحميل",
+   "label": "Loading City",
    "reqd": 1
   },
   {
    "fieldname": "delivery_city",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "مدينة التسليم",
+   "label": "Delivery City",
    "reqd": 1
   },
   {
    "fieldname": "approximate_distance_km",
    "fieldtype": "Float",
-   "label": "المسافة التقريبية (كم)"
+   "label": "Approx. Distance (km)"
   },
   {
    "fieldname": "expected_duration_hours",
    "fieldtype": "Float",
-   "label": "الزمن المتوقع (ساعات)"
+   "label": "Expected Duration (hours)"
   },
   {
    "fieldname": "remarks",
    "fieldtype": "Small Text",
-   "label": "ملاحظات"
+   "label": "Remarks"
   }
  ],
  "index_web_pages_for_search": 1,

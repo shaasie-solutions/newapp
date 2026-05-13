@@ -10,7 +10,7 @@
    "fieldname": "shipping_request",
    "fieldtype": "Link",
    "in_list_view": 1,
-   "label": "طلب الشحن",
+   "label": "Shipping Request",
    "options": "Shipping Request",
    "reqd": 1,
    "unique": 1
@@ -19,14 +19,14 @@
    "fieldname": "cargo_prepared",
    "fieldtype": "Check",
    "default": "0",
-   "label": "تم تجهيز البضائع المحمولة"
+   "label": "Cargo Prepared"
   },
   {
    "fieldname": "preparation_status",
    "fieldtype": "Select",
    "in_list_view": 1,
    "in_standard_filter": 1,
-   "label": "حالة التجهيز",
+   "label": "Preparation Status",
    "options": "Under Preparation\nReady for Trip\nEntered Trip",
    "default": "Under Preparation",
    "reqd": 1

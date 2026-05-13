@@ -1,26 +1,35 @@
-# haulage_mgmt — تطبيق لوجستيات الشحن لـ ERPNext
+# haulage_mgmt — haulage logistics for ERPNext
 
-تطبيق **Frappe** يعتمد على **ERPNext** لإدارة طلبات الشحن بالشاحنات: أسطول، سائقون، مسارات، رحلات، مصروفات، فواتير بيع، وقيد يومية للمصروفات.
+A **Frappe** app on **ERPNext** for truck shipping: fleet, drivers, routes, trips, expenses, Sales Invoices, and draft Journal Entries for trip costs.
 
-**الإصدار:** انظر `haulage_mgmt/__init__.py` ووسوم Git (مثل `v0.1.0`).
-
----
-
-## المتطلبات
-
-- [Frappe Bench](https://docs.frappe.io/framework/user/en/installation) مع موقع يعمل عليه **ERPNext**
-- Python 3.10+ (حسب إصدار الـ bench لديك)
+**Version:** see `haulage_mgmt/__init__.py` and Git tags (e.g. `v0.1.0`).
 
 ---
 
-## التثبيت
+## Language (English UI + Arabic)
 
-انسخ المجلد `haulage_mgmt` داخل مجلد `apps` في الـ bench، أو أضفه كمصدر git:
+- **Source strings** in the app are **English** (Python `_("…")`, client `__(…)`, DocType labels, workspace, print format).
+- **Arabic** is supplied via the official Frappe pattern: CSV at **`translations/ar.csv`** in the app root (next to `setup.py`). See the [Frappe translations guide](https://docs.frappe.io/framework/user/en/guides/basics/translations).
+- After changing `ar.csv` or adding client strings, run **`bench --site <yoursite> clear-cache`**. If you change client-translated strings, also run **`bench build --app haulage_mgmt`**.
+- Users see Arabic when their **Desk language** is set to Arabic (and translations are loaded).
+
+---
+
+## Requirements
+
+- [Frappe Bench](https://docs.frappe.io/framework/user/en/installation) with a site that has **ERPNext** installed
+- Python 3.10+ (match your bench environment)
+
+---
+
+## Install
+
+Copy the `haulage_mgmt` folder under your bench `apps` directory, or add it from git:
 
 ```bash
 cd /path/to/frappe-bench
 bench get-app /path/to/newapp/haulage_mgmt haulage_mgmt
-# أو: نسخ المجلد يدوياً ثم:
+# or after copying the folder manually:
 bench get-app ./apps/haulage_mgmt
 
 bench --site yoursite.com install-app haulage_mgmt
@@ -28,71 +37,72 @@ bench --site yoursite.com migrate
 bench build --app haulage_mgmt
 ```
 
-بعد التثبيت، نفّذ **Migrate** عند كل تحديث للتطبيق.
+Run **Migrate** whenever you update the app.
 
 ---
 
-## الإعداد الأولي
+## Initial setup
 
-1. **Haulage Logistics Settings** (إعدادات لوجستيات الشحن)  
-   - **صنف خدمة الشحن الافتراضي:** صنف `Item` (خدمة) يُستخدم في سطر فاتورة البيع عند زر «إنشاء فاتورة بيع للشحنة».  
-   - **حساب دائن لترحيل مصروفات الرحلة:** حساب من دليل الحسابات (ليس من نوع Expense) لقيد يومية المصروفات.
+1. **Haulage Logistics Settings**
+   - **Default freight Item (Sales Invoice):** an `Item` (typically a service) used on the Sales Invoice line when you use **Create Sales Invoice for shipment**.
+   - **Trip expense credit account (Journal Entry):** a Chart of Accounts account that is **not** of root type Expense (e.g. cash or a clearing account) for the credit side of the trip expense JE.
 
-2. **الأدوار**  
-   - يُنشأ دور **Fleet Manager** تلقائياً عند `migrate`. عيّنه للمستخدمين من نموذج **User**.  
-   - لزر «إنشاء قيد مصروفات»: يحتاج المستخدم صلاحية **إنشاء Journal Entry** (غالباً عبر **Role Permission Manager**).
+2. **Roles**
+   - **Fleet Manager** is created on `migrate`. Assign it on **User** as needed.
+   - For **Create expense journal (draft)**, users need permission to create **Journal Entry** (often via **Role Permission Manager**).
 
-3. **المجدول (Scheduler)**  
-   - مهمة يومية للتذكير بوثائق الشاحنات/السائقين (مهام **ToDo**). تأكد من تشغيل `bench schedule` أو البيئة المعتادة لديك.
-
----
-
-## تسلسل العمل المقترح
-
-1. البيانات الأساسية: شاحنات، سائقون، خطوط سير، أنواع مصروفات (مع ربط حساب مصروف).  
-2. **Customer** في ERPNext للعملاء.  
-3. **Shipping Request** (طلب شحن).  
-4. **Shipment Preparation** (تجهيز) حتى تصبح الشحنة جاهزة للرحلة.  
-5. **Haulage Trip** (رحلة) مع ربط الشحنات والشاحنة والسائق والشركة.  
-6. أحداث الرحلة، المصروفات، فاتورة البيع، قيد يومية المصروفات عند الحاجة.  
-7. التقارير من وحدة **Haulage Logistics** أو من Workspace المكتب.
+3. **Scheduler**
+   - A daily job creates **ToDo** reminders for expiring truck/driver documents. Ensure `bench schedule` (or your hosting equivalent) is running.
 
 ---
 
-## المكوّنات الرئيسية
+## Suggested workflow
 
-| نوع المستند / الميزة | الوصف |
-|----------------------|--------|
-| Truck, Driver | بيانات الأسطول والسائقين |
-| Shipping Route | خطوط السير |
-| Haulage Expense Type | أنواع مصروفات + ربط `Account` |
-| Shipping Request | طلب شحن مرتبط بالعميل |
-| Shipment Preparation | تجهيز الشحنة قبل الرحلة |
-| Haulage Trip | رحلة تشغيل مع شحنات وأحداث ومصروفات |
-| تقارير Script | Trip Financial Summary, Driver Performance, Truck Performance |
-| Workspace | لوحة «إدارة الشحن» في Desk |
-| لوحة العميل | ربط **Shipping Request** من بطاقة **Customer** |
-| Print Format | Haulage Trip Dispatch |
+1. Master data: trucks, drivers, shipping routes, haulage expense types (each linked to an expense **Account**).
+2. **Customer** in ERPNext for clients.
+3. **Shipping Request**
+4. **Shipment Preparation** until the cargo is **Ready for Trip**.
+5. **Haulage Trip** with shipments, truck, driver, and company.
+6. Trip events, expenses, Sales Invoice, and expense Journal Entry as needed.
+7. Reports under **Haulage Logistics** or the **Fleet Haulage** workspace.
 
 ---
 
-## واجهات برمجية (Whitelisted)
+## Main components
 
-- `haulage_mgmt.haulage_logistics.api.create_sales_invoice_from_shipment`  
-- `haulage_mgmt.haulage_logistics.api.create_trip_expense_journal_entry`  
-
-تُستدعى من أزرار نموذج **Haulage Trip** في الواجهة.
+| DocType / feature | Description |
+|-------------------|-------------|
+| Truck, Driver | Fleet master data |
+| Shipping Route | Routes |
+| Haulage Expense Type | Expense categories + **Account** link |
+| Shipping Request | Customer shipping request |
+| Shipment Preparation | Pre-trip cargo preparation |
+| Haulage Trip | Operational trip with shipments, events, expenses |
+| Script reports | Trip Financial Summary, Driver Performance, Truck Performance |
+| Workspace | Fleet Haulage desk shortcuts |
+| Customer dashboard | Shipping requests from **Customer** |
+| Print format | Haulage Trip Dispatch |
 
 ---
 
-## الترخيص
+## Whitelisted API
 
-انظر `license.txt` (MIT ما لم يُنص على غير ذلك).
+- `haulage_mgmt.haulage_logistics.api.create_sales_invoice_from_shipment`
+- `haulage_mgmt.haulage_logistics.api.create_trip_expense_journal_entry`
+
+Used by buttons on **Haulage Trip**.
 
 ---
 
-## مراجع رسمية
+## License
 
-- [Frappe Framework](https://docs.frappe.io/framework)  
-- [ERPNext](https://docs.frappe.io/erpnext)  
-- [Custom Apps](https://docs.frappe.io/erpnext/user/manual/en/customize-erpnext)
+See `license.txt` (MIT unless stated otherwise).
+
+---
+
+## Official references
+
+- [Frappe Framework](https://docs.frappe.io/framework)
+- [ERPNext](https://docs.frappe.io/erpnext)
+- [Custom apps](https://docs.frappe.io/erpnext/user/manual/en/customize-erpnext)
+- [Translations](https://docs.frappe.io/framework/user/en/guides/basics/translations)

@@ -15,7 +15,7 @@
   {
    "hidden": 0,
    "is_query_report": 0,
-   "label": "التقارير",
+   "label": "Reports",
    "link_count": 3,
    "link_type": "DocType",
    "onboard": 0,
@@ -24,7 +24,7 @@
   {
    "hidden": 0,
    "is_query_report": 1,
-   "label": "تقرير الرحلات المالية",
+   "label": "Trip Financial Summary",
    "link_count": 0,
    "link_to": "Trip Financial Summary",
    "link_type": "Report",
@@ -34,7 +34,7 @@
   {
    "hidden": 0,
    "is_query_report": 1,
-   "label": "أداء السائقين",
+   "label": "Driver Performance",
    "link_count": 0,
    "link_to": "Driver Performance",
    "link_type": "Report",
@@ -44,7 +44,7 @@
   {
    "hidden": 0,
    "is_query_report": 1,
-   "label": "أداء الشاحنات",
+   "label": "Truck Performance",
    "link_count": 0,
    "link_to": "Truck Performance",
    "link_type": "Report",
@@ -68,7 +68,7 @@
   {
    "color": "Blue",
    "doc_view": "List",
-   "label": "طلبات الشحن",
+   "label": "Shipping Requests",
    "link_to": "Shipping Request",
    "stats_filter": "[]",
    "type": "DocType"
@@ -76,7 +76,7 @@
   {
    "color": "Green",
    "doc_view": "List",
-   "label": "الرحلات",
+   "label": "Trips",
    "link_to": "Haulage Trip",
    "stats_filter": "[]",
    "type": "DocType"
@@ -84,7 +84,7 @@
   {
    "color": "Grey",
    "doc_view": "List",
-   "label": "تجهيز الشحنات",
+   "label": "Shipment Preparations",
    "link_to": "Shipment Preparation",
    "stats_filter": "[]",
    "type": "DocType"
@@ -92,7 +92,7 @@
   {
    "color": "Orange",
    "doc_view": "List",
-   "label": "الشاحنات",
+   "label": "Trucks",
    "link_to": "Truck",
    "stats_filter": "[]",
    "type": "DocType"
@@ -100,7 +100,7 @@
   {
    "color": "Cyan",
    "doc_view": "List",
-   "label": "السائقون",
+   "label": "Drivers",
    "link_to": "Driver",
    "stats_filter": "[]",
    "type": "DocType"
@@ -108,7 +108,7 @@
   {
    "color": "Grey",
    "doc_view": "List",
-   "label": "خطوط السير",
+   "label": "Shipping Routes",
    "link_to": "Shipping Route",
    "stats_filter": "[]",
    "type": "DocType"
@@ -116,7 +116,7 @@
   {
    "color": "Grey",
    "doc_view": "List",
-   "label": "أنواع المصروفات",
+   "label": "Haulage Expense Types",
    "link_to": "Haulage Expense Type",
    "stats_filter": "[]",
    "type": "DocType"
@@ -124,12 +124,12 @@
   {
    "color": "Red",
    "doc_view": "Form",
-   "label": "إعدادات الشحن",
+   "label": "Haulage Logistics Settings",
    "link_to": "Haulage Logistics Settings",
    "stats_filter": "[]",
    "type": "DocType"
   }
  ],
- "title": "إدارة الشحن",
+ "title": "Fleet Haulage",
  "type": "Workspace"
 }

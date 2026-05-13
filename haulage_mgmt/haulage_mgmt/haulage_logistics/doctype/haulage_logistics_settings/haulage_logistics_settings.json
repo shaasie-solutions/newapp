@@ -8,7 +8,7 @@
   {
    "fieldname": "default_freight_item",
    "fieldtype": "Link",
-   "label": "صنف خدمة الشحن الافتراضي (لفاتورة البيع)",
+   "label": "Default Freight Item (Sales Invoice)",
    "options": "Item"
   },
   {
@@ -18,9 +18,9 @@
   {
    "fieldname": "trip_expense_credit_account",
    "fieldtype": "Link",
-   "label": "حساب دائن لترحيل مصروفات الرحلة (قيد يومية)",
+   "label": "Trip Expense Credit Account (Journal Entry)",
    "options": "Account",
-   "description": "يُجمَع إجمالي المصروفات على هذا الحساب (مثلاً نقدية بالصندوق أو ذمم مؤقتة). لكل سطر مصروف يُستخدم حساب نوع المصروف كمدين."
+   "description": "Total trip expenses are credited to this account (e.g. cash or clearing). Each expense line debits the expense type account."
   }
  ],
  "index_web_pages_for_search": 1,

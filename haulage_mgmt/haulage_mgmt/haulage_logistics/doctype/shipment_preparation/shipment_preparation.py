@@ -12,7 +12,7 @@ class ShipmentPreparation(Document):
         )
         conflict = [n for n in others if n != self.name]
         if conflict:
-            frappe.throw(_("يوجد سجل تجهيز آخر لنفس طلب الشحن."))
+            frappe.throw(_("Another preparation record already exists for this shipping request."))
 
 
 def sync_shipping_request_status(doc, method=None):

@@ -2,11 +2,11 @@ from frappe import _
 
 
 def get_dashboard_data(data=None, **kwargs):
-    """يضيف طلبات الشحن إلى لوحة تحكم العميل في ERPNext."""
+    """Append Shipping Request to the Customer dashboard."""
     if data is None:
         data = {}
     if not isinstance(data, dict):
         return data
     transactions = data.setdefault("transactions", [])
-    transactions.append({"label": _("الشحن والأسطول"), "items": ["Shipping Request"]})
+    transactions.append({"label": _("Fleet & Haulage"), "items": ["Shipping Request"]})
     return data

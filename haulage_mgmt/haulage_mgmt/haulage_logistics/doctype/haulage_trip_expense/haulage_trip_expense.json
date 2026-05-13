@@ -17,7 +17,7 @@
    "fieldname": "expense_type",
    "fieldtype": "Link",
    "in_list_view": 1,
-   "label": "نوع المصروف",
+   "label": "Expense Type",
    "options": "Haulage Expense Type",
    "reqd": 1
   },
@@ -25,7 +25,7 @@
    "fieldname": "amount",
    "fieldtype": "Currency",
    "in_list_view": 1,
-   "label": "القيمة",
+   "label": "Amount",
    "reqd": 1
   },
   {
@@ -33,23 +33,23 @@
    "fieldtype": "Date",
    "default": "Today",
    "in_list_view": 1,
-   "label": "التاريخ",
+   "label": "Date",
    "reqd": 1
   },
   {
    "fieldname": "party",
    "fieldtype": "Data",
-   "label": "المستلم / الدافع"
+   "label": "Recipient / Paid To"
   },
   {
    "fieldname": "receipt",
    "fieldtype": "Attach",
-   "label": "مرفق إيصال"
+   "label": "Receipt Attachment"
   },
   {
    "fieldname": "remarks",
    "fieldtype": "Small Text",
-   "label": "ملاحظات"
+   "label": "Remarks"
   }
  ],
  "istable": 1,

@@ -7,20 +7,20 @@ def get_filters():
     return [
         {
             "fieldname": "trip",
-            "label": _("الرحلة"),
+            "label": _("Trip"),
             "fieldtype": "Link",
             "options": "Haulage Trip",
             "reqd": 0,
         },
         {
             "fieldname": "from_date",
-            "label": _("من تاريخ"),
+            "label": _("From date"),
             "fieldtype": "Date",
             "reqd": 0,
         },
         {
             "fieldname": "to_date",
-            "label": _("إلى تاريخ"),
+            "label": _("To date"),
             "fieldtype": "Date",
             "reqd": 0,
         },
@@ -31,25 +31,25 @@ def execute(filters=None):
     filters = filters or {}
     columns = [
         {
-            "label": _("رقم الرحلة"),
+            "label": _("Trip No."),
             "fieldname": "trip",
             "fieldtype": "Link",
             "options": "Haulage Trip",
             "width": 140,
         },
-        {"label": _("الحالة"), "fieldname": "trip_status", "fieldtype": "Data", "width": 100},
-        {"label": _("السائق"), "fieldname": "driver", "fieldtype": "Link", "options": "Driver", "width": 120},
-        {"label": _("الشاحنة"), "fieldname": "truck", "fieldtype": "Link", "options": "Truck", "width": 120},
+        {"label": _("Status"), "fieldname": "trip_status", "fieldtype": "Data", "width": 100},
+        {"label": _("Driver"), "fieldname": "driver", "fieldtype": "Link", "options": "Driver", "width": 120},
+        {"label": _("Truck"), "fieldname": "truck", "fieldtype": "Link", "options": "Truck", "width": 120},
         {
-            "label": _("المسار"),
+            "label": _("Route"),
             "fieldname": "shipping_route",
             "fieldtype": "Link",
             "options": "Shipping Route",
             "width": 140,
         },
-        {"label": _("الإيرادات"), "fieldname": "revenue", "fieldtype": "Currency", "width": 110},
-        {"label": _("المصروفات"), "fieldname": "expenses", "fieldtype": "Currency", "width": 110},
-        {"label": _("صافي الدخل"), "fieldname": "net_income", "fieldtype": "Currency", "width": 110},
+        {"label": _("Revenue"), "fieldname": "revenue", "fieldtype": "Currency", "width": 110},
+        {"label": _("Expenses"), "fieldname": "expenses", "fieldtype": "Currency", "width": 110},
+        {"label": _("Net income"), "fieldname": "net_income", "fieldtype": "Currency", "width": 110},
     ]
 
     conditions = []

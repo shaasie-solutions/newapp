@@ -8,13 +8,13 @@ class Truck(Document):
     def validate(self):
         if self.license_end_date and getdate(self.license_end_date) < getdate(today()):
             frappe.msgprint(
-                _("انتهاء ترخيص الشاحنة مسجّل كمنقضٍ."),
+                _("Truck license appears expired."),
                 indicator="red",
-                title=_("الترخيص"),
+                title=_("License"),
             )
         if self.insurance_end_date and getdate(self.insurance_end_date) < getdate(today()):
             frappe.msgprint(
-                _("انتهاء التأمين مسجّل كمنقضٍ."),
+                _("Truck insurance appears expired."),
                 indicator="orange",
-                title=_("التأمين"),
+                title=_("Insurance"),
             )

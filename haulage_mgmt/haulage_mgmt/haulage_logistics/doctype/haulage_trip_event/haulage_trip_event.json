@@ -10,7 +10,7 @@
    "fieldname": "event_type",
    "fieldtype": "Select",
    "in_list_view": 1,
-   "label": "نوع الحدث",
+   "label": "Event Type",
    "options": "Start\nPause\nResume\nArrival\nReturn",
    "reqd": 1
   },
@@ -18,13 +18,13 @@
    "fieldname": "event_datetime",
    "fieldtype": "Datetime",
    "in_list_view": 1,
-   "label": "الوقت",
+   "label": "Event Date & Time",
    "reqd": 1
   },
   {
    "fieldname": "notes",
    "fieldtype": "Small Text",
-   "label": "ملاحظات"
+   "label": "Remarks"
   }
  ],
  "istable": 1,

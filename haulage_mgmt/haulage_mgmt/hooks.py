@@ -1,7 +1,9 @@
 app_name = "haulage_mgmt"
-app_title = "إدارة الشحن بالشاحنات"
+app_title = "Haulage Management"
 app_publisher = "Haulage Mgmt"
-app_description = "طلبات شحن، تجهيز، رحلات، مصروفات، وربط فواتير البيع مع ERPNext"
+app_description = (
+    "Shipping requests, trip preparation, haulage trips, expenses, and ERPNext billing integration."
+)
 app_email = ""
 app_license = "MIT"
 app_version = "0.1.0"

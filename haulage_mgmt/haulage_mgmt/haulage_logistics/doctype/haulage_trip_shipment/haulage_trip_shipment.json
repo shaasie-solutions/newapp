@@ -10,7 +10,7 @@
    "fieldname": "shipping_request",
    "fieldtype": "Link",
    "in_list_view": 1,
-   "label": "طلب الشحن",
+   "label": "Shipping Request",
    "options": "Shipping Request",
    "reqd": 1
   },
@@ -18,7 +18,7 @@
    "fieldname": "shipment_preparation",
    "fieldtype": "Link",
    "in_list_view": 1,
-   "label": "سجل التجهيز",
+   "label": "Preparation Record",
    "options": "Shipment Preparation",
    "read_only": 1
   }

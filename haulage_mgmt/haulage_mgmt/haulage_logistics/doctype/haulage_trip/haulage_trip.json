@@ -28,7 +28,7 @@
   {
    "fieldname": "naming_series",
    "fieldtype": "Select",
-   "label": "التسلسل",
+   "label": "Series",
    "options": "TRIP-.#####",
    "reqd": 1
   },
@@ -37,7 +37,7 @@
    "fieldtype": "Select",
    "in_list_view": 1,
    "in_standard_filter": 1,
-   "label": "حالة الرحلة",
+   "label": "Trip Status",
    "options": "Preparing\nStarted\nPaused\nCompleted\nCancelled",
    "default": "Preparing",
    "reqd": 1
@@ -51,7 +51,7 @@
    "fieldtype": "Link",
    "in_list_view": 1,
    "in_standard_filter": 1,
-   "label": "الشركة",
+   "label": "Company",
    "options": "Company",
    "reqd": 1
   },
@@ -59,7 +59,7 @@
    "fieldname": "shipping_route",
    "fieldtype": "Link",
    "in_list_view": 1,
-   "label": "خط السير",
+   "label": "Shipping Route",
    "options": "Shipping Route",
    "reqd": 1
   },
@@ -67,7 +67,7 @@
    "fieldname": "truck",
    "fieldtype": "Link",
    "in_list_view": 1,
-   "label": "الشاحنة",
+   "label": "Truck",
    "options": "Truck",
    "reqd": 1
   },
@@ -75,64 +75,64 @@
    "fieldname": "driver",
    "fieldtype": "Link",
    "in_list_view": 1,
-   "label": "السائق",
+   "label": "Driver",
    "options": "Driver",
    "reqd": 1
   },
   {
    "fieldname": "departure_date",
    "fieldtype": "Datetime",
-   "label": "تاريخ الإقلاع"
+   "label": "Departure Date & Time"
   },
   {
    "fieldname": "section_break_accounting",
    "fieldtype": "Section Break",
-   "label": "المحاسبة"
+   "label": "Accounting"
   },
   {
    "fieldname": "trip_journal_entry",
    "fieldtype": "Link",
-   "label": "قيد يومية المصروفات",
+   "label": "Expense Journal Entry",
    "options": "Journal Entry",
    "read_only": 1
   },
   {
    "fieldname": "section_break_shipments",
    "fieldtype": "Section Break",
-   "label": "الشحنات"
+   "label": "Shipments"
   },
   {
    "fieldname": "shipments",
    "fieldtype": "Table",
-   "label": "طلبات الشحن في الرحلة",
+   "label": "Shipping Requests on Trip",
    "options": "Haulage Trip Shipment"
   },
   {
    "fieldname": "section_break_events",
    "fieldtype": "Section Break",
-   "label": "تنفيذ الرحلة (أوقات)"
+   "label": "Trip Execution (timeline)"
   },
   {
    "fieldname": "trip_events",
    "fieldtype": "Table",
-   "label": "أحداث الرحلة",
+   "label": "Trip Events",
    "options": "Haulage Trip Event"
   },
   {
    "fieldname": "section_break_expenses",
    "fieldtype": "Section Break",
-   "label": "مصروفات الرحلة"
+   "label": "Trip Expenses"
   },
   {
    "fieldname": "trip_expenses",
    "fieldtype": "Table",
-   "label": "توزيع المصروفات",
+   "label": "Expense Allocation",
    "options": "Haulage Trip Expense"
   },
   {
    "fieldname": "operational_notes",
    "fieldtype": "Text",
-   "label": "ملاحظات تشغيلية"
+   "label": "Operational Notes"
   }
  ],
  "index_web_pages_for_search": 1,

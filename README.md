@@ -1,14 +1,14 @@
 # newapp
 
-مستودع يضم تطبيق **Frappe / ERPNext** لإدارة الشحن بالشاحنات.
+Repository containing a **Frappe / ERPNext** app for fleet haulage and shipping logistics.
 
-## المحتوى
+## Contents
 
-| المسار | الوصف |
-|--------|--------|
-| [`haulage_mgmt/`](./haulage_mgmt/) | تطبيق Frappe كامل (`haulage_mgmt`) — راجع [**README التطبيق**](./haulage_mgmt/README.md) للتثبيت والإعداد. |
+| Path | Description |
+|------|-------------|
+| [`haulage_mgmt/`](./haulage_mgmt/) | Full Frappe app (`haulage_mgmt`) — see the [**app README**](./haulage_mgmt/README.md) for install and setup. |
 
-## البدء السريع
+## Quick start
 
 ```bash
 cd frappe-bench
@@ -17,8 +17,8 @@ bench --site yoursite.com install-app haulage_mgmt
 bench migrate
 ```
 
-التفاصيل الكاملة، تسلسل العمل، والإعدادات: **`haulage_mgmt/README.md`**.
+Full workflow, settings, and **language / translations** notes: **`haulage_mgmt/README.md`**.
 
-## الإصدارات
+## Versions
 
-يُستخدم [Semantic Versioning](https://semver.org/) عبر وسوم Git (مثال: `v0.1.0`).
+[Semantic Versioning](https://semver.org/) via Git tags (for example `v0.1.0`).

@@ -2,7 +2,7 @@ import frappe
 
 
 def before_migrate():
-    """يُنشئ دور Fleet Manager قبل مزامنة أنواع المستندات حتى تُستورد صلاحياته من JSON."""
+    """Create Fleet Manager role before DocType sync so JSON permissions import cleanly."""
     if frappe.db.exists("Role", "Fleet Manager"):
         return
     doc = frappe.new_doc("Role")
@@ -12,7 +12,7 @@ def before_migrate():
 
 
 def after_migrate():
-    """بيانات قديمة: تعبئة حقل الشركة في الرحلات إن وُجدت شركة افتراضية."""
+    """Backfill Company on legacy Haulage Trip rows when a default company exists."""
     if not frappe.db.exists("DocType", "Haulage Trip"):
         return
     company = frappe.db.get_value("Company", {}, "name")

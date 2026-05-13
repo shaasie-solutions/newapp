@@ -9,5 +9,5 @@ class HaulageLogisticsSettings(Document):
             root = frappe.db.get_value("Account", self.trip_expense_credit_account, "root_type")
             if root == "Expense":
                 frappe.throw(
-                    _("حساب «الدائن لترحيل المصروفات» لا يجب أن يكون من نوع مصروف.")
+                    _("The credit account for trip expenses must not be an Expense account.")
                 )

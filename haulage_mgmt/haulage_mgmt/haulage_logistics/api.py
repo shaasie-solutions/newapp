@@ -10,9 +10,9 @@ def create_sales_invoice_from_shipment(trip_name, shipping_request_name):
     trip_name = (trip_name or "").strip()
     shipping_request_name = (shipping_request_name or "").strip()
     if not frappe.has_permission("Haulage Trip", "write", doc=trip_name):
-        frappe.throw(_("ليس لديك صلاحية تعديل هذه الرحلة."), frappe.PermissionError)
+        frappe.throw(_("You do not have permission to edit this trip."), frappe.PermissionError)
     if not frappe.has_permission("Sales Invoice", "create"):
-        frappe.throw(_("ليس لديك صلاحية إنشاء فاتورة بيع."), frappe.PermissionError)
+        frappe.throw(_("You do not have permission to create a Sales Invoice."), frappe.PermissionError)
 
     trip = _validate_shipment_on_trip(trip_name, shipping_request_name)
 
@@ -22,13 +22,13 @@ def create_sales_invoice_from_shipment(trip_name, shipping_request_name):
     if not item_code:
         frappe.throw(
             _(
-                "يرجى فتح «إعدادات لوجستيات الشحن» وتحديد صنف خدمة الشحن الافتراضي قبل إنشاء الفاتورة."
+                "Please set the default freight Item in Haulage Logistics Settings before creating the invoice."
             )
         )
 
     sr = frappe.get_doc("Shipping Request", shipping_request_name)
     if not frappe.has_permission("Shipping Request", "read", doc=sr.name):
-        frappe.throw(_("ليس لديك صلاحية قراءة طلب الشحن."), frappe.PermissionError)
+        frappe.throw(_("You do not have permission to read this shipping request."), frappe.PermissionError)
 
     company = trip.get("company") or frappe.defaults.get_user_default("Company")
     if not company:
@@ -45,7 +45,7 @@ def create_sales_invoice_from_shipment(trip_name, shipping_request_name):
             "item_code": item_code,
             "qty": 1,
             "rate": flt(sr.agreed_price),
-            "description": _("شحن — طلب {0} — رحلة {1}").format(sr.name, trip_name),
+            "description": _("Freight — request {0} — trip {1}").format(sr.name, trip_name),
         },
     )
     if hasattr(si, "set_missing_values"):
@@ -57,28 +57,28 @@ def create_sales_invoice_from_shipment(trip_name, shipping_request_name):
 
 @frappe.whitelist()
 def create_trip_expense_journal_entry(trip_name):
-    """يُنشئ قيد يومية (مسودة) لمجموع مصروفات الرحلة: مدين حسابات المصروف، دائن حساب الإعدادات."""
+    """Create a draft Journal Entry for trip expenses (debit expense accounts, credit configured account)."""
     trip_name = (trip_name or "").strip()
     if not frappe.has_permission("Haulage Trip", "write", doc=trip_name):
-        frappe.throw(_("ليس لديك صلاحية تعديل هذه الرحلة."), frappe.PermissionError)
+        frappe.throw(_("You do not have permission to edit this trip."), frappe.PermissionError)
     if not frappe.has_permission("Journal Entry", "create"):
         frappe.throw(
-            _("يلزم صلاحية «إنشاء قيد يومية» (مثلاً مدير حسابات أو صلاحية مخصّصة على Journal Entry)."),
+            _("You need permission to create a Journal Entry (e.g. Accounts Manager or a custom role)."),
             frappe.PermissionError,
         )
 
     trip = frappe.get_doc("Haulage Trip", trip_name)
     if trip.trip_status == "Cancelled":
-        frappe.throw(_("لا يمكن ترحيل قيد لرحلة ملغاة."))
+        frappe.throw(_("Cannot post expenses for a cancelled trip."))
     if trip.trip_journal_entry:
-        frappe.throw(_("يوجد قيد يومية مرتبط بالفعل: {0}").format(trip.trip_journal_entry))
+        frappe.throw(_("A journal entry is already linked: {0}").format(trip.trip_journal_entry))
 
     credit_acc = frappe.db.get_single_value(
         "Haulage Logistics Settings", "trip_expense_credit_account"
     )
     if not credit_acc:
         frappe.throw(
-            _("حدّد في «إعدادات لوجستيات الشحن» الحساب الدائن لترحيل مصروفات الرحلة.")
+            _("Set the credit account for trip expenses in Haulage Logistics Settings.")
         )
 
     _validate_account_company(credit_acc, trip.company)
@@ -89,18 +89,18 @@ def create_trip_expense_journal_entry(trip_name):
             continue
         exp_acc = frappe.db.get_value("Haulage Expense Type", row.expense_type, "account")
         if not exp_acc:
-            frappe.throw(_("نوع المصروف {0} بدون حساب محاسبي.").format(row.expense_type))
+            frappe.throw(_("Expense type {0} has no ledger account.").format(row.expense_type))
         _validate_account_company(exp_acc, trip.company)
         totals[exp_acc] += flt(row.amount)
 
     if not totals:
-        frappe.throw(_("لا توجد بنود مصروفات بمبالغ لترحيلها."))
+        frappe.throw(_("There are no expense lines with amounts to post."))
 
     je = frappe.new_doc("Journal Entry")
     je.company = trip.company
     je.posting_date = frappe.utils.today()
     je.voucher_type = "Journal Entry"
-    je.user_remark = _("مصروفات رحلة شحن {0}").format(trip.name)
+    je.user_remark = _("Haulage trip expenses {0}").format(trip.name)
 
     grand = 0.0
     for acc, amt in totals.items():
@@ -132,12 +132,12 @@ def create_trip_expense_journal_entry(trip_name):
 def _validate_account_company(account, company):
     acc_co = frappe.db.get_value("Account", account, "company")
     if acc_co and company and acc_co != company:
-        frappe.throw(_("الحساب {0} لا يتبع الشركة {1}.").format(account, company))
+        frappe.throw(_("Account {0} does not belong to company {1}.").format(account, company))
 
 
 def _validate_shipment_on_trip(trip_name, shipping_request_name):
     trip = frappe.get_doc("Haulage Trip", trip_name)
     linked = {r.shipping_request for r in (trip.get("shipments") or []) if r.shipping_request}
     if shipping_request_name not in linked:
-        frappe.throw(_("طلب الشحن المحدد غير مرتبط بهذه الرحلة."))
+        frappe.throw(_("The selected shipping request is not on this trip."))
     return trip

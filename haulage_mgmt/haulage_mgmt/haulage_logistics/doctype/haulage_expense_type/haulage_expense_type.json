@@ -11,7 +11,7 @@
    "fieldname": "expense_name",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "اسم المصروف",
+   "label": "Expense Name",
    "reqd": 1,
    "unique": 1
   },
@@ -19,7 +19,7 @@
    "fieldname": "account",
    "fieldtype": "Link",
    "in_list_view": 1,
-   "label": "الحساب المحاسبي",
+   "label": "Account",
    "options": "Account",
    "reqd": 1
   }

@@ -2,6 +2,8 @@
 
 Repository containing a **Frappe / ERPNext** app for fleet haulage and shipping logistics.
 
+The installable app is in **`haulage_mgmt/`** (not at the repo root). Use `bench get-app <path-to-clone>/haulage_mgmt`. See [**Uninstall and removal**](./haulage_mgmt/README.md#uninstall-and-removal) in the app README.
+
 ## Contents
 
 | Path | Description |

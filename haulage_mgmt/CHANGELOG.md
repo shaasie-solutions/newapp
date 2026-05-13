@@ -4,7 +4,9 @@
 
 ### Changed
 
-- Default UI language is **English**; Arabic strings live in **`translations/ar.csv`** (Frappe translation pattern). Client strings use `__()`; server messages use `_()`. `MANIFEST.in` includes the `translations` folder for packaging.
+- Default UI language is **English**; Arabic strings live in **`translations/ar.csv`**. Client strings use `__()`; server messages use `_()`. `MANIFEST.in` includes the `translations` folder for packaging.
+- Document monorepo layout, `bench uninstall-app` / `bench remove-app`, and safer default company resolution (`install.py`, Sales Invoice API).
+- `before_uninstall` hook removes the **Fleet Manager** role and **Has Role** assignments created by the app.
 
 ### Added
 

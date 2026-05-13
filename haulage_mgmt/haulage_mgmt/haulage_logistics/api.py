@@ -32,7 +32,8 @@ def create_sales_invoice_from_shipment(trip_name, shipping_request_name):
 
     company = trip.get("company") or frappe.defaults.get_user_default("Company")
     if not company:
-        company = frappe.db.get_value("Company", {}, "name")
+        companies = frappe.get_all("Company", pluck="name", order_by="creation asc", limit=1)
+        company = companies[0] if companies else None
 
     si = frappe.new_doc("Sales Invoice")
     si.customer = sr.customer

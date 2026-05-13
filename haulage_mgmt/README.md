@@ -24,12 +24,13 @@ A **Frappe** app on **ERPNext** for truck shipping: fleet, drivers, routes, trip
 
 ## Install
 
-Copy the `haulage_mgmt` folder under your bench `apps` directory, or add it from git:
+This Git repository is a **monorepo**: the Frappe app (with `setup.py`) lives in the **`haulage_mgmt/`** subfolder, not at the repository root. Point `bench get-app` at that folder.
 
 ```bash
 cd /path/to/frappe-bench
+# From a clone of this repo (adjust the path to your clone):
 bench get-app /path/to/newapp/haulage_mgmt haulage_mgmt
-# or after copying the folder manually:
+# or after copying only the app folder into apps/:
 bench get-app ./apps/haulage_mgmt
 
 bench --site yoursite.com install-app haulage_mgmt
@@ -37,7 +38,30 @@ bench --site yoursite.com migrate
 bench build --app haulage_mgmt
 ```
 
-Run **Migrate** whenever you update the app.
+`install-app` runs migrations for the app; run **`bench migrate`** again after pulling updates. The app declares **`required_apps = ["erpnext"]`** — install **ERPNext** on the site first.
+
+---
+
+## Uninstall and removal
+
+**From a site (drops app DocTypes and module data for that site):**
+
+```bash
+# Optional: list what would be removed
+bench --site yoursite.com uninstall-app haulage_mgmt --dry-run
+
+bench --site yoursite.com uninstall-app haulage_mgmt --yes --no-backup
+```
+
+`before_uninstall` removes the **Fleet Manager** role and its **Has Role** rows so they do not remain orphaned. Standard ERPNext documents you created while using the app (e.g. Sales Invoices, Journal Entries) are **not** deleted.
+
+**Remove the app code from the bench** (after it is uninstalled on every site that had it, or use `--force` if bench insists):
+
+```bash
+bench remove-app haulage_mgmt --force
+```
+
+Then you can delete the app directory from `apps/` if anything remains, or remove your git clone.
 
 ---
 

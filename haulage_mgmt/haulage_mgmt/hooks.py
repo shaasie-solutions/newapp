@@ -12,6 +12,7 @@ required_apps = ["erpnext"]
 
 before_migrate = "haulage_mgmt.install.before_migrate"
 after_migrate = "haulage_mgmt.install.after_migrate"
+before_uninstall = "haulage_mgmt.install.before_uninstall"
 
 override_doctype_dashboards = {
     "Customer": "haulage_mgmt.haulage_logistics.dashboard.customer_dashboard.get_dashboard_data",

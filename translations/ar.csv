@@ -96,6 +96,7 @@
 "Expected delivery date cannot be before the required loading date.","تاريخ التسليم المتوقع لا يمكن أن يسبق تاريخ التحميل المطلوب.",""
 "Set the company on the trip (no default company for the user).","حدد الشركة في الرحلة (لا توجد شركة افتراضية للمستخدم).",""
 "Add at least one shipment to the trip (unless the trip is cancelled).","أضف شحنة واحدة على الأقل للرحلة (ما لم تكن الرحلة ملغاة).",""
+"Each shipment line must specify a shipping request.","كل سطر شحنة يجب أن يحدد طلب شحن.",""
 "Shipping request {0} is duplicated in the shipment table.","طلب الشحن {0} مكرر في جدول الشحنات.",""
 "Create a shipment preparation record for {0} before adding it to a trip.","يجب إنشاء سجل تجهيز الشحنة لطلب {0} قبل إضافته للرحلة.",""
 "Shipping request {0} is not in Ready for Trip preparation status.","طلب {0} ليس بحالة «جاهز للدخول في رحلة» في التجهيز.",""

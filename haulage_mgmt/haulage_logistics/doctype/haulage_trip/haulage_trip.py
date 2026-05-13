@@ -22,12 +22,14 @@ class HaulageTrip(Document):
     def _validate_shipments_not_empty(self):
         if self.trip_status == "Cancelled":
             return
-        if not (self.get("shipments") or []):
+        rows = self.get("shipments") or []
+        if not rows:
             frappe.throw(_("Add at least one shipment to the trip (unless the trip is cancelled)."))
-        seen = set()
-        for row in self.get("shipments") or []:
+        for row in rows:
             if not row.shipping_request:
-                continue
+                frappe.throw(_("Each shipment line must specify a shipping request."))
+        seen = set()
+        for row in rows:
             if row.shipping_request in seen:
                 frappe.throw(_("Shipping request {0} is duplicated in the shipment table.").format(row.shipping_request))
             seen.add(row.shipping_request)
@@ -171,16 +173,6 @@ def _update_preparations_and_requests(doc):
             continue
 
         if doc.trip_status == "Cancelled":
-            frappe.db.set_value(
-                "Shipment Preparation",
-                prep_name,
-                "preparation_status",
-                "Ready for Trip",
-            )
-            frappe.db.set_value(
-                "Shipping Request", row.shipping_request, "request_status", "Goods Prepared"
-            )
-        elif doc.trip_status == "Preparing":
             frappe.db.set_value(
                 "Shipment Preparation",
                 prep_name,

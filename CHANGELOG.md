@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.1.6] — 2026-05-13
+
+### Fixed
+
+- **Haulage Trip**: Saving with status **Preparing** no longer resets linked preparation / shipping request from an in-progress state (e.g. after temporarily changing status). **Cancelled** still rolls preparation back to **Ready for Trip** as before.
+- **Haulage Trip**: Shipment child rows must always specify a **shipping request** (no blank lines) when the trip is not cancelled.
+
+[0.1.6]: https://github.com/shaasie-solutions/newapp/releases/tag/v0.1.6
+
 ## [0.1.5] — 2026-05-13
 
 ### Changed

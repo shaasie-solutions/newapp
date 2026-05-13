@@ -6,9 +6,10 @@ from frappe.model.document import Document
 class HaulageTrip(Document):
     def validate(self):
         if not self.company:
-            self.company = frappe.defaults.get_user_default("Company") or frappe.db.get_value(
-                "Company", {}, "name"
-            )
+            self.company = frappe.defaults.get_user_default("Company")
+        if not self.company:
+            companies = frappe.get_all("Company", pluck="name", limit=1)
+            self.company = companies[0] if companies else None
         if not self.company:
             frappe.throw(_("Set the company on the trip (no default company for the user)."))
         self._validate_shipments_not_empty()

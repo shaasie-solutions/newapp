@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.1.5] — 2026-05-13
+
+### Changed
+
+- **Workspace**: Removed the separate **Analytics** block; **script reports** live only under **8 · Reports**. Reordered shortcuts and link cards to match the operational flow (master data → requests → preparation → trips → ERPNext revenue → reports → settings). Added **Customer**, **New Shipment Preparation**, and **Sales Invoices** shortcuts; link cards are **Master data**, **Shipping & preparation**, **Trips & billing**, **Reports & configuration**.
+- **Truck**: Optional **Internal fleet ID** field (alongside naming series / document name).
+- **Haulage Trip**: Clearer section labels for execution and expense allocation; **Company** default uses the first `Company` when the user has no default (same pattern as install).
+- **Arabic (`ar.csv`)**: New strings for workspace headers and the new labels.
+
+[0.1.5]: https://github.com/shaasie-solutions/newapp/releases/tag/v0.1.5
+
 ## [0.1.4] — 2026-05-13
 
 ### Changed

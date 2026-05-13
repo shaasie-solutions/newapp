@@ -110,7 +110,7 @@
   {
    "fieldname": "section_break_events",
    "fieldtype": "Section Break",
-   "label": "Trip Execution (timeline)"
+   "label": "Trip execution (start / pause / arrival / return)"
   },
   {
    "fieldname": "trip_events",
@@ -121,7 +121,7 @@
   {
    "fieldname": "section_break_expenses",
    "fieldtype": "Section Break",
-   "label": "Trip Expenses"
+   "label": "Expense allocation (per trip)"
   },
   {
    "fieldname": "trip_expenses",

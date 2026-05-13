@@ -7,6 +7,7 @@
  "engine": "InnoDB",
  "field_order": [
   "naming_series",
+  "internal_fleet_id",
   "license_plate",
   "truck_type",
   "truck_model",
@@ -27,6 +28,13 @@
    "label": "Series",
    "options": "TRUCK-.####",
    "reqd": 1
+  },
+  {
+   "fieldname": "internal_fleet_id",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Internal fleet ID"
   },
   {
    "fieldname": "license_plate",

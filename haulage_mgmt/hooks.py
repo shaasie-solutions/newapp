@@ -6,7 +6,7 @@ app_description = (
 )
 app_email = ""
 app_license = "MIT"
-app_version = "0.1.1"
+app_version = "0.1.2"
 
 required_apps = ["erpnext"]
 

@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.1.2] — 2026-05-13
+
+### Fixed
+
+- **Bench `get-app` from Git URL:** moved `setup.py`, `MANIFEST.in`, `requirements.txt`, `license.txt`, and `translations/` to the **repository root** so Bench finds `apps/<repo>/setup.py` (fixes `FileNotFoundError: .../newapp/setup.py` when cloning `newapp`).
+
+[0.1.2]: https://github.com/shaasie-solutions/newapp/releases/tag/v0.1.2
+
 ## [0.1.1] — 2026-05-13
 
 ### Added

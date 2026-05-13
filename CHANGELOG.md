@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.1.10] — 2026-05-14
+
+### Changed
+
+- **Haulage Operations Summary**: Added **Group by** filter (`Trip` / `Driver` / `Truck`). **Trip** shows each trip with revenue (agreed prices), expenses (trip lines), net income, and shipment count. **Driver** and **Truck** aggregate the same financials with trip count, total shipments, totals, and **average net per trip**.
+
+[0.1.10]: https://github.com/shaasie-solutions/newapp/releases/tag/v0.1.10
+
 ## [0.1.9] — 2026-05-14
 
 ### Changed

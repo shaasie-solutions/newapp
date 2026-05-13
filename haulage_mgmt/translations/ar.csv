@@ -134,6 +134,8 @@
 "To date","إلى تاريخ",""
 "Include records with no trips in period","عرض من ليس لديهم رحلات في الفترة",""
 "Include trucks with no trips in period","عرض من ليس لها رحلات في الفترة",""
+"Group by","تجميع حسب",""
+"Avg net per trip","متوسط صافي الدخل لكل رحلة",""
 "Trip count","عدد الرحلات",""
 "Shipment count","عدد الشحنات",""
 "Total expenses","إجمالي المصروفات",""

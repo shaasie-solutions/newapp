@@ -1,12 +1,22 @@
 # Changelog
 
-## [0.1.0] — 2026-05-13
+## [0.1.1] — 2026-05-13
+
+### Added
+
+- **`translations/ar.csv`**: Arabic translations (Frappe CSV pattern).
+- **`before_uninstall`**: removes **Fleet Manager** role and related **Has Role** rows on site uninstall.
 
 ### Changed
 
-- Default UI language is **English**; Arabic strings live in **`translations/ar.csv`**. Client strings use `__()`; server messages use `_()`. `MANIFEST.in` includes the `translations` folder for packaging.
-- Document monorepo layout, `bench uninstall-app` / `bench remove-app`, and safer default company resolution (`install.py`, Sales Invoice API).
-- `before_uninstall` hook removes the **Fleet Manager** role and **Has Role** assignments created by the app.
+- **UI source language English** across DocTypes, workspace, print format, script reports, Python `_("…")`, and client `__(…)`.
+- **`MANIFEST.in`**: include `translations/*.csv` for packaging.
+- **Company fallback**: first `Company` via `get_all` in `install.py` and Sales Invoice API (replaces empty `get_value` filters).
+- **Docs**: monorepo `get-app` path, `bench uninstall-app` / `bench remove-app`, ERPNext prerequisite.
+
+[0.1.1]: https://github.com/shaasie-solutions/newapp/releases/tag/v0.1.1
+
+## [0.1.0] — 2026-05-13
 
 ### Added
 

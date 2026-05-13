@@ -23,4 +23,4 @@ Full workflow, settings, and **language / translations** notes: **`haulage_mgmt/
 
 ## Versions
 
-[Semantic Versioning](https://semver.org/) via Git tags (for example `v0.1.0`).
+[Semantic Versioning](https://semver.org/) via Git tags (for example `v0.1.0`, `v0.1.1`).

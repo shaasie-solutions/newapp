@@ -2,7 +2,7 @@
 
 A **Frappe** app on **ERPNext** for truck shipping: fleet, drivers, routes, trips, expenses, Sales Invoices, and draft Journal Entries for trip costs.
 
-**Version:** see `haulage_mgmt/__init__.py` and Git tags (e.g. `v0.1.0`).
+**Version:** see `haulage_mgmt/__init__.py` and Git tags (e.g. `v0.1.1`).
 
 ---
 

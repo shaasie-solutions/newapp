@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.1.9] — 2026-05-14
+
+### Changed
+
+- **Workspace**: Numbered steps **5** (trip expenses shortcut → `Haulage Trip` list), **6** (revenue / Sales Invoices), **7** (reports). Removed the duplicate trip shortcut from the expenses row by using a distinct shortcut label **Trip expenses** (same list, for navigation clarity).
+- **Reports**: Replaced **Trip Financial Summary**, **Driver Performance**, and **Truck Performance** with a single script report **Haulage Operations Summary** (`ref_doctype` `Haulage Trip`) with filters: **Trip**, **Driver**, **Truck**, **From date**, **To date** (combinable). Output is one row per trip with revenue, expenses, net income, and shipment count.
+- **`after_migrate`**: Deletes legacy Report records for the three removed reports so desk links stay clean.
+
+[0.1.9]: https://github.com/shaasie-solutions/newapp/releases/tag/v0.1.9
+
 ## [0.1.7] — 2026-05-13
 
 ### Changed

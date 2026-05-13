@@ -20,7 +20,8 @@ def before_migrate():
 
 
 def after_migrate():
-    """Sync desk workspace from app JSON; backfill Company on legacy trips."""
+    """Purge replaced desk artifacts; sync workspace from app JSON; backfill Company on legacy trips."""
+    _purge_legacy_haulage_reports()
     _sync_haulage_workspace_from_json()
     _fix_workspace_sidebar()
     if not frappe.db.exists("DocType", "Haulage Trip"):
@@ -36,6 +37,19 @@ def after_migrate():
         """,
         (company,),
     )
+
+
+def _purge_legacy_haulage_reports():
+    """Remove script reports superseded by Haulage Operations Summary (keeps desk links valid)."""
+    if not frappe.db.exists("DocType", "Report"):
+        return
+    for report in ("Trip Financial Summary", "Driver Performance", "Truck Performance"):
+        if not frappe.db.exists("Report", report):
+            continue
+        try:
+            frappe.delete_doc("Report", report, force=True, ignore_permissions=True)
+        except Exception:
+            frappe.log_error(frappe.get_traceback(), f"haulage_mgmt: purge legacy report {report}")
 
 
 def _sync_haulage_workspace_from_json():

@@ -13,6 +13,20 @@ def get_filters():
             "reqd": 0,
         },
         {
+            "fieldname": "driver",
+            "label": _("Driver"),
+            "fieldtype": "Link",
+            "options": "Driver",
+            "reqd": 0,
+        },
+        {
+            "fieldname": "truck",
+            "label": _("Truck"),
+            "fieldtype": "Link",
+            "options": "Truck",
+            "reqd": 0,
+        },
+        {
             "fieldname": "from_date",
             "label": _("From date"),
             "fieldtype": "Date",
@@ -47,6 +61,7 @@ def execute(filters=None):
             "options": "Shipping Route",
             "width": 140,
         },
+        {"label": _("Shipment count"), "fieldname": "shipment_count", "fieldtype": "Int", "width": 110},
         {"label": _("Revenue"), "fieldname": "revenue", "fieldtype": "Currency", "width": 110},
         {"label": _("Expenses"), "fieldname": "expenses", "fieldtype": "Currency", "width": 110},
         {"label": _("Net income"), "fieldname": "net_income", "fieldtype": "Currency", "width": 110},
@@ -58,6 +73,12 @@ def execute(filters=None):
     if filters.get("trip"):
         conditions.append("ht.name = %s")
         values.append(filters["trip"])
+    if filters.get("driver"):
+        conditions.append("ht.driver = %s")
+        values.append(filters["driver"])
+    if filters.get("truck"):
+        conditions.append("ht.truck = %s")
+        values.append(filters["truck"])
     if filters.get("from_date"):
         conditions.append("DATE(COALESCE(ht.departure_date, ht.modified)) >= %s")
         values.append(filters["from_date"])
@@ -75,6 +96,11 @@ def execute(filters=None):
             ht.driver,
             ht.truck,
             ht.shipping_route,
+            (
+                SELECT COUNT(DISTINCT s.shipping_request)
+                FROM `tabHaulage Trip Shipment` s
+                WHERE s.parent = ht.name
+            ) AS shipment_count,
             IFNULL(rev.revenue, 0) AS revenue,
             IFNULL(exp.expenses, 0) AS expenses,
             IFNULL(rev.revenue, 0) - IFNULL(exp.expenses, 0) AS net_income
@@ -101,5 +127,6 @@ def execute(filters=None):
         row["revenue"] = flt(row.get("revenue"))
         row["expenses"] = flt(row.get("expenses"))
         row["net_income"] = flt(row.get("net_income"))
+        row["shipment_count"] = int(row.get("shipment_count") or 0)
 
     return columns, data

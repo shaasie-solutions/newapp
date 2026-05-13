@@ -5,7 +5,7 @@ with open("requirements.txt") as f:
 
 setup(
     name="haulage_mgmt",
-    version="0.1.6",
+    version="0.1.7",
     description="Haulage / fleet logistics for ERPNext",
     author="Haulage Mgmt",
     author_email="",
@@ -13,5 +13,5 @@ setup(
     zip_safe=False,
     include_package_data=True,
     install_requires=install_requires,
-    package_data={"haulage_mgmt": ["**/*.json", "**/*.js", "**/*.html", "**/*.css", "**/*.svg"]},
+    package_data={"haulage_mgmt": ["**/*.json", "**/*.js", "**/*.html", "**/*.css", "**/*.svg", "translations/*.csv"]},
 )

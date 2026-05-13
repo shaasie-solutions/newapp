@@ -1,3 +1,6 @@
+import json
+from pathlib import Path
+
 import frappe
 
 
@@ -17,7 +20,9 @@ def before_migrate():
 
 
 def after_migrate():
-    """Backfill Company on legacy Haulage Trip rows when a default company exists."""
+    """Sync desk workspace from app JSON; backfill Company on legacy trips."""
+    _sync_haulage_workspace_from_json()
+    _fix_workspace_sidebar()
     if not frappe.db.exists("DocType", "Haulage Trip"):
         return
     company = _first_company_name()
@@ -31,7 +36,42 @@ def after_migrate():
         """,
         (company,),
     )
-    _fix_workspace_sidebar()
+
+
+def _sync_haulage_workspace_from_json():
+    """Replace workspace content, shortcuts, and links from the app bundle.
+
+    Avoids duplicate or stale shortcut rows on sites that imported an older workspace.
+    """
+    try:
+        _do_sync_haulage_workspace_from_json()
+    except Exception:
+        frappe.log_error(frappe.get_traceback(), "haulage_mgmt: workspace sync failed")
+
+
+def _do_sync_haulage_workspace_from_json():
+    ws_name = "Haulage Logistics"
+    if not frappe.db.exists("Workspace", ws_name):
+        return
+    path = Path(frappe.get_app_path("haulage_mgmt")) / "haulage_logistics" / "workspace" / "haulage_logistics" / "haulage_logistics.json"
+    if not path.exists():
+        return
+    with path.open(encoding="utf-8") as f:
+        data = json.load(f)
+    doc = frappe.get_doc("Workspace", ws_name)
+    doc.content = data.get("content") or "[]"
+    doc.title = data.get("title") or ws_name
+    doc.label = data.get("label") or ws_name
+    for row in list(doc.shortcuts):
+        doc.remove(row)
+    for row in list(doc.links):
+        doc.remove(row)
+    for row in data.get("shortcuts") or []:
+        doc.append("shortcuts", row)
+    for row in data.get("links") or []:
+        doc.append("links", row)
+    doc.parent_page = ""
+    doc.save(ignore_permissions=True)
 
 
 def _fix_workspace_sidebar():

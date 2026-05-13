@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.1.7] — 2026-05-13
+
+### Changed
+
+- **Workspace**: Removed the bottom **Browse as cards** block so shortcuts are not doubled with link cards on the desk page.
+- **Install**: `after_migrate` now **re-syncs** the Haulage Logistics workspace (content, shortcuts, links) from the app JSON so old duplicate shortcut rows are cleared on existing sites.
+- **Arabic**: Expanded `ar.csv` (DocType names, roles, desk labels, status values, and common UI strings). File location is now **`haulage_mgmt/translations/ar.csv`** so Frappe loads translations with the app package; `setup.py` includes these CSV files in `package_data`.
+
+### Fixed
+
+- **Translations CSV**: Repaired quoting and removed duplicate source keys.
+
+[0.1.7]: https://github.com/shaasie-solutions/newapp/releases/tag/v0.1.7
+
 ## [0.1.6] — 2026-05-13
 
 ### Fixed

@@ -1,7 +1,7 @@
 recursive-include haulage_mgmt *.json
 recursive-include haulage_mgmt *.js
 recursive-include haulage_mgmt *.py
+recursive-include haulage_mgmt *.csv
 recursive-include haulage_mgmt/public *
-recursive-include translations *.csv
 include license.txt
 include requirements.txt

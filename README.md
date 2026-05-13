@@ -34,7 +34,7 @@ The app requires **ERPNext** (`required_apps = ["erpnext"]`) on the site.
 |------|-------------|
 | `setup.py`, `requirements.txt`, `MANIFEST.in`, `license.txt` | Frappe app root (Bench expects `setup.py` here). |
 | `haulage_mgmt/` | Python package (`hooks.py`, modules, DocTypes). |
-| `translations/ar.csv` | Arabic translations. |
+| `haulage_mgmt/translations/ar.csv` | Arabic translations (Frappe CSV). |
 | `CHANGELOG.md` | Release notes. |
 
 ---
@@ -48,7 +48,7 @@ Full workflow, uninstall, i18n, and setup details are in the sections below (sam
 ## Language (English UI + Arabic)
 
 - **Source strings** are **English** (Python `_("…")`, client `__(…)`).
-- **Arabic** via **`translations/ar.csv`** next to `setup.py`. See the [Frappe translations guide](https://docs.frappe.io/framework/user/en/guides/basics/translations).
+- **Arabic** via **`haulage_mgmt/translations/ar.csv`**. See the [Frappe translations guide](https://docs.frappe.io/framework/user/en/guides/basics/translations).
 - After changing `ar.csv` or client strings: **`bench --site <site> clear-cache`** and **`bench build --app haulage_mgmt`** when needed.
 
 ---

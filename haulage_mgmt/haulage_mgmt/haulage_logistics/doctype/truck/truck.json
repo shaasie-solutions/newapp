@@ -1,0 +1,139 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "naming_series:",
+ "creation": "2026-05-13 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "naming_series",
+  "license_plate",
+  "truck_type",
+  "truck_model",
+  "load_capacity",
+  "column_break_status",
+  "truck_status",
+  "license_start_date",
+  "license_end_date",
+  "section_break_insurance",
+  "insurance_company",
+  "insurance_end_date",
+  "remarks"
+ ],
+ "fields": [
+  {
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "label": "التسلسل",
+   "options": "TRUCK-.####",
+   "reqd": 1
+  },
+  {
+   "fieldname": "license_plate",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "رقم اللوحة",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "truck_type",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "نوع الشاحنة"
+  },
+  {
+   "fieldname": "truck_model",
+   "fieldtype": "Data",
+   "label": "موديل الشاحنة"
+  },
+  {
+   "fieldname": "load_capacity",
+   "fieldtype": "Float",
+   "label": "سعة الحمولة (طن)"
+  },
+  {
+   "fieldname": "column_break_status",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "truck_status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "حالة الشاحنة",
+   "options": "Available\nBusy\nMaintenance\nStopped",
+   "default": "Available",
+   "reqd": 1
+  },
+  {
+   "fieldname": "license_start_date",
+   "fieldtype": "Date",
+   "label": "تاريخ الترخيص"
+  },
+  {
+   "fieldname": "license_end_date",
+   "fieldtype": "Date",
+   "label": "تاريخ انتهاء الترخيص"
+  },
+  {
+   "fieldname": "section_break_insurance",
+   "fieldtype": "Section Break",
+   "label": "التأمين"
+  },
+  {
+   "fieldname": "insurance_company",
+   "fieldtype": "Data",
+   "label": "شركة التأمين"
+  },
+  {
+   "fieldname": "insurance_end_date",
+   "fieldtype": "Date",
+   "label": "تاريخ انتهاء التأمين"
+  },
+  {
+   "fieldname": "remarks",
+   "fieldtype": "Small Text",
+   "label": "ملاحظات عامة"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-05-13 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Haulage Logistics",
+ "name": "Truck",
+ "naming_rule": "By \"Naming Series\" field",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Fleet Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

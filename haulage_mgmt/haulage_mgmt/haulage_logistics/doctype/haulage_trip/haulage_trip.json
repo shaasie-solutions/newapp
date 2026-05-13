@@ -1,0 +1,177 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "autoname": "naming_series:",
+ "creation": "2026-05-13 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "naming_series",
+  "trip_status",
+  "column_break_head",
+  "company",
+  "shipping_route",
+  "truck",
+  "driver",
+  "departure_date",
+  "section_break_accounting",
+  "trip_journal_entry",
+  "section_break_shipments",
+  "shipments",
+  "section_break_events",
+  "trip_events",
+  "section_break_expenses",
+  "trip_expenses",
+  "operational_notes"
+ ],
+ "fields": [
+  {
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "label": "التسلسل",
+   "options": "TRIP-.#####",
+   "reqd": 1
+  },
+  {
+   "fieldname": "trip_status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "حالة الرحلة",
+   "options": "Preparing\nStarted\nPaused\nCompleted\nCancelled",
+   "default": "Preparing",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_head",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "company",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "الشركة",
+   "options": "Company",
+   "reqd": 1
+  },
+  {
+   "fieldname": "shipping_route",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "خط السير",
+   "options": "Shipping Route",
+   "reqd": 1
+  },
+  {
+   "fieldname": "truck",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "الشاحنة",
+   "options": "Truck",
+   "reqd": 1
+  },
+  {
+   "fieldname": "driver",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "السائق",
+   "options": "Driver",
+   "reqd": 1
+  },
+  {
+   "fieldname": "departure_date",
+   "fieldtype": "Datetime",
+   "label": "تاريخ الإقلاع"
+  },
+  {
+   "fieldname": "section_break_accounting",
+   "fieldtype": "Section Break",
+   "label": "المحاسبة"
+  },
+  {
+   "fieldname": "trip_journal_entry",
+   "fieldtype": "Link",
+   "label": "قيد يومية المصروفات",
+   "options": "Journal Entry",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_break_shipments",
+   "fieldtype": "Section Break",
+   "label": "الشحنات"
+  },
+  {
+   "fieldname": "shipments",
+   "fieldtype": "Table",
+   "label": "طلبات الشحن في الرحلة",
+   "options": "Haulage Trip Shipment"
+  },
+  {
+   "fieldname": "section_break_events",
+   "fieldtype": "Section Break",
+   "label": "تنفيذ الرحلة (أوقات)"
+  },
+  {
+   "fieldname": "trip_events",
+   "fieldtype": "Table",
+   "label": "أحداث الرحلة",
+   "options": "Haulage Trip Event"
+  },
+  {
+   "fieldname": "section_break_expenses",
+   "fieldtype": "Section Break",
+   "label": "مصروفات الرحلة"
+  },
+  {
+   "fieldname": "trip_expenses",
+   "fieldtype": "Table",
+   "label": "توزيع المصروفات",
+   "options": "Haulage Trip Expense"
+  },
+  {
+   "fieldname": "operational_notes",
+   "fieldtype": "Text",
+   "label": "ملاحظات تشغيلية"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-05-13 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Haulage Logistics",
+ "name": "Haulage Trip",
+ "naming_rule": "By \"Naming Series\" field",
+ "default_print_format": "Haulage Trip Dispatch",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Fleet Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.1.4] — 2026-05-13
+
+### Changed
+
+- **Workspace desk UX**: EditorJS `content` with section headers, **shortcut tiles** for every main DocType/report/settings (including **New** forms), and **link cards** (Operations, Fleet & master data, Reports, Configuration). `indicator_color` on workspace; `truck` icon for sidebar/app list.
+
+[0.1.4]: https://github.com/shaasie-solutions/newapp/releases/tag/v0.1.4
+
 ## [0.1.3] — 2026-05-13
 
 ### Fixed

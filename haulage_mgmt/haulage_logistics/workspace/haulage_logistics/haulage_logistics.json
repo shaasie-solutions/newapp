@@ -1,7 +1,7 @@
 {
  "app": "haulage_mgmt",
  "charts": [],
- "content": "[]",
+ "content": "[{\"id\":\"hmH0\",\"type\":\"header\",\"data\":{\"text\":\"Shortcuts\",\"col\":12}},{\"id\":\"hmH1\",\"type\":\"header\",\"data\":{\"text\":\"Operations\",\"col\":12}},{\"id\":\"hmS1\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Shipping Requests\",\"col\":3}},{\"id\":\"hmS2\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Trips\",\"col\":3}},{\"id\":\"hmS3\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Shipment Preparations\",\"col\":3}},{\"id\":\"hmS4\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"New Shipping Request\",\"col\":3}},{\"id\":\"hmS5\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"New Haulage Trip\",\"col\":3}},{\"id\":\"hmH2\",\"type\":\"header\",\"data\":{\"text\":\"Fleet & master data\",\"col\":12}},{\"id\":\"hmS6\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Trucks\",\"col\":3}},{\"id\":\"hmS7\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Drivers\",\"col\":3}},{\"id\":\"hmS8\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Shipping Routes\",\"col\":3}},{\"id\":\"hmS9\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Haulage Expense Types\",\"col\":3}},{\"id\":\"hmH3\",\"type\":\"header\",\"data\":{\"text\":\"Analytics\",\"col\":12}},{\"id\":\"hmSa\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Trip Financial Summary\",\"col\":3}},{\"id\":\"hmSb\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Driver Performance\",\"col\":3}},{\"id\":\"hmSc\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Truck Performance\",\"col\":3}},{\"id\":\"hmH4\",\"type\":\"header\",\"data\":{\"text\":\"Setup\",\"col\":12}},{\"id\":\"hmSd\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Haulage Logistics Settings\",\"col\":3}},{\"id\":\"hmSp\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"hmH5\",\"type\":\"header\",\"data\":{\"text\":\"Browse as cards\",\"col\":12}},{\"id\":\"hmC1\",\"type\":\"card\",\"data\":{\"card_name\":\"Operations\",\"col\":4}},{\"id\":\"hmC2\",\"type\":\"card\",\"data\":{\"card_name\":\"Fleet & master data\",\"col\":4}},{\"id\":\"hmC3\",\"type\":\"card\",\"data\":{\"card_name\":\"Reports\",\"col\":4}},{\"id\":\"hmC4\",\"type\":\"card\",\"data\":{\"card_name\":\"Configuration\",\"col\":4}}]",
  "creation": "2026-05-13 15:00:00",
  "custom_blocks": [],
  "docstatus": 0,
@@ -9,9 +9,98 @@
  "for_user": "",
  "hide_custom": 0,
  "icon": "truck",
+ "indicator_color": "blue",
  "is_hidden": 0,
  "label": "Haulage Logistics",
  "links": [
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Operations",
+   "link_count": 3,
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Shipping Request",
+   "link_count": 0,
+   "link_to": "Shipping Request",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Shipment Preparation",
+   "link_count": 0,
+   "link_to": "Shipment Preparation",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Haulage Trip",
+   "link_count": 0,
+   "link_to": "Haulage Trip",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Fleet & master data",
+   "link_count": 4,
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Truck",
+   "link_count": 0,
+   "link_to": "Truck",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Driver",
+   "link_count": 0,
+   "link_to": "Driver",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Shipping Route",
+   "link_count": 0,
+   "link_to": "Shipping Route",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Haulage Expense Type",
+   "link_count": 0,
+   "link_to": "Haulage Expense Type",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
   {
    "hidden": 0,
    "is_query_report": 0,
@@ -48,6 +137,25 @@
    "link_count": 0,
    "link_to": "Truck Performance",
    "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Configuration",
+   "link_count": 1,
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Haulage Logistics Settings",
+   "link_count": 0,
+   "link_to": "Haulage Logistics Settings",
+   "link_type": "DocType",
    "onboard": 0,
    "type": "Link"
   }
@@ -90,6 +198,22 @@
    "type": "DocType"
   },
   {
+   "color": "Cyan",
+   "doc_view": "New",
+   "label": "New Shipping Request",
+   "link_to": "Shipping Request",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Green",
+   "doc_view": "New",
+   "label": "New Haulage Trip",
+   "link_to": "Haulage Trip",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
    "color": "Orange",
    "doc_view": "List",
    "label": "Trucks",
@@ -120,6 +244,28 @@
    "link_to": "Haulage Expense Type",
    "stats_filter": "[]",
    "type": "DocType"
+  },
+  {
+   "color": "Purple",
+   "doc_view": "",
+   "label": "Trip Financial Summary",
+   "link_to": "Trip Financial Summary",
+   "stats_filter": "[]",
+   "type": "Report"
+  },
+  {
+   "color": "Yellow",
+   "doc_view": "",
+   "label": "Driver Performance",
+   "link_to": "Driver Performance",
+   "stats_filter": "[]",
+   "type": "Report"
+  },
+  {
+   "color": "Grey",
+   "link_to": "Truck Performance",
+   "stats_filter": "[]",
+   "type": "Report"
   },
   {
    "color": "Red",

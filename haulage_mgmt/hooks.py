@@ -6,9 +6,21 @@ app_description = (
 )
 app_email = ""
 app_license = "MIT"
-app_version = "0.1.2"
+app_version = "0.1.3"
+app_icon = "truck"
+app_logo_url = "/assets/haulage_mgmt/images/haulage-desk.svg"
 
 required_apps = ["erpnext"]
+
+add_to_apps_screen = [
+    {
+        "name": "haulage_mgmt",
+        "logo": app_logo_url,
+        "title": "Haulage Management",
+        "route": "/desk/haulage-logistics",
+        "has_permission": "haulage_mgmt.boot.check_haulage_app_permission",
+    }
+]
 
 before_migrate = "haulage_mgmt.install.before_migrate"
 after_migrate = "haulage_mgmt.install.after_migrate"

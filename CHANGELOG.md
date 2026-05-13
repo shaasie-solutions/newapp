@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.1.3] — 2026-05-13
+
+### Fixed
+
+- **Workspace 404 (`fleet-haulage`)**: Desk routes slug the workspace **name** (`Haulage Logistics` → `haulage-logistics`), but **title** was `Fleet Haulage` (`fleet-haulage`), so links broke. **Title** now matches **name**; `after_migrate` corrects existing sites and clears a wrong **parent_page** so the item is not nested under another workspace (e.g. Integrations).
+- **App launcher**: `add_to_apps_screen` + `app_logo_url` / `app_icon` so **Haulage Management** appears as its own app tile with route `/desk/haulage-logistics` (run `bench build --app haulage_mgmt` after pull).
+
+[0.1.3]: https://github.com/shaasie-solutions/newapp/releases/tag/v0.1.3
+
 ## [0.1.2] — 2026-05-13
 
 ### Fixed

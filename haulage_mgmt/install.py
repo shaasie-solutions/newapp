@@ -31,6 +31,24 @@ def after_migrate():
         """,
         (company,),
     )
+    _fix_workspace_sidebar()
+
+
+def _fix_workspace_sidebar():
+    """Keep workspace title in sync with name (desk routes slug the name) and detach from any parent."""
+    ws = "Haulage Logistics"
+    if not frappe.db.exists("Workspace", ws):
+        return
+    row = frappe.db.get_value("Workspace", ws, ["title", "parent_page"], as_dict=True)
+    if not row:
+        return
+    updates = {}
+    if row.get("title") != ws:
+        updates["title"] = ws
+    if row.get("parent_page"):
+        updates["parent_page"] = ""
+    if updates:
+        frappe.db.set_value("Workspace", ws, updates)
 
 
 def before_uninstall():

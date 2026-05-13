@@ -2,7 +2,7 @@
 
 Git repository for the **`haulage_mgmt`** custom app: fleet haulage, shipping requests, trips, expenses, and ERPNext billing (Sales Invoice / Journal Entry).
 
-**Version:** see `haulage_mgmt/__init__.py` and Git tags (e.g. `v0.1.2`).
+**Version:** see `haulage_mgmt/__init__.py` and Git tags (e.g. `v0.1.3`).
 
 ---
 
@@ -12,13 +12,15 @@ Git repository for the **`haulage_mgmt`** custom app: fleet haulage, shipping re
 
 ```bash
 cd /path/to/frappe-bench
-bench get-app https://github.com/shaasie-solutions/newapp.git --branch v0.1.2
+bench get-app https://github.com/shaasie-solutions/newapp.git --branch v0.1.3
 
 bench --site yoursite.com install-app haulage_mgmt
 bench --site yoursite.com migrate
 bench build --app haulage_mgmt
 bench --site yoursite.com clear-cache
 ```
+
+The **Haulage Management** app tile opens workspace **`/desk/haulage-logistics`** (slug of **Haulage Logistics**). Some setups also accept **`/app/haulage-logistics`** depending on Frappe version.
 
 Bench clones the repo into `apps/newapp` (from the repo name). The Python package name and **`bench install-app`** target remain **`haulage_mgmt`** (from `setup.py`).
 
@@ -82,7 +84,7 @@ bench remove-app haulage_mgmt --force
 
 1. Master data: trucks, drivers, routes, haulage expense types (with **Account**).
 2. **Customer** → **Shipping Request** → **Shipment Preparation** → **Haulage Trip** (shipments, events, expenses).
-3. Reports and **Fleet Haulage** workspace.
+3. Reports and **Haulage Logistics** workspace (also under the **Haulage Management** app icon when `add_to_apps_screen` is active).
 
 ---
 

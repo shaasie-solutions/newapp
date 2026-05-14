@@ -4,7 +4,7 @@
  "doctype": "DocType",
  "editable_grid": 1,
  "engine": "InnoDB",
- "field_order": ["shipping_request", "shipment_preparation"],
+ "field_order": ["shipping_request"],
  "fields": [
   {
    "fieldname": "shipping_request",
@@ -13,14 +13,6 @@
    "label": "Shipping Request",
    "options": "Shipping Request",
    "reqd": 1
-  },
-  {
-   "fieldname": "shipment_preparation",
-   "fieldtype": "Link",
-   "in_list_view": 1,
-   "label": "Preparation Record",
-   "options": "Shipment Preparation",
-   "read_only": 1
   }
  ],
  "istable": 1,

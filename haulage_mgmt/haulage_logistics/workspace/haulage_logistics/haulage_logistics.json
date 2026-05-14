@@ -1,7 +1,7 @@
 {
  "app": "haulage_mgmt",
  "charts": [],
- "content": "[{\"id\":\"w0\",\"type\":\"header\",\"data\":{\"text\":\"1 \\u00b7 Master data\",\"col\":12}},{\"id\":\"w0a\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Trucks\",\"col\":3}},{\"id\":\"w0b\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Drivers\",\"col\":3}},{\"id\":\"w0c\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Shipping Routes\",\"col\":3}},{\"id\":\"w0d\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Haulage Expense Types\",\"col\":3}},{\"id\":\"w0e\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Customers\",\"col\":3}},{\"id\":\"w1\",\"type\":\"header\",\"data\":{\"text\":\"2 \\u00b7 Shipping requests\",\"col\":12}},{\"id\":\"w1a\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Shipping Requests\",\"col\":3}},{\"id\":\"w1b\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"New Shipping Request\",\"col\":3}},{\"id\":\"w2\",\"type\":\"header\",\"data\":{\"text\":\"3 \\u00b7 Shipment preparation\",\"col\":12}},{\"id\":\"w2a\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Shipment Preparations\",\"col\":3}},{\"id\":\"w2b\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"New Shipment Preparation\",\"col\":3}},{\"id\":\"w3\",\"type\":\"header\",\"data\":{\"text\":\"4 \\u00b7 Trips (prepare & execute)\",\"col\":12}},{\"id\":\"w3a\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Trips\",\"col\":3}},{\"id\":\"w3b\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"New Haulage Trip\",\"col\":3}},{\"id\":\"w4\",\"type\":\"header\",\"data\":{\"text\":\"5 \\u00b7 Trip expenses\",\"col\":12}},{\"id\":\"w4a\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Trip expenses\",\"col\":3}},{\"id\":\"w5\",\"type\":\"header\",\"data\":{\"text\":\"6 \\u00b7 Revenue (ERPNext)\",\"col\":12}},{\"id\":\"w5a\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Sales Invoices\",\"col\":3}},{\"id\":\"w6\",\"type\":\"header\",\"data\":{\"text\":\"7 \\u00b7 Reports\",\"col\":12}},{\"id\":\"w6a\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Haulage Operations Summary\",\"col\":3}},{\"id\":\"w7\",\"type\":\"header\",\"data\":{\"text\":\"Configuration\",\"col\":12}},{\"id\":\"w7a\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Haulage Logistics Settings\",\"col\":3}}]",
+ "content": "[{\"id\":\"w0\",\"type\":\"header\",\"data\":{\"text\":\"Master data\",\"col\":12}},{\"id\":\"w0a\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Trucks\",\"col\":3}},{\"id\":\"w0b\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Drivers\",\"col\":3}},{\"id\":\"w0c\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Shipping Routes\",\"col\":3}},{\"id\":\"w0d\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Haulage Expense Types\",\"col\":3}},{\"id\":\"w0e\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Customers\",\"col\":3}},{\"id\":\"w0f\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Haulage Logistics Settings\",\"col\":3}},{\"id\":\"w1\",\"type\":\"header\",\"data\":{\"text\":\"1 \\u00b7 Shipping requests\",\"col\":12}},{\"id\":\"w1a\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Shipping Requests\",\"col\":3}},{\"id\":\"w1b\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"New Shipping Request\",\"col\":3}},{\"id\":\"w2\",\"type\":\"header\",\"data\":{\"text\":\"2 \\u00b7 Trips\",\"col\":12}},{\"id\":\"w2a\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Trips\",\"col\":3}},{\"id\":\"w2b\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"New Haulage Trip\",\"col\":3}},{\"id\":\"w3\",\"type\":\"header\",\"data\":{\"text\":\"Reports\",\"col\":12}},{\"id\":\"w3a\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Haulage Operations Summary\",\"col\":3}}]",
  "creation": "2026-05-13 15:00:00",
  "custom_blocks": [],
  "docstatus": 0,
@@ -17,7 +17,7 @@
    "hidden": 0,
    "is_query_report": 0,
    "label": "Master data",
-   "link_count": 5,
+   "link_count": 6,
    "link_type": "DocType",
    "onboard": 0,
    "type": "Card Break"
@@ -75,8 +75,18 @@
   {
    "hidden": 0,
    "is_query_report": 0,
-   "label": "Shipping & preparation",
-   "link_count": 2,
+   "label": "Haulage Logistics Settings",
+   "link_count": 0,
+   "link_to": "Haulage Logistics Settings",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Shipping requests",
+   "link_count": 1,
    "link_type": "DocType",
    "onboard": 0,
    "type": "Card Break"
@@ -94,18 +104,8 @@
   {
    "hidden": 0,
    "is_query_report": 0,
-   "label": "Shipment Preparation",
-   "link_count": 0,
-   "link_to": "Shipment Preparation",
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Trips & billing",
-   "link_count": 2,
+   "label": "Trips",
+   "link_count": 1,
    "link_type": "DocType",
    "onboard": 0,
    "type": "Card Break"
@@ -123,18 +123,8 @@
   {
    "hidden": 0,
    "is_query_report": 0,
-   "label": "Sales Invoice",
-   "link_count": 0,
-   "link_to": "Sales Invoice",
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Reports & configuration",
-   "link_count": 2,
+   "label": "Reports",
+   "link_count": 1,
    "link_type": "DocType",
    "onboard": 0,
    "type": "Card Break"
@@ -148,19 +138,9 @@
    "link_type": "Report",
    "onboard": 0,
    "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Haulage Logistics Settings",
-   "link_count": 0,
-   "link_to": "Haulage Logistics Settings",
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
   }
  ],
- "modified": "2026-05-14 00:00:00",
+ "modified": "2026-05-14 14:00:00",
  "modified_by": "Administrator",
  "module": "Haulage Logistics",
  "name": "Haulage Logistics",
@@ -214,6 +194,14 @@
    "type": "DocType"
   },
   {
+   "color": "Red",
+   "doc_view": "Form",
+   "label": "Haulage Logistics Settings",
+   "link_to": "Haulage Logistics Settings",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
    "color": "Blue",
    "doc_view": "List",
    "label": "Shipping Requests",
@@ -226,22 +214,6 @@
    "doc_view": "New",
    "label": "New Shipping Request",
    "link_to": "Shipping Request",
-   "stats_filter": "[]",
-   "type": "DocType"
-  },
-  {
-   "color": "Grey",
-   "doc_view": "List",
-   "label": "Shipment Preparations",
-   "link_to": "Shipment Preparation",
-   "stats_filter": "[]",
-   "type": "DocType"
-  },
-  {
-   "color": "Cyan",
-   "doc_view": "New",
-   "label": "New Shipment Preparation",
-   "link_to": "Shipment Preparation",
    "stats_filter": "[]",
    "type": "DocType"
   },
@@ -262,36 +234,12 @@
    "type": "DocType"
   },
   {
-   "color": "Pink",
-   "doc_view": "List",
-   "label": "Trip expenses",
-   "link_to": "Haulage Trip",
-   "stats_filter": "[]",
-   "type": "DocType"
-  },
-  {
-   "color": "Cyan",
-   "doc_view": "List",
-   "label": "Sales Invoices",
-   "link_to": "Sales Invoice",
-   "stats_filter": "[]",
-   "type": "DocType"
-  },
-  {
    "color": "Purple",
    "doc_view": "",
    "label": "Haulage Operations Summary",
    "link_to": "Haulage Operations Summary",
    "stats_filter": "[]",
    "type": "Report"
-  },
-  {
-   "color": "Red",
-   "doc_view": "Form",
-   "label": "Haulage Logistics Settings",
-   "link_to": "Haulage Logistics Settings",
-   "stats_filter": "[]",
-   "type": "DocType"
   }
  ],
  "title": "Haulage Logistics",

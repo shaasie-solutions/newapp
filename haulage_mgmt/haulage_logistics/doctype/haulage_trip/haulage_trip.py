@@ -13,7 +13,7 @@ class HaulageTrip(Document):
         if not self.company:
             frappe.throw(_("Set the company on the trip (no default company for the user)."))
         self._validate_shipments_not_empty()
-        self._validate_shipments_ready()
+        self._validate_shipping_requests()
         self._validate_route_alignment()
         self._validate_no_duplicate_shipment_on_active_trips()
         self._validate_truck_and_driver()
@@ -34,31 +34,21 @@ class HaulageTrip(Document):
                 frappe.throw(_("Shipping request {0} is duplicated in the shipment table.").format(row.shipping_request))
             seen.add(row.shipping_request)
 
-    def _validate_shipments_ready(self):
+    def _validate_shipping_requests(self):
+        if self.trip_status == "Cancelled":
+            return
         for row in self.get("shipments") or []:
             if not row.shipping_request:
                 continue
-            prep = frappe.db.get_value(
-                "Shipment Preparation",
-                {"shipping_request": row.shipping_request},
-                ["name", "preparation_status", "cargo_prepared"],
-                as_dict=True,
-            )
-            if not prep:
+            if not frappe.db.exists("Shipping Request", row.shipping_request):
+                frappe.throw(_("Shipping request {0} does not exist.").format(row.shipping_request))
+            st = frappe.db.get_value("Shipping Request", row.shipping_request, "request_status")
+            if st == "Cancelled":
+                frappe.throw(_("Shipping request {0} is cancelled.").format(row.shipping_request))
+            if st == "Delivered" and self.trip_status != "Completed":
                 frappe.throw(
-                    _("Create a shipment preparation record for {0} before adding it to a trip.").format(
-                        row.shipping_request
-                    )
+                    _("Shipping request {0} is already marked delivered.").format(row.shipping_request)
                 )
-            if prep.preparation_status != "Ready for Trip":
-                frappe.throw(
-                    _("Shipping request {0} is not in Ready for Trip preparation status.").format(
-                        row.shipping_request
-                    )
-                )
-            if not prep.cargo_prepared:
-                frappe.throw(_("Confirm cargo is prepared for shipping request {0}.").format(row.shipping_request))
-            row.shipment_preparation = prep.name
 
     def _validate_route_alignment(self):
         if not self.shipping_route:
@@ -136,7 +126,7 @@ def refresh_truck_fleet_status(truck_name):
     cur = frappe.db.get_value("Truck", truck_name, "truck_status")
     if cur in ("Maintenance", "Stopped"):
         return
-    busy = frappe.db.sql(
+    reserved = frappe.db.sql(
         """
         SELECT 1 FROM `tabHaulage Trip`
         WHERE truck = %s AND trip_status IN ('Preparing', 'Started', 'Paused')
@@ -144,7 +134,7 @@ def refresh_truck_fleet_status(truck_name):
         """,
         (truck_name,),
     )
-    if busy:
+    if reserved:
         frappe.db.set_value("Truck", truck_name, "truck_status", "Reserved for Trip")
     else:
         frappe.db.set_value("Truck", truck_name, "truck_status", "Available")
@@ -153,53 +143,36 @@ def refresh_truck_fleet_status(truck_name):
 def on_trip_update(doc, method=None):
     if getattr(doc, "doctype", None) != "Haulage Trip":
         return
-    _update_preparations_and_requests(doc)
+    _update_shipping_requests_for_trip(doc)
     refresh_truck_fleet_status(doc.truck)
     prev = doc.get_doc_before_save()
     if prev and prev.truck and prev.truck != doc.truck:
         refresh_truck_fleet_status(prev.truck)
 
 
-def _update_preparations_and_requests(doc):
+def _update_shipping_requests_for_trip(doc):
     for row in doc.get("shipments") or []:
         if not row.shipping_request:
             continue
-        prep_name = row.shipment_preparation or frappe.db.get_value(
-            "Shipment Preparation",
-            {"shipping_request": row.shipping_request},
-            "name",
-        )
-        if not prep_name:
-            continue
-
         if doc.trip_status == "Cancelled":
-            frappe.db.set_value(
-                "Shipment Preparation",
-                prep_name,
-                "preparation_status",
-                "Ready for Trip",
-            )
             frappe.db.set_value(
                 "Shipping Request", row.shipping_request, "request_status", "Goods Prepared"
             )
-        else:
+        elif doc.trip_status == "Preparing":
             frappe.db.set_value(
-                "Shipment Preparation",
-                prep_name,
-                "preparation_status",
-                "Entered Trip",
+                "Shipping Request", row.shipping_request, "request_status", "Goods Prepared"
             )
-            if doc.trip_status in ("Started", "Paused"):
-                frappe.db.set_value(
-                    "Shipping Request",
-                    row.shipping_request,
-                    "request_status",
-                    "Out for Delivery",
-                )
-            elif doc.trip_status == "Completed":
-                frappe.db.set_value(
-                    "Shipping Request",
-                    row.shipping_request,
-                    "request_status",
-                    "Delivered",
-                )
+        elif doc.trip_status in ("Started", "Paused"):
+            frappe.db.set_value(
+                "Shipping Request",
+                row.shipping_request,
+                "request_status",
+                "Out for Delivery",
+            )
+        elif doc.trip_status == "Completed":
+            frappe.db.set_value(
+                "Shipping Request",
+                row.shipping_request,
+                "request_status",
+                "Delivered",
+            )

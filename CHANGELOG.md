@@ -1,5 +1,25 @@
 # Changelog
 
+## [0.1.12] — 2026-05-13
+
+### Removed
+
+- **Shipment Preparation** DocType and desk flows that depended on it.
+
+### Changed
+
+- **Haulage Trip**: Validates linked **Shipping Request** documents directly and syncs request status from the trip lifecycle (no preparation records).
+- **Haulage Trip Shipment**: Child rows reference **Shipping Request** only.
+- **Shipping Request**: Removed the **Prepare shipment** client button.
+- **Haulage Logistics** workspace: **Master data**, **1 · Shipping requests**, **2 · Trips**, **Reports**; standalone trip-expense and Sales Invoice shortcuts removed from the desk (billing and expenses remain on the trip form).
+- **Arabic (`ar.csv`)** and **README** workflow text updated.
+
+### Fixed
+
+- **Install**: `before_migrate` clears legacy **Shipment Preparation** table rows when the old DocType still exists so **migrate** can drop the table cleanly.
+
+[0.1.12]: https://github.com/shaasie-solutions/newapp/releases/tag/v0.1.12
+
 ## [0.1.11] — 2026-05-14
 
 ### Changed

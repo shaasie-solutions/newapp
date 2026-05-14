@@ -6,7 +6,7 @@ app_description = (
 )
 app_email = ""
 app_license = "MIT"
-app_version = "0.1.11"
+app_version = "0.1.12"
 app_icon = "truck"
 app_logo_url = "/assets/haulage_mgmt/images/haulage-desk.svg"
 
@@ -39,10 +39,6 @@ scheduler_events = {
 doc_events = {
     "Haulage Trip": {
         "on_update": "haulage_mgmt.haulage_logistics.doctype.haulage_trip.haulage_trip.on_trip_update",
-    },
-    "Shipment Preparation": {
-        "on_update": "haulage_mgmt.haulage_logistics.doctype.shipment_preparation.shipment_preparation.sync_shipping_request_status",
-        "after_insert": "haulage_mgmt.haulage_logistics.doctype.shipment_preparation.shipment_preparation.sync_shipping_request_status",
     },
 }
 

@@ -1,15 +1,5 @@
 frappe.ui.form.on("Shipping Request", {
 	refresh(frm) {
-		if (!frm.is_new()) {
-			frm.add_custom_button(
-				__("Prepare shipment"),
-				() => {
-					frappe.route_options = { shipping_request: frm.doc.name };
-					frappe.new_doc("Shipment Preparation");
-				},
-				__("Shipping"),
-			);
-		}
 		if (frm.doc.customer) {
 			frm.add_custom_button(
 				__("Open customer record"),

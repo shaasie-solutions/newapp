@@ -10,7 +10,12 @@ def _first_company_name():
 
 
 def before_migrate():
-    """Create Fleet Manager role before DocType sync so JSON permissions import cleanly."""
+    """Create Fleet Manager role; clear Shipment Preparation rows before DocType removal."""
+    if frappe.db.exists("DocType", "Shipment Preparation"):
+        try:
+            frappe.db.sql("DELETE FROM `tabShipment Preparation`")
+        except Exception:
+            frappe.log_error(frappe.get_traceback(), "haulage_mgmt: clear Shipment Preparation")
     if frappe.db.exists("Role", "Fleet Manager"):
         return
     doc = frappe.new_doc("Role")

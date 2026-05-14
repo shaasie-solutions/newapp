@@ -21,6 +21,7 @@ def before_migrate():
 
 def after_migrate():
     """Purge replaced desk artifacts; sync workspace from app JSON; backfill Company on legacy trips."""
+    _migrate_truck_busy_to_reserved()
     _purge_legacy_haulage_reports()
     _sync_haulage_workspace_from_json()
     _fix_workspace_sidebar()
@@ -36,6 +37,16 @@ def after_migrate():
         WHERE IFNULL(company, '') = ''
         """,
         (company,),
+    )
+
+
+def _migrate_truck_busy_to_reserved():
+    """Rename legacy truck status Busy -> Reserved for Trip on existing rows."""
+    if not frappe.db.exists("DocType", "Truck"):
+        return
+    frappe.db.sql(
+        "UPDATE `tabTruck` SET truck_status = %s WHERE truck_status = %s",
+        ("Reserved for Trip", "Busy"),
     )
 
 

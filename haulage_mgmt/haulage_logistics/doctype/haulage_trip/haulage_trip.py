@@ -130,7 +130,7 @@ class HaulageTrip(Document):
 
 
 def refresh_truck_fleet_status(truck_name):
-    """Set truck Busy when any active trip exists; otherwise Available (respects Maintenance/Stopped)."""
+    """Set truck Reserved for Trip when any active trip exists; otherwise Available (respects Maintenance/Stopped)."""
     if not truck_name:
         return
     cur = frappe.db.get_value("Truck", truck_name, "truck_status")
@@ -145,7 +145,7 @@ def refresh_truck_fleet_status(truck_name):
         (truck_name,),
     )
     if busy:
-        frappe.db.set_value("Truck", truck_name, "truck_status", "Busy")
+        frappe.db.set_value("Truck", truck_name, "truck_status", "Reserved for Trip")
     else:
         frappe.db.set_value("Truck", truck_name, "truck_status", "Available")
 

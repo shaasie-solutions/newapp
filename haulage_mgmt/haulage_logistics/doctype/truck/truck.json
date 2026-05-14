@@ -7,7 +7,6 @@
  "engine": "InnoDB",
  "field_order": [
   "naming_series",
-  "internal_fleet_id",
   "license_plate",
   "truck_type",
   "truck_model",
@@ -28,13 +27,6 @@
    "label": "Series",
    "options": "TRUCK-.####",
    "reqd": 1
-  },
-  {
-   "fieldname": "internal_fleet_id",
-   "fieldtype": "Data",
-   "in_list_view": 1,
-   "in_standard_filter": 1,
-   "label": "Internal fleet ID"
   },
   {
    "fieldname": "license_plate",
@@ -71,7 +63,7 @@
    "in_list_view": 1,
    "in_standard_filter": 1,
    "label": "Truck Status",
-   "options": "Available\nBusy\nMaintenance\nStopped",
+   "options": "Available\nReserved for Trip\nMaintenance\nStopped",
    "default": "Available",
    "reqd": 1
   },
@@ -108,7 +100,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-05-13 00:00:00.000000",
+ "modified": "2026-05-14 12:00:00",
  "modified_by": "Administrator",
  "module": "Haulage Logistics",
  "name": "Truck",

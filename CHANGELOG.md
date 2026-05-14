@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.1.11] — 2026-05-14
+
+### Changed
+
+- **Truck**: Removed **Internal fleet ID** field; document name / naming series remains the primary identifier.
+- **Truck status**: Replaced **Busy** with **Reserved for Trip** (Arabic: محجوزة لرحلة). Fleet auto-status from active trips now sets this value. `after_migrate` updates existing rows from `Busy` to `Reserved for Trip`.
+
+[0.1.11]: https://github.com/shaasie-solutions/newapp/releases/tag/v0.1.11
+
 ## [0.1.10] — 2026-05-14
 
 ### Changed

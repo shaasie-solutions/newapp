@@ -6,6 +6,10 @@ from frappe.utils import getdate, today
 
 class ShippingRequest(Document):
     def validate(self):
+        if not (self.pickup_location or "").strip():
+            frappe.throw(_("Pickup location is required."))
+        if not (self.delivery_location or "").strip():
+            frappe.throw(_("Delivery location is required."))
         if self.required_loading_date and self.expected_delivery_date:
             if getdate(self.expected_delivery_date) < getdate(self.required_loading_date):
                 frappe.throw(

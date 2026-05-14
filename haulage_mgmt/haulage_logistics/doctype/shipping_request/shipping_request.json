@@ -8,7 +8,8 @@
   "naming_series",
   "customer",
   "request_date",
-  "shipping_route",
+  "pickup_location",
+  "delivery_location",
   "cargo_type",
   "cargo_description",
   "weight_or_qty",
@@ -45,11 +46,17 @@
    "reqd": 1
   },
   {
-   "fieldname": "shipping_route",
-   "fieldtype": "Link",
+   "fieldname": "pickup_location",
+   "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "Shipping Route",
-   "options": "Shipping Route",
+   "label": "Pickup location",
+   "reqd": 1
+  },
+  {
+   "fieldname": "delivery_location",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Delivery location",
    "reqd": 1
   },
   {

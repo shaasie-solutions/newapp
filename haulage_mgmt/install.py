@@ -10,7 +10,8 @@ def _first_company_name():
 
 
 def before_migrate():
-    """Create Fleet Manager role; clear Shipment Preparation rows before DocType removal."""
+    """Backfill SR locations from Shipping Route; clear legacy tables; create Fleet Manager role."""
+    _migrate_shipping_route_to_sr_locations()
     if frappe.db.exists("DocType", "Shipment Preparation"):
         try:
             frappe.db.sql("DELETE FROM `tabShipment Preparation`")
@@ -22,6 +23,39 @@ def before_migrate():
     doc.role_name = "Fleet Manager"
     doc.desk_access = 1
     doc.insert(ignore_permissions=True)
+
+
+def _migrate_shipping_route_to_sr_locations():
+    """Before schema sync: add pickup/delivery columns if missing and copy from tabShipping Route."""
+    if not frappe.db.exists("DocType", "Shipping Request"):
+        return
+    if not frappe.db.has_column("Shipping Request", "pickup_location"):
+        try:
+            frappe.db.add_column("Shipping Request", "pickup_location", "Data")
+        except Exception:
+            frappe.log_error(frappe.get_traceback(), "haulage_mgmt: add_column pickup_location")
+    if not frappe.db.has_column("Shipping Request", "delivery_location"):
+        try:
+            frappe.db.add_column("Shipping Request", "delivery_location", "Data")
+        except Exception:
+            frappe.log_error(frappe.get_traceback(), "haulage_mgmt: add_column delivery_location")
+    if not frappe.db.exists("DocType", "Shipping Route"):
+        return
+    if not frappe.db.has_column("Shipping Request", "shipping_route"):
+        return
+    try:
+        frappe.db.sql(
+            """
+            UPDATE `tabShipping Request` sr
+            INNER JOIN `tabShipping Route` r ON r.name = sr.shipping_route
+            SET
+                sr.pickup_location = COALESCE(NULLIF(TRIM(sr.pickup_location), ''), r.loading_city),
+                sr.delivery_location = COALESCE(NULLIF(TRIM(sr.delivery_location), ''), r.delivery_city)
+            WHERE IFNULL(sr.shipping_route, '') != ''
+            """
+        )
+    except Exception:
+        frappe.log_error(frappe.get_traceback(), "haulage_mgmt: copy Shipping Route into SR locations")
 
 
 def after_migrate():

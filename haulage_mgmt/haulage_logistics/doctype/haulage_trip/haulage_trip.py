@@ -12,12 +12,29 @@ class HaulageTrip(Document):
             self.company = companies[0] if companies else None
         if not self.company:
             frappe.throw(_("Set the company on the trip (no default company for the user)."))
+        self._sync_shipment_location_columns()
         self._validate_shipments_not_empty()
         self._validate_shipping_requests()
-        self._validate_route_alignment()
         self._validate_no_duplicate_shipment_on_active_trips()
         self._validate_truck_and_driver()
         self._validate_trip_status_consistency()
+
+    def _sync_shipment_location_columns(self):
+        """Mirror pickup/delivery from each Shipping Request onto the child row (print / API)."""
+        for row in self.get("shipments") or []:
+            if not row.shipping_request:
+                row.pickup_location = ""
+                row.delivery_location = ""
+                continue
+            locs = frappe.db.get_value(
+                "Shipping Request",
+                row.shipping_request,
+                ["pickup_location", "delivery_location"],
+                as_dict=True,
+            )
+            if locs:
+                row.pickup_location = locs.pickup_location or ""
+                row.delivery_location = locs.delivery_location or ""
 
     def _validate_shipments_not_empty(self):
         if self.trip_status == "Cancelled":
@@ -48,24 +65,6 @@ class HaulageTrip(Document):
             if st == "Delivered" and self.trip_status != "Completed":
                 frappe.throw(
                     _("Shipping request {0} is already marked delivered.").format(row.shipping_request)
-                )
-
-    def _validate_route_alignment(self):
-        if not self.shipping_route:
-            return
-        for row in self.get("shipments") or []:
-            if not row.shipping_request:
-                continue
-            sr_route = frappe.db.get_value(
-                "Shipping Request", row.shipping_request, "shipping_route"
-            )
-            if sr_route and sr_route != self.shipping_route:
-                frappe.msgprint(
-                    _("Warning: shipping request {0} uses route {1}, which differs from the trip route.").format(
-                        row.shipping_request, sr_route
-                    ),
-                    indicator="orange",
-                    title=_("Route mismatch"),
                 )
 
     def _validate_no_duplicate_shipment_on_active_trips(self):

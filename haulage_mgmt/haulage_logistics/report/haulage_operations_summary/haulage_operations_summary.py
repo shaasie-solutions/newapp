@@ -79,7 +79,15 @@ def _trip_metrics_subquery(where_clause):
             ht.trip_status,
             ht.driver,
             ht.truck,
-            ht.shipping_route,
+            (
+                SELECT GROUP_CONCAT(
+                    CONCAT(IFNULL(sr.pickup_location, ''), ' \u2192 ', IFNULL(sr.delivery_location, ''))
+                    ORDER BY s.idx SEPARATOR ' | '
+                )
+                FROM `tabHaulage Trip Shipment` s
+                INNER JOIN `tabShipping Request` sr ON sr.name = s.shipping_request
+                WHERE s.parent = ht.name
+            ) AS shipment_locations,
             ht.modified AS trip_modified,
             (
                 SELECT COUNT(DISTINCT s.shipping_request)
@@ -127,11 +135,10 @@ def execute(filters=None):
             {"label": _("Driver"), "fieldname": "driver", "fieldtype": "Link", "options": "Driver", "width": 120},
             {"label": _("Truck"), "fieldname": "truck", "fieldtype": "Link", "options": "Truck", "width": 120},
             {
-                "label": _("Route"),
-                "fieldname": "shipping_route",
-                "fieldtype": "Link",
-                "options": "Shipping Route",
-                "width": 140,
+                "label": _("Shipment locations"),
+                "fieldname": "shipment_locations",
+                "fieldtype": "Data",
+                "width": 220,
             },
             {"label": _("Shipment count"), "fieldname": "shipment_count", "fieldtype": "Int", "width": 110},
             {"label": _("Revenue"), "fieldname": "revenue", "fieldtype": "Currency", "width": 110},
@@ -140,7 +147,7 @@ def execute(filters=None):
         ]
         data = frappe.db.sql(
             f"""
-            SELECT trip, trip_status, driver, truck, shipping_route, shipment_count, revenue, expenses, net_income
+            SELECT trip, trip_status, driver, truck, shipment_locations, shipment_count, revenue, expenses, net_income
             FROM ({trip_sql}) AS tm
             ORDER BY trip_modified DESC
             """,

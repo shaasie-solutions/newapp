@@ -16,6 +16,9 @@ frappe.ui.form.on("Haulage Trip", {
 		frm.add_custom_button(__("Print dispatch sheet"), () => {
 			frappe.set_route("print", frm.doctype, frm.doc.name, "Haulage Trip Dispatch");
 		});
+		frm.add_custom_button(__("Print shipments sheet"), () => {
+			frappe.set_route("print", frm.doctype, frm.doc.name, "Haulage Trip Shipments Sheet");
+		});
 		frm.add_custom_button(
 			__("Create Sales Invoice for shipment"),
 			() => haulage_mgmt.trip.prompt_sales_invoice(frm),
@@ -40,6 +43,29 @@ frappe.ui.form.on("Haulage Trip", {
 		frm.add_custom_button(__("Resume"), () => haulage_mgmt.trip.append_event(frm, "Resume"), __("Quick events"));
 		frm.add_custom_button(__("Arrival"), () => haulage_mgmt.trip.append_event(frm, "Arrival"), __("Quick events"));
 		frm.add_custom_button(__("Return"), () => haulage_mgmt.trip.append_event(frm, "Return"), __("Quick events"));
+	},
+});
+
+frappe.ui.form.on("Haulage Trip Shipment", {
+	shipping_request(frm, cdt, cdn) {
+		const row = locals[cdt][cdn];
+		if (!row.shipping_request) {
+			frappe.model.set_value(cdt, cdn, "pickup_location", "");
+			frappe.model.set_value(cdt, cdn, "delivery_location", "");
+			return;
+		}
+		frappe.db.get_value(
+			"Shipping Request",
+			row.shipping_request,
+			["pickup_location", "delivery_location"],
+			(r) => {
+				if (!r) {
+					return;
+				}
+				frappe.model.set_value(cdt, cdn, "pickup_location", r.pickup_location || "");
+				frappe.model.set_value(cdt, cdn, "delivery_location", r.delivery_location || "");
+			},
+		);
 	},
 });
 

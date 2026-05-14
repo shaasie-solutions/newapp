@@ -1,5 +1,23 @@
 # Changelog
 
+## [0.1.13] — 2026-05-13
+
+### Removed
+
+- **Shipping Route** DocType and all desk links; trips no longer reference a shared route master.
+
+### Changed
+
+- **Shipping Request**: **Pickup location** and **Delivery location** (required text) replace **Shipping Route**; existing sites backfill from **Shipping Route** loading/delivery cities on migrate (`before_migrate`).
+- **Haulage Trip**: **Shipping Route** field removed.
+- **Haulage Trip Shipment**: **Pickup location** and **Delivery location** (read-only, from linked request) shown in the grid; server `validate` mirrors values from **Shipping Request** for print/API; client refreshes on link change.
+- **Haulage Operations Summary** (Trip view): **Route** column replaced by **Shipment locations** (concatenated pickup → delivery per shipment line, in row order).
+- **Print**: **Haulage Trip Dispatch** updated (shipments table with pickup/delivery); new **Haulage Trip Shipments Sheet** format; trip form adds **Print shipments sheet**.
+- **Haulage Logistics** workspace: master data shortcuts/links no longer include Shipping Route.
+- **Trip / trip shipment forms**: Field descriptions clarify that pickup and delivery on each trip line are loaded from the linked **Shipping Request** (Arabic strings in `ar.csv`).
+
+[0.1.13]: https://github.com/shaasie-solutions/newapp/releases/tag/v0.1.13
+
 ## [0.1.12] — 2026-05-13
 
 ### Removed

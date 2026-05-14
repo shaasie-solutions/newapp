@@ -10,7 +10,6 @@
   "trip_status",
   "column_break_head",
   "company",
-  "shipping_route",
   "truck",
   "driver",
   "departure_date",
@@ -56,14 +55,6 @@
    "reqd": 1
   },
   {
-   "fieldname": "shipping_route",
-   "fieldtype": "Link",
-   "in_list_view": 1,
-   "label": "Shipping Route",
-   "options": "Shipping Route",
-   "reqd": 1
-  },
-  {
    "fieldname": "truck",
    "fieldtype": "Link",
    "in_list_view": 1,
@@ -105,6 +96,7 @@
    "fieldname": "shipments",
    "fieldtype": "Table",
    "label": "Shipping Requests on Trip",
+   "description": "Pickup and delivery on each line are loaded from the linked Shipping Request (edit them on the request).",
    "options": "Haulage Trip Shipment"
   },
   {

@@ -4,7 +4,11 @@
  "doctype": "DocType",
  "editable_grid": 1,
  "engine": "InnoDB",
- "field_order": ["shipping_request"],
+ "field_order": [
+  "shipping_request",
+  "pickup_location",
+  "delivery_location"
+ ],
  "fields": [
   {
    "fieldname": "shipping_request",
@@ -13,6 +17,24 @@
    "label": "Shipping Request",
    "options": "Shipping Request",
    "reqd": 1
+  },
+  {
+   "fieldname": "pickup_location",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Pickup location",
+   "description": "Taken from the linked Shipping Request.",
+   "read_only": 1,
+   "fetch_from": "shipping_request.pickup_location"
+  },
+  {
+   "fieldname": "delivery_location",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Delivery location",
+   "description": "Taken from the linked Shipping Request.",
+   "read_only": 1,
+   "fetch_from": "shipping_request.delivery_location"
   }
  ],
  "istable": 1,

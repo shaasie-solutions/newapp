@@ -263,12 +263,101 @@ def _fix_workspace_sidebar():
 
 
 def before_uninstall():
-    """Remove roles created by this app so they do not linger after uninstall."""
+    """Remove desk artifacts, custom role, and legacy DocTypes so the site stays clean."""
+    _uninstall_remove_haulage_todos()
+    _uninstall_remove_workspace()
+    _uninstall_remove_pages()
+    _uninstall_remove_reports()
+    _uninstall_remove_print_formats()
+    _uninstall_remove_legacy_doctypes()
+    _uninstall_remove_fleet_manager_role()
+    _uninstall_remove_module_def()
+
+
+def after_uninstall():
+    """Final cache clear after Frappe drops app DocTypes."""
+    try:
+        frappe.clear_cache()
+    except Exception:
+        frappe.log_error(frappe.get_traceback(), "haulage_mgmt after_uninstall: clear_cache")
+
+
+def _uninstall_delete_doc(doctype, name):
+    if not name or not frappe.db.exists(doctype, name):
+        return
+    try:
+        frappe.delete_doc(doctype, name, force=True, ignore_permissions=True)
+    except Exception:
+        frappe.log_error(
+            frappe.get_traceback(),
+            f"haulage_mgmt uninstall: delete {doctype} {name}",
+        )
+
+
+def _uninstall_remove_fleet_manager_role():
     role = "Fleet Manager"
     if not frappe.db.exists("Role", role):
         return
     frappe.db.sql("DELETE FROM `tabHas Role` WHERE role=%s", (role,))
+    _uninstall_delete_doc("Role", role)
+
+
+def _uninstall_remove_workspace():
+    _uninstall_delete_doc("Workspace", "Haulage Logistics")
+
+
+def _uninstall_remove_pages():
+    for page in (
+        "trip-operations",
+        "trip-accounting",
+        "trip-accounting-entry",
+    ):
+        _uninstall_delete_doc("Page", page)
+
+
+def _uninstall_remove_reports():
+    for report in (
+        "Haulage Driver Report",
+        "Haulage Trip Report",
+        "Haulage Truck Report",
+        "Haulage Custody Report",
+        "Trip Financial Summary",
+        "Driver Performance",
+        "Truck Performance",
+        "Haulage Operations Summary",
+    ):
+        _uninstall_delete_doc("Report", report)
+
+
+def _uninstall_remove_print_formats():
+    for pf in (
+        "Haulage Trip Operations",
+        "Haulage Trip Summary",
+        "Haulage Trip Dispatch",
+        "Haulage Trip Shipments Sheet",
+    ):
+        _uninstall_delete_doc("Print Format", pf)
+
+
+def _uninstall_remove_legacy_doctypes():
+    """DocTypes removed from the app in older versions but may still exist on the site."""
+    for dt in ("Shipment Preparation", "Shipping Route"):
+        if not frappe.db.exists("DocType", dt):
+            continue
+        _uninstall_delete_doc("DocType", dt)
+
+
+def _uninstall_remove_module_def():
+    _uninstall_delete_doc("Module Def", "Haulage Logistics")
+
+
+def _uninstall_remove_haulage_todos():
+    if not frappe.db.exists("DocType", "ToDo"):
+        return
     try:
-        frappe.delete_doc("Role", role, force=True, ignore_permissions=True)
+        frappe.db.sql(
+            "DELETE FROM `tabToDo` WHERE description LIKE %s",
+            ("[Haulage%",),
+        )
     except Exception:
-        frappe.log_error(frappe.get_traceback(), "haulage_mgmt before_uninstall: Role Fleet Manager")
+        frappe.log_error(frappe.get_traceback(), "haulage_mgmt uninstall: ToDo cleanup")

@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.1.30] — 2026-05-15
+
+### Changed
+
+- **Uninstall**: comprehensive `before_uninstall` / `after_uninstall` — removes workspace, pages, reports, print formats, Fleet Manager role, legacy DocTypes, and haulage ToDos; site stays clean after `uninstall-app`.
+
+[0.1.30]: https://github.com/shaasie-solutions/newapp/releases/tag/v0.1.30
+
 ## [0.1.29] — 2026-05-15
 
 ### Fixed

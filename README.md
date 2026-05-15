@@ -68,6 +68,32 @@ bench build --app haulage_mgmt
 
 Hard-refresh the browser (**Ctrl+Shift+R**).
 
+### Uninstall (clean removal)
+
+To remove the app from a site **without leaving desk links, roles, or legacy pages**:
+
+```bash
+bench --site yoursite.com uninstall-app haulage_mgmt
+bench --site yoursite.com clear-cache
+```
+
+This runs `before_uninstall` / `after_uninstall` hooks that remove:
+
+- **Fleet Manager** role and user role assignments  
+- **Haulage Logistics** workspace  
+- Custom **pages** (All Trips, trip accounting redirects)  
+- **Reports** and **print formats** (current and legacy names)  
+- Legacy **DocTypes** if still on the site (**Shipment Preparation**, **Shipping Route**)  
+- Fleet expiry **ToDo** reminders created by the app  
+
+Frappe then drops all **Haulage** DocTypes and their data (trips, trucks, drivers, shipping requests, settings, etc.).
+
+To remove the app from the bench entirely:
+
+```bash
+bench remove-app haulage_mgmt
+```
+
 ### Arabic interface
 
 1. Site language (optional): `bench --site yoursite.com set-config language ar`

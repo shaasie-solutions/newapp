@@ -6,7 +6,7 @@ app_description = (
 )
 app_email = ""
 app_license = "MIT"
-app_version = "0.1.29"
+app_version = "0.1.30"
 app_icon = "truck"
 app_logo_url = "/assets/haulage_mgmt/images/haulage-desk.svg"
 
@@ -35,6 +35,7 @@ add_to_apps_screen = [
 before_migrate = "haulage_mgmt.install.before_migrate"
 after_migrate = "haulage_mgmt.install.after_migrate"
 before_uninstall = "haulage_mgmt.install.before_uninstall"
+after_uninstall = "haulage_mgmt.install.after_uninstall"
 
 override_doctype_dashboards = {
     "Customer": "haulage_mgmt.haulage_logistics.dashboard.customer_dashboard.get_dashboard_data",

@@ -14,10 +14,39 @@ from haulage_mgmt.haulage_logistics.trip_financials import get_trip_financial_su
 @frappe.whitelist()
 def get_trip_operations_list(status=None):
     """Operational list: trip, status, driver, truck, date."""
+    return _trip_hub_rows(status, include_financials=False)
+
+
+@frappe.whitelist()
+def get_all_trips_hub(status=None):
+    """Unified All Trips list: status, driver, truck, date, revenue, expenses, custody, net."""
+    return _trip_hub_rows(status, include_financials=True)
+
+
+def _trip_hub_rows(status=None, include_financials=False):
+    if include_financials:
+        conditions = ["1=1"]
+        values = []
+        if status:
+            conditions.append("ht.trip_status = %s")
+            values.append(status)
+        where = " AND ".join(conditions)
+        rows = frappe.db.sql(
+            f"""
+            SELECT *
+            FROM ({trip_metrics_subquery(where)}) AS fin
+            ORDER BY fin.trip_modified DESC, fin.trip DESC
+            LIMIT 500
+            """,
+            tuple(values),
+            as_dict=True,
+        )
+        normalize_money_rows(rows)
+        return rows
+
     filters = {}
     if status:
         filters["trip_status"] = status
-
     rows = frappe.get_all(
         "Haulage Trip",
         filters=filters,

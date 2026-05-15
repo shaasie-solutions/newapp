@@ -1,5 +1,23 @@
 # Changelog
 
+## [0.1.28] — 2026-05-15
+
+### Fixed
+
+- **All Trips** hub: unified list with status actions, financial columns, Open and Accounting buttons; fixed broken page container; restored legacy page redirects.
+- Trip form: no duplicate action buttons on refresh; accounting mode persists after save.
+- Shared `haulage_trip_hub.js` for list and form status/accounting navigation.
+
+[0.1.28]: https://github.com/shaasie-solutions/newapp/releases/tag/v0.1.28
+
+## [0.1.27] — 2026-05-15
+
+### Changed
+
+- Code health: unified desk APIs in `trip_operations.py`, shared `haulage_i18n.status_badge`, legacy page cleanup on migrate, README architecture updated.
+
+[0.1.27]: https://github.com/shaasie-solutions/newapp/releases/tag/v0.1.27
+
 ## [0.1.25] — 2026-05-15
 
 ### Changed

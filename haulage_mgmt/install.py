@@ -65,7 +65,6 @@ def after_migrate():
     _migrate_truck_busy_to_reserved()
     _purge_legacy_haulage_reports()
     _purge_legacy_haulage_print_formats()
-    _purge_legacy_haulage_pages()
     _sync_haulage_workspace_from_json()
     _fix_workspace_sidebar()
     if not frappe.db.exists("DocType", "Haulage Trip"):
@@ -146,19 +145,6 @@ def _migrate_truck_busy_to_reserved():
         "UPDATE `tabTruck` SET truck_status = %s WHERE truck_status = %s",
         ("Reserved for Trip", "Busy"),
     )
-
-
-def _purge_legacy_haulage_pages():
-    """Remove desk pages replaced by trip-operations hub (redirect stubs remain in app code)."""
-    if not frappe.db.exists("DocType", "Page"):
-        return
-    for page in ("trip-accounting", "trip-accounting-entry"):
-        if not frappe.db.exists("Page", page):
-            continue
-        try:
-            frappe.delete_doc("Page", page, force=True, ignore_permissions=True)
-        except Exception:
-            frappe.log_error(frappe.get_traceback(), f"haulage_mgmt: purge legacy page {page}")
 
 
 def _purge_legacy_haulage_print_formats():

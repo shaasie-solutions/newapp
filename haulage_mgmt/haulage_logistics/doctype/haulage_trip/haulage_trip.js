@@ -1,8 +1,3 @@
-frappe.provide("haulage_mgmt.trip");
-
-const ACCOUNTING_ROUTE_FLAG = "haulage_accounting_entry";
-const ACCOUNTING_RELOAD_KEY = "haulage_trip_accounting_reload";
-
 const ACCOUNTING_FIELDS = [
 	"section_break_trip_accounting",
 	"trip_revenue_summary",
@@ -49,51 +44,6 @@ function clear_form_custom_buttons(frm) {
 	if (frm.page && typeof frm.page.clear_custom_actions === "function") {
 		frm.page.clear_custom_actions();
 	}
-}
-
-function enter_accounting_mode(frm) {
-	if (!frm.doc.name) {
-		return;
-	}
-	frm._haulage_accounting_entry = true;
-}
-
-function mark_accounting_reload(frm) {
-	try {
-		sessionStorage.setItem(ACCOUNTING_RELOAD_KEY, frm.doc.name);
-	} catch (e) {
-		/* private browsing */
-	}
-}
-
-function consume_accounting_reload(frm) {
-	try {
-		const pending = sessionStorage.getItem(ACCOUNTING_RELOAD_KEY);
-		if (pending && pending === frm.doc.name) {
-			frm._haulage_accounting_entry = true;
-		}
-		sessionStorage.removeItem(ACCOUNTING_RELOAD_KEY);
-	} catch (e) {
-		/* ignore */
-	}
-}
-
-function sync_accounting_mode_from_route(frm) {
-	if (frm.is_new()) {
-		frm._haulage_accounting_entry = false;
-		return;
-	}
-	if (frappe.route_options && frappe.route_options[ACCOUNTING_ROUTE_FLAG]) {
-		enter_accounting_mode(frm);
-		return;
-	}
-	if (!frm._haulage_accounting_entry) {
-		consume_accounting_reload(frm);
-	}
-}
-
-function is_accounting_entry(frm) {
-	return Boolean(frm._haulage_accounting_entry) && !frm.is_new();
 }
 
 function set_operational_layout(frm) {
@@ -152,18 +102,10 @@ function setup_accounting_entry(frm) {
 	if (!frm.is_new()) {
 		frm.add_custom_button(__("Back to trip list"), () => {
 			frm._haulage_accounting_entry = false;
-			frappe.route_options = { view: "accounting" };
-			frappe.set_route("trip-operations");
+			haulage_mgmt.trip.open_hub();
 		});
 	}
 }
-
-function open_trip_accounting_form(trip_name) {
-	frappe.route_options = { [ACCOUNTING_ROUTE_FLAG]: 1 };
-	frappe.set_route("Form", "Haulage Trip", trip_name);
-}
-
-haulage_mgmt.trip.open_accounting = open_trip_accounting_form;
 
 haulage_mgmt.trip.set_status_indicator = function (frm) {
 	if (!frm.doc.trip_status) {
@@ -173,24 +115,11 @@ haulage_mgmt.trip.set_status_indicator = function (frm) {
 	frm.page.set_indicator(__(frm.doc.trip_status), color);
 };
 
-haulage_mgmt.trip.run_status_action = function (frm, action, confirm_message) {
-	const run = () => {
-		frappe.call({
-			method: "haulage_mgmt.haulage_logistics.api.set_trip_status",
-			args: { trip_name: frm.doc.name, action },
-			freeze: true,
-			callback(r) {
-				if (!r.exc) {
-					frm.reload_doc();
-				}
-			},
-		});
-	};
-	if (confirm_message) {
-		frappe.confirm(confirm_message, run);
-		return;
-	}
-	run();
+haulage_mgmt.trip.run_status_action_on_form = function (frm, action, confirm_message) {
+	haulage_mgmt.trip.run_status_action(frm.doc.name, action, {
+		confirm_message,
+		on_success: () => frm.reload_doc(),
+	});
 };
 
 haulage_mgmt.trip.add_print_buttons = function (frm) {
@@ -211,44 +140,11 @@ haulage_mgmt.trip.add_print_buttons = function (frm) {
 };
 
 haulage_mgmt.trip.add_status_action_buttons = function (frm) {
-	const status = frm.doc.trip_status || "Preparing";
 	const group = __("Trip actions");
-
-	if (status === "Preparing" || status === "Paused") {
+	for (const act of haulage_mgmt.trip.status_actions_for(frm.doc.trip_status)) {
 		frm.add_custom_button(
-			__("Start trip"),
-			() => haulage_mgmt.trip.run_status_action(frm, "start"),
-			group,
-		);
-	}
-	if (status === "Started") {
-		frm.add_custom_button(
-			__("Pause trip"),
-			() => haulage_mgmt.trip.run_status_action(frm, "pause"),
-			group,
-		);
-	}
-	if (status === "Started" || status === "Paused") {
-		frm.add_custom_button(
-			__("Trip arrival"),
-			() =>
-				haulage_mgmt.trip.run_status_action(
-					frm,
-					"arrive",
-					__("Mark this trip as completed (arrival)?"),
-				),
-			group,
-		);
-	}
-	if (status !== "Completed" && status !== "Cancelled") {
-		frm.add_custom_button(
-			__("Cancel trip"),
-			() =>
-				haulage_mgmt.trip.run_status_action(
-					frm,
-					"cancel",
-					__("Cancel this trip? Linked shipping requests will return to Goods Prepared."),
-				),
+			act.label,
+			() => haulage_mgmt.trip.run_status_action_on_form(frm, act.action, act.confirm),
 			group,
 		);
 	}
@@ -256,7 +152,7 @@ haulage_mgmt.trip.add_status_action_buttons = function (frm) {
 
 frappe.ui.form.on("Haulage Trip", {
 	onload(frm) {
-		sync_accounting_mode_from_route(frm);
+		haulage_mgmt.trip.sync_accounting_mode_from_route(frm);
 		if (frm.is_new() && !frm.doc.company) {
 			const c = frappe.defaults.get_user_default("company");
 			if (c) {
@@ -265,22 +161,22 @@ frappe.ui.form.on("Haulage Trip", {
 		}
 	},
 	onload_post_render(frm) {
-		sync_accounting_mode_from_route(frm);
-		if (is_accounting_entry(frm)) {
+		haulage_mgmt.trip.sync_accounting_mode_from_route(frm);
+		if (haulage_mgmt.trip.is_accounting_entry(frm)) {
 			setup_accounting_entry(frm);
 		} else {
 			set_operational_layout(frm);
 		}
 	},
 	refresh(frm) {
-		sync_accounting_mode_from_route(frm);
-		if (is_accounting_entry(frm)) {
+		clear_form_custom_buttons(frm);
+		haulage_mgmt.trip.sync_accounting_mode_from_route(frm);
+		if (haulage_mgmt.trip.is_accounting_entry(frm)) {
 			setup_accounting_entry(frm);
 			haulage_mgmt.trip.set_status_indicator(frm);
 			return;
 		}
 
-		frm._haulage_accounting_entry = false;
 		set_operational_layout(frm);
 		if (frm.is_new()) {
 			frm.page.set_indicator(__("Preparing"), "orange");
@@ -291,15 +187,15 @@ frappe.ui.form.on("Haulage Trip", {
 		haulage_mgmt.trip.add_status_action_buttons(frm);
 
 		frm.add_custom_button(__("Trip accounting"), () => {
-			open_trip_accounting_form(frm.doc.name);
+			haulage_mgmt.trip.open_accounting(frm.doc.name);
 		});
 
 		haulage_mgmt.trip.add_print_buttons(frm);
 	},
 	after_save(frm) {
-		if (is_accounting_entry(frm)) {
-			enter_accounting_mode(frm);
-			mark_accounting_reload(frm);
+		if (haulage_mgmt.trip.is_accounting_entry(frm)) {
+			haulage_mgmt.trip.enter_accounting_mode(frm);
+			haulage_mgmt.trip.mark_accounting_reload(frm);
 			setup_accounting_entry(frm);
 		}
 	},
@@ -410,7 +306,7 @@ haulage_mgmt.trip.create_expense_je = function (frm) {
 		freeze_message: __("Creating journal entry..."),
 		callback(r) {
 			if (!r.exc && r.message && r.message.name) {
-				enter_accounting_mode(frm);
+				haulage_mgmt.trip.enter_accounting_mode(frm);
 				frm.reload_doc().then(() => {
 					frappe.set_route("Form", "Journal Entry", r.message.name);
 				});

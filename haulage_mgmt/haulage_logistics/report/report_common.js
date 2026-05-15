@@ -11,6 +11,8 @@ haulage_mgmt.report_common.default_period_filters = function (report) {
 	}
 };
 
+const STATUS_COLUMNS = ["trip_status", "request_status", "truck_status", "driver_status"];
+
 haulage_mgmt.report_common.net_income_formatter = function (
 	value,
 	row,
@@ -26,4 +28,23 @@ haulage_mgmt.report_common.net_income_formatter = function (
 		return `<span class="text-success">${formatted}</span>`;
 	}
 	return formatted;
+};
+
+haulage_mgmt.report_common.report_formatter = function (
+	value,
+	row,
+	column,
+	data,
+	default_formatter,
+) {
+	if (STATUS_COLUMNS.includes(column.fieldname) && value) {
+		return __(value);
+	}
+	return haulage_mgmt.report_common.net_income_formatter(
+		value,
+		row,
+		column,
+		data,
+		default_formatter,
+	);
 };

@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.1.22] — 2026-05-15
+
+### Fixed
+
+- **Arabic translations**: trip/request/truck/driver statuses in list views, reports, trip accounting page, and form indicators; expanded `ar.csv`; workspace shortcut **Trip operations** link fixed.
+
+[0.1.22]: https://github.com/shaasie-solutions/newapp/releases/tag/v0.1.22
+
 ## [0.1.21] — 2026-05-15
 
 ### Removed

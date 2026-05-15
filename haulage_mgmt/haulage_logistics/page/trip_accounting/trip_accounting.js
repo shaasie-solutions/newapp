@@ -28,7 +28,9 @@ class TripAccountingPage {
 			fieldtype: "Select",
 			fieldname: "trip_status",
 			label: __("Status"),
-			options: "\nPreparing\nStarted\nPaused\nCompleted\nCancelled",
+			options: haulage_mgmt.i18n
+				? haulage_mgmt.i18n.trip_status_filter_options()
+				: "\nPreparing\nStarted\nPaused\nCompleted\nCancelled",
 			change: () => this.refresh(),
 		});
 		this.page.add_inner_button(__("Refresh"), () => this.refresh());
@@ -84,7 +86,7 @@ class TripAccountingPage {
 			const trip = frappe.utils.escape_html(row.trip);
 			html += `<tr class="trip-accounting-row" data-trip="${trip}" style="cursor:pointer">
 				<td><a href="#" class="trip-accounting-open" data-trip="${trip}">${trip}</a></td>
-				<td>${frappe.utils.escape_html(row.trip_status || "")}</td>
+				<td>${frappe.utils.escape_html(__(row.trip_status || ""))}</td>
 				<td>${row.trip_date || ""}</td>
 				<td>${frappe.utils.escape_html(row.driver || "")}</td>
 				<td>${frappe.utils.escape_html(row.truck || "")}</td>

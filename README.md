@@ -3,7 +3,7 @@
 Custom Frappe app (**`haulage_mgmt`**) for fleet haulage companies: master data, customer shipping requests, trip operations, per-trip financial allocation (revenue, expenses, custody), ERPNext billing, and operational reports.
 
 **Repository:** [shaasie-solutions/newapp](https://github.com/shaasie-solutions/newapp)  
-**Version:** see `haulage_mgmt/__init__.py` and Git tags (e.g. `v0.1.21`).  
+**Version:** see `haulage_mgmt/__init__.py` and Git tags (e.g. `v0.1.22`).  
 **Requires:** [ERPNext](https://erpnext.com/) on the site.
 
 ---
@@ -47,7 +47,7 @@ Net income = Revenue − Expenses − Custody
 
 ```bash
 cd /path/to/frappe-bench
-bench get-app https://github.com/shaasie-solutions/newapp.git --branch v0.1.21
+bench get-app https://github.com/shaasie-solutions/newapp.git --branch v0.1.22
 
 bench --site yoursite.com install-app haulage_mgmt
 bench --site yoursite.com migrate
@@ -68,6 +68,14 @@ bench build --app haulage_mgmt
 ```
 
 Hard-refresh the browser (**Ctrl+Shift+R**).
+
+### Arabic interface
+
+1. Site language (optional): `bench --site yoursite.com set-config language ar`
+2. Each user: **My Settings** → **Language** → **العربية**
+3. After app update: `bench build --app haulage_mgmt` and `bench --site yoursite.com clear-cache`
+
+Trip statuses, request statuses, truck/driver statuses, list views, reports, and custom pages use `haulage_mgmt/translations/ar.csv`. Values stay in English in the database; labels display in Arabic.
 
 ---
 

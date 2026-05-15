@@ -169,6 +169,9 @@ frappe.ui.form.on("Haulage Trip", {
 		} else {
 			set_operational_layout(frm);
 		}
+		if (frm.fields_dict.trip_status) {
+			frm.refresh_field("trip_status");
+		}
 	},
 	refresh(frm) {
 		sync_accounting_mode_from_route(frm);

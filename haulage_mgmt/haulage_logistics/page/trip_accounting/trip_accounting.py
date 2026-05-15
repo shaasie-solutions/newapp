@@ -2,10 +2,15 @@ import frappe
 from frappe import _
 from frappe.utils import flt
 
+from haulage_mgmt.haulage_logistics.report.report_utils import (
+    normalize_money_rows,
+    trip_metrics_subquery,
+)
+
 
 @frappe.whitelist()
 def get_trip_accounting_list(status=None):
-    """Trips with revenue, expenses, and net income for the Trip Accounting desk page."""
+    """Trips with revenue, expenses, custody, and net income for the list page."""
     conditions = ["1=1"]
     values = []
     if status:
@@ -15,50 +20,21 @@ def get_trip_accounting_list(status=None):
     where = " AND ".join(conditions)
     rows = frappe.db.sql(
         f"""
-        SELECT
-            ht.name AS trip,
-            ht.trip_status,
-            ht.driver,
-            ht.truck,
-            DATE(COALESCE(ht.departure_date, ht.modified)) AS trip_date,
-            (
-                SELECT COUNT(DISTINCT s.shipping_request)
-                FROM `tabHaulage Trip Shipment` s
-                WHERE s.parent = ht.name
-            ) AS shipment_count,
-            IFNULL(rev.revenue, 0) AS revenue,
-            IFNULL(exp.expenses, 0) AS expenses,
-            IFNULL(rev.revenue, 0) - IFNULL(exp.expenses, 0) AS net_income
-        FROM `tabHaulage Trip` ht
-        LEFT JOIN (
-            SELECT parent, SUM(amount) AS expenses
-            FROM `tabHaulage Trip Expense`
-            GROUP BY parent
-        ) exp ON exp.parent = ht.name
-        LEFT JOIN (
-            SELECT s.parent, SUM(IFNULL(sr.agreed_price, 0)) AS revenue
-            FROM `tabHaulage Trip Shipment` s
-            INNER JOIN `tabShipping Request` sr ON sr.name = s.shipping_request
-            GROUP BY s.parent
-        ) rev ON rev.parent = ht.name
-        WHERE {where}
-        ORDER BY COALESCE(ht.departure_date, ht.modified) DESC, ht.name DESC
+        SELECT *
+        FROM ({trip_metrics_subquery(where)}) AS fin
+        ORDER BY fin.trip_date DESC, fin.trip DESC
         LIMIT 500
         """,
         tuple(values),
         as_dict=True,
     )
-    for row in rows:
-        row["revenue"] = flt(row.get("revenue"))
-        row["expenses"] = flt(row.get("expenses"))
-        row["net_income"] = flt(row.get("net_income"))
-        row["shipment_count"] = int(row.get("shipment_count") or 0)
+    normalize_money_rows(rows)
     return rows
 
 
 @frappe.whitelist()
 def get_trip_accounting_detail(trip_name):
-    """Revenue lines and expense totals for the trip accounting form view."""
+    """Revenue lines and financial totals for the trip accounting entry page."""
     trip_name = (trip_name or "").strip()
     if not trip_name or not frappe.db.exists("Haulage Trip", trip_name):
         frappe.throw(_("Trip {0} does not exist.").format(trip_name))
@@ -90,12 +66,16 @@ def get_trip_accounting_detail(trip_name):
         )
 
     total_expenses = sum(flt(e.amount) for e in (trip.get("trip_expenses") or []))
+    total_custody = sum(flt(c.amount) for c in (trip.get("trip_custodies") or []))
     return {
         "trip": trip_name,
         "trip_status": trip.trip_status,
+        "driver": trip.driver,
+        "truck": trip.truck,
         "revenue_lines": revenue_lines,
         "total_revenue": total_revenue,
         "total_expenses": total_expenses,
-        "net_income": total_revenue - total_expenses,
+        "total_custody": total_custody,
+        "net_income": total_revenue - total_expenses - total_custody,
         "trip_journal_entry": trip.trip_journal_entry,
     }

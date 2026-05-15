@@ -20,6 +20,8 @@
   "trip_revenue_summary",
   "section_break_expenses",
   "trip_expenses",
+  "section_break_custodies",
+  "trip_custodies",
   "section_break_accounting",
   "trip_journal_entry"
  ],
@@ -113,6 +115,17 @@
    "fieldtype": "Table",
    "label": "Expense Allocation",
    "options": "Haulage Trip Expense"
+  },
+  {
+   "fieldname": "section_break_custodies",
+   "fieldtype": "Section Break",
+   "label": "Custody allocation (per trip)"
+  },
+  {
+   "fieldname": "trip_custodies",
+   "fieldtype": "Table",
+   "label": "Custody Allocation",
+   "options": "Haulage Trip Custody"
   },
   {
    "fieldname": "section_break_accounting",

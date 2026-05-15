@@ -1,18 +1,16 @@
 # newapp — haulage_mgmt (Frappe / ERPNext)
 
-Git repository for the **`haulage_mgmt`** custom app: fleet haulage, shipping requests, trips, expenses, and ERPNext billing (Sales Invoice / Journal Entry).
+Git repository for the **`haulage_mgmt`** custom app: fleet haulage, shipping requests, trips, trip accounting (expenses and custody), and ERPNext billing.
 
-**Version:** see `haulage_mgmt/__init__.py` and Git tags (e.g. `v0.1.15`).
+**Version:** see `haulage_mgmt/__init__.py` and Git tags (e.g. `v0.1.18`).
 
 ---
 
 ## Install with Bench (Git URL + tag/branch)
 
-`setup.py` is at the **repository root**, so `bench get-app` works with the GitHub URL and `--branch`:
-
 ```bash
 cd /path/to/frappe-bench
-bench get-app https://github.com/shaasie-solutions/newapp.git --branch v0.1.15
+bench get-app https://github.com/shaasie-solutions/newapp.git --branch v0.1.18
 
 bench --site yoursite.com install-app haulage_mgmt
 bench --site yoursite.com migrate
@@ -20,71 +18,30 @@ bench build --app haulage_mgmt
 bench --site yoursite.com clear-cache
 ```
 
-The **Haulage Management** app tile opens workspace **`/desk/haulage-logistics`** (slug of **Haulage Logistics**). Some setups also accept **`/app/haulage-logistics`** depending on Frappe version.
+Desk workspace: **`/desk/haulage-logistics`** (app tile **Haulage Management**).
 
-Bench clones the repo into `apps/newapp` (from the repo name). The Python package name and **`bench install-app`** target remain **`haulage_mgmt`** (from `setup.py`).
-
-The app requires **ERPNext** (`required_apps = ["erpnext"]`) on the site.
+Requires **ERPNext** on the site.
 
 ---
 
-## Repository layout
+## Workspace overview
 
-| Path | Description |
-|------|-------------|
-| `setup.py`, `requirements.txt`, `MANIFEST.in`, `license.txt` | Frappe app root (Bench expects `setup.py` here). |
-| `haulage_mgmt/` | Python package (`hooks.py`, modules, DocTypes). |
-| `haulage_mgmt/translations/ar.csv` | Arabic translations (Frappe CSV). |
-| `CHANGELOG.md` | Release notes. |
-
----
-
-## Documentation
-
-Full workflow, uninstall, i18n, and setup details are in the sections below (same content as the former app-level README).
-
----
-
-## Language (English UI + Arabic)
-
-- **Source strings** are **English** (Python `_("…")`, client `__(…)`).
-- **Arabic** via **`haulage_mgmt/translations/ar.csv`**. See the [Frappe translations guide](https://docs.frappe.io/framework/user/en/guides/basics/translations).
-- After changing `ar.csv` or client strings: **`bench --site <site> clear-cache`** and **`bench build --app haulage_mgmt`** when needed.
-
----
-
-## Requirements
-
-- [Frappe Bench](https://docs.frappe.io/framework/user/en/installation) with **ERPNext** installed on the site.
-- Python 3.10+ (match your bench).
-
----
-
-## Uninstall and removal
-
-```bash
-bench --site yoursite.com uninstall-app haulage_mgmt --dry-run
-bench --site yoursite.com uninstall-app haulage_mgmt --yes --no-backup
-bench remove-app haulage_mgmt --force
-```
-
-`before_uninstall` removes the **Fleet Manager** role and related **Has Role** rows. Standard ERPNext documents (e.g. Sales Invoices) are **not** deleted.
-
----
-
-## Initial setup
-
-1. **Haulage Logistics Settings** — default freight **Item**; trip expense **credit** account (not an Expense root type).
-2. **Fleet Manager** role (created on migrate); assign on **User**. Journal Entry permission for expense posting.
-3. **`bench schedule`** for daily fleet document **ToDo** reminders.
+| Section | Purpose |
+|---------|---------|
+| **Master data** | Trucks, drivers, expense types, **custody types**, customers, settings |
+| **1 · Shipping requests** | Customer orders with pickup/delivery locations |
+| **2 · Trips** | Operational trips (shipments, truck, driver) — no accounting here |
+| **3 · Trip accounting** | List trips → open **accounting sheet** (revenue, expenses, custody) |
+| **Reports** | Driver, trip, truck, and custody reports (driver + date filters) |
 
 ---
 
 ## Suggested workflow
 
-1. Master data: trucks, drivers, haulage expense types (with **Account**), customers, and **Haulage Logistics Settings**.
-2. **Customer** → **Shipping Request** → **Haulage Trip** (shipments, events, expenses, and billing from the trip form).
-3. Reports and **Haulage Logistics** workspace (also under the **Haulage Management** app icon when `add_to_apps_screen` is active).
+1. Set up **Haulage Logistics Settings**, trucks (by name), drivers (by name), expense and custody types (with ledger accounts).
+2. **Shipping Request** → **Haulage Trip** (operational).
+3. **Trip accounting** → select trip → allocate **expenses** and **custody**, create invoices / journal entry.
+4. Use **Reports** for period analysis by driver, trip, truck, or custody lines.
 
 ---
 
@@ -97,12 +54,4 @@ bench remove-app haulage_mgmt --force
 
 ## License
 
-See `license.txt` (MIT unless stated otherwise).
-
----
-
-## Official references
-
-- [Frappe Framework](https://docs.frappe.io/framework)
-- [ERPNext](https://docs.frappe.io/erpnext)
-- [Translations](https://docs.frappe.io/framework/user/en/guides/basics/translations)
+MIT — see `license.txt`.

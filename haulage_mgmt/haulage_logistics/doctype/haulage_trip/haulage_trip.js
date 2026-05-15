@@ -1,27 +1,58 @@
 frappe.provide("haulage_mgmt.trip");
 
-function is_accounting_view(frm) {
-	if (frappe.route_options && frappe.route_options.accounting) {
-		return true;
-	}
-	return frappe.utils.get_url_arg("accounting") === "1";
+const ACCOUNTING_FIELDS = [
+	"section_break_trip_accounting",
+	"trip_revenue_summary",
+	"section_break_expenses",
+	"trip_expenses",
+	"section_break_custodies",
+	"trip_custodies",
+	"section_break_accounting",
+	"trip_journal_entry",
+];
+
+const OPERATIONAL_ONLY = [
+	"naming_series",
+	"trip_status",
+	"column_break_head",
+	"company",
+	"truck",
+	"driver",
+	"departure_date",
+	"section_break_shipments",
+	"shipments",
+	"operational_notes",
+];
+
+function is_accounting_entry(frm) {
+	return Boolean(frm._haulage_accounting_entry);
 }
 
-function set_trip_form_mode(frm) {
-	const accounting = is_accounting_view(frm) && !frm.is_new();
-	const accounting_fields = [
-		"section_break_trip_accounting",
-		"trip_revenue_summary",
-		"section_break_expenses",
-		"trip_expenses",
-		"section_break_accounting",
-		"trip_journal_entry",
-	];
-	for (const fieldname of accounting_fields) {
-		frm.set_df_property(fieldname, "hidden", accounting ? 0 : 1);
+function set_operational_layout(frm) {
+	for (const fieldname of ACCOUNTING_FIELDS) {
+		frm.set_df_property(fieldname, "hidden", 1);
 	}
-	frm.set_df_property("section_break_events", "hidden", 1);
-	frm.set_df_property("trip_events", "hidden", 1);
+	for (const fieldname of OPERATIONAL_ONLY) {
+		frm.set_df_property(fieldname, "hidden", 0);
+	}
+}
+
+function set_accounting_entry_layout(frm) {
+	for (const fieldname of OPERATIONAL_ONLY) {
+		if (fieldname === "section_break_shipments" || fieldname === "shipments") {
+			frm.set_df_property(fieldname, "hidden", 1);
+			continue;
+		}
+		if (["naming_series", "trip_status", "company", "truck", "driver", "departure_date"].includes(fieldname)) {
+			frm.set_df_property(fieldname, "read_only", 1);
+			frm.set_df_property(fieldname, "hidden", 0);
+			continue;
+		}
+		frm.set_df_property(fieldname, "hidden", 1);
+	}
+	for (const fieldname of ACCOUNTING_FIELDS) {
+		frm.set_df_property(fieldname, "hidden", 0);
+	}
 }
 
 frappe.ui.form.on("Haulage Trip", {
@@ -32,64 +63,36 @@ frappe.ui.form.on("Haulage Trip", {
 				frm.set_value("company", c);
 			}
 		}
-		set_trip_form_mode(frm);
+		if (is_accounting_entry(frm)) {
+			set_accounting_entry_layout(frm);
+		} else {
+			set_operational_layout(frm);
+		}
 	},
 	refresh(frm) {
-		set_trip_form_mode(frm);
-		const accounting = is_accounting_view(frm) && !frm.is_new();
-
-		if (accounting) {
+		if (is_accounting_entry(frm)) {
+			set_accounting_entry_layout(frm);
 			haulage_mgmt.trip.render_revenue_summary(frm);
+			haulage_mgmt.trip.add_accounting_buttons(frm);
+			return;
 		}
 
+		set_operational_layout(frm);
 		if (frm.is_new()) {
 			return;
 		}
 
-		if (!accounting) {
-			frm.add_custom_button(__("Print dispatch sheet"), () => {
-				frappe.set_route("print", frm.doctype, frm.doc.name, "Haulage Trip Dispatch");
-			});
-			frm.add_custom_button(__("Print shipments sheet"), () => {
-				frappe.set_route("print", frm.doctype, frm.doc.name, "Haulage Trip Shipments Sheet");
-			});
-			frm.add_custom_button(__("Trip accounting"), () => {
-				frappe.route_options = { accounting: 1 };
-				frappe.set_route("Form", "Haulage Trip", frm.doc.name);
-			});
-			return;
-		}
-
-		frm.dashboard.add_indicator(
-			__("Trip accounting view"),
-			accounting ? "blue" : "grey",
-		);
-
-		frm.add_custom_button(
-			__("Create Sales Invoice for shipment"),
-			() => haulage_mgmt.trip.prompt_sales_invoice(frm),
-			__("Revenue"),
-		);
-		if (!frm.doc.trip_journal_entry && frm.doc.trip_status !== "Cancelled") {
-			frm.add_custom_button(
-				__("Create expense journal (draft)"),
-				() => haulage_mgmt.trip.create_expense_je(frm),
-				__("Accounting"),
-			);
-		}
-		if (frm.doc.trip_journal_entry) {
-			frm.add_custom_button(
-				__("Open expense journal"),
-				() => frappe.set_route("Form", "Journal Entry", frm.doc.trip_journal_entry),
-				__("Accounting"),
-			);
-		}
-		frm.add_custom_button(__("Back to trip list"), () => {
-			frappe.set_route("List", "Haulage Trip");
+		frm.add_custom_button(__("Print dispatch sheet"), () => {
+			frappe.set_route("print", frm.doctype, frm.doc.name, "Haulage Trip Dispatch");
 		});
-		frm.add_custom_button(__("Trip accounting home"), () => {
-			frappe.set_route("trip-accounting");
+		frm.add_custom_button(__("Print shipments sheet"), () => {
+			frappe.set_route("print", frm.doctype, frm.doc.name, "Haulage Trip Shipments Sheet");
 		});
+	},
+	after_save(frm) {
+		if (is_accounting_entry(frm)) {
+			haulage_mgmt.trip.render_revenue_summary(frm);
+		}
 	},
 });
 
@@ -115,6 +118,28 @@ frappe.ui.form.on("Haulage Trip Shipment", {
 		);
 	},
 });
+
+haulage_mgmt.trip.add_accounting_buttons = function (frm) {
+	frm.add_custom_button(
+		__("Create Sales Invoice for shipment"),
+		() => haulage_mgmt.trip.prompt_sales_invoice(frm),
+		__("Revenue"),
+	);
+	if (!frm.doc.trip_journal_entry && frm.doc.trip_status !== "Cancelled") {
+		frm.add_custom_button(
+			__("Create expense journal (draft)"),
+			() => haulage_mgmt.trip.create_expense_je(frm),
+			__("Accounting"),
+		);
+	}
+	if (frm.doc.trip_journal_entry) {
+		frm.add_custom_button(
+			__("Open expense journal"),
+			() => frappe.set_route("Form", "Journal Entry", frm.doc.trip_journal_entry),
+			__("Accounting"),
+		);
+	}
+};
 
 haulage_mgmt.trip.render_revenue_summary = function (frm) {
 	if (!frm.doc.name) {
@@ -149,18 +174,12 @@ haulage_mgmt.trip.render_revenue_summary = function (frm) {
 						<th class="text-right">${__("Agreed Price")}</th>
 					</tr></thead>
 					<tbody>${rows || `<tr><td colspan="5" class="text-muted">${__("No shipments on this trip.")}</td></tr>`}</tbody>
-					<tfoot><tr>
-						<th colspan="4" class="text-right">${__("Total revenue")}</th>
-						<th class="text-right">${fmt(d.total_revenue)}</th>
-					</tr>
-					<tr>
-						<th colspan="4" class="text-right">${__("Total expenses")}</th>
-						<th class="text-right">${fmt(d.total_expenses)}</th>
-					</tr>
-					<tr>
-						<th colspan="4" class="text-right">${__("Net income")}</th>
-						<th class="text-right"><b>${fmt(d.net_income)}</b></th>
-					</tr></tfoot>
+					<tfoot>
+					<tr><th colspan="4" class="text-right">${__("Total revenue")}</th><th class="text-right">${fmt(d.total_revenue)}</th></tr>
+					<tr><th colspan="4" class="text-right">${__("Total expenses")}</th><th class="text-right">${fmt(d.total_expenses)}</th></tr>
+					<tr><th colspan="4" class="text-right">${__("Total custody")}</th><th class="text-right">${fmt(d.total_custody)}</th></tr>
+					<tr><th colspan="4" class="text-right">${__("Net income")}</th><th class="text-right"><b>${fmt(d.net_income)}</b></th></tr>
+					</tfoot>
 				</table>
 			</div>`;
 			$(frm.fields_dict.trip_revenue_summary.wrapper).html(html);

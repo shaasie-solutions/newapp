@@ -2,11 +2,11 @@ app_name = "haulage_mgmt"
 app_title = "Haulage Management"
 app_publisher = "Haulage Mgmt"
 app_description = (
-    "Master data, shipping requests, trips, expenses, ERPNext invoices, and script reports."
+    "Fleet haulage: master data, shipping requests, trips, trip accounting, custody, and ERPNext billing."
 )
 app_email = ""
 app_license = "MIT"
-app_version = "0.1.15"
+app_version = "0.1.18"
 app_icon = "truck"
 app_logo_url = "/assets/haulage_mgmt/images/haulage-desk.svg"
 

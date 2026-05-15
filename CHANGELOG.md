@@ -1,5 +1,46 @@
 # Changelog
 
+## [0.1.18] — 2026-05-15
+
+### Changed
+
+- **Reports**: Unified **net income** = revenue − expenses − **custody** across driver, trip, and truck reports; **Custody** column added where relevant. Shared logic in `report_utils.py`.
+- **Trip accounting** list API reuses the same financial SQL as reports.
+- **Trip accounting entry**: revenue summary refreshes after save.
+- **README** and app description updated for current workspace layout (operations vs accounting vs reports).
+
+[0.1.18]: https://github.com/shaasie-solutions/newapp/releases/tag/v0.1.18
+
+## [0.1.17] — 2026-05-15
+
+### Added
+
+- **Haulage Trip Custody** child table on trips (custody type, amount, date, holder).
+- **Trip accounting entry** page (`trip-accounting-entry`): separate sheet after choosing a trip from **Trip Accounting** list — expenses, custody, and revenue summary (operational trip form no longer shows accounting).
+- **Haulage Custody Report**: filters for custody type, driver, from/to date; one row per custody line on trips.
+
+### Changed
+
+- **Trip Accounting** list shows custody column; net income = revenue − expenses − custody. **Open sheet** opens the dedicated entry page instead of the operational trip form.
+
+[0.1.17]: https://github.com/shaasie-solutions/newapp/releases/tag/v0.1.17
+
+## [0.1.16] — 2026-05-15
+
+### Added
+
+- **Haulage Driver Report**, **Haulage Trip Report**, and **Haulage Truck Report**: each with optional **Driver** filter (all drivers when empty) and **From date** / **To date** period filters. Driver and truck reports aggregate trips; trip report lists one row per trip with revenue, expenses, and net income.
+
+### Removed
+
+- **Haulage Operations Summary** (replaced by the three reports above). `after_migrate` removes the legacy report record on existing sites.
+
+### Changed
+
+- **Haulage Logistics** workspace **Reports** section: three dedicated report shortcuts and link cards.
+
+[0.1.16]: https://github.com/shaasie-solutions/newapp/releases/tag/v0.1.16
+
 ## [0.1.15] — 2026-05-15
 
 ### Added

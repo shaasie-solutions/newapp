@@ -147,10 +147,15 @@ def _migrate_truck_busy_to_reserved():
 
 
 def _purge_legacy_haulage_reports():
-    """Remove script reports superseded by Haulage Operations Summary (keeps desk links valid)."""
+    """Remove replaced script reports so desk links stay valid after upgrades."""
     if not frappe.db.exists("DocType", "Report"):
         return
-    for report in ("Trip Financial Summary", "Driver Performance", "Truck Performance"):
+    for report in (
+        "Trip Financial Summary",
+        "Driver Performance",
+        "Truck Performance",
+        "Haulage Operations Summary",
+    ):
         if not frappe.db.exists("Report", report):
             continue
         try:

@@ -20,7 +20,13 @@ def get_trip_operations_list(status=None):
 @frappe.whitelist()
 def get_all_trips_hub(status=None):
     """Unified All Trips list: status, driver, truck, date, revenue, expenses, custody, net."""
-    return _trip_hub_rows(status, include_financials=True)
+    if not frappe.has_permission("Haulage Trip", "read"):
+        frappe.throw(_("You do not have permission to read trips."), frappe.PermissionError)
+    try:
+        return _trip_hub_rows(status, include_financials=True)
+    except Exception:
+        frappe.log_error(frappe.get_traceback(), "haulage_mgmt: get_all_trips_hub SQL failed")
+        return _trip_hub_rows_python(status)
 
 
 def _trip_hub_rows(status=None, include_financials=False):
@@ -59,6 +65,40 @@ def _trip_hub_rows(status=None, include_financials=False):
         dt = row.departure_date or row.modified
         row["trip_date"] = getdate(dt) if dt else None
     return rows
+
+
+def _trip_hub_rows_python(status=None):
+    """Reliable fallback when SQL metrics query fails (e.g. missing child tables)."""
+    filters = {}
+    if status:
+        filters["trip_status"] = status
+    rows = frappe.get_all(
+        "Haulage Trip",
+        filters=filters,
+        fields=["name", "trip_status", "truck", "driver", "departure_date", "modified"],
+        order_by="modified desc",
+        limit_page_length=500,
+    )
+    out = []
+    for row in rows:
+        fin = get_trip_financial_summary(row.name)
+        dt = row.departure_date or row.modified
+        out.append(
+            {
+                "trip": row.name,
+                "trip_status": row.trip_status,
+                "driver": row.driver,
+                "truck": row.truck,
+                "trip_date": getdate(dt) if dt else None,
+                "trip_modified": row.modified,
+                "revenue": fin.get("total_revenue", 0),
+                "expenses": fin.get("total_expenses", 0),
+                "custody_total": fin.get("total_custody", 0),
+                "net_income": fin.get("net_income", 0),
+            }
+        )
+    normalize_money_rows(out)
+    return out
 
 
 @frappe.whitelist()

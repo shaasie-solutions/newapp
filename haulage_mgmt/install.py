@@ -65,6 +65,7 @@ def after_migrate():
     _migrate_truck_busy_to_reserved()
     _purge_legacy_haulage_reports()
     _purge_legacy_haulage_print_formats()
+    _sync_haulage_pages_from_json()
     _sync_haulage_workspace_from_json()
     _fix_workspace_sidebar()
     if not frappe.db.exists("DocType", "Haulage Trip"):
@@ -145,6 +146,33 @@ def _migrate_truck_busy_to_reserved():
         "UPDATE `tabTruck` SET truck_status = %s WHERE truck_status = %s",
         ("Reserved for Trip", "Busy"),
     )
+
+
+def _sync_haulage_pages_from_json():
+    """Ensure trip-operations and legacy redirect pages exist in the database."""
+    if not frappe.db.exists("DocType", "Page"):
+        return
+    base = Path(frappe.get_app_path("haulage_mgmt")) / "haulage_logistics" / "page"
+    if not base.is_dir():
+        return
+    try:
+        from frappe.modules.import_file import import_file_by_path
+    except ImportError:
+        frappe.log_error("haulage_mgmt: cannot import import_file_by_path", "page sync")
+        return
+    for page_dir in sorted(base.iterdir()):
+        if not page_dir.is_dir():
+            continue
+        json_path = page_dir / f"{page_dir.name}.json"
+        if not json_path.is_file():
+            continue
+        try:
+            import_file_by_path(str(json_path), force=True, ignore_version=True)
+        except Exception:
+            frappe.log_error(
+                frappe.get_traceback(),
+                f"haulage_mgmt: sync page {page_dir.name}",
+            )
 
 
 def _purge_legacy_haulage_print_formats():

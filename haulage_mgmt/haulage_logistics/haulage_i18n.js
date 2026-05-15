@@ -1,3 +1,4 @@
+frappe.provide("haulage_mgmt");
 frappe.provide("haulage_mgmt.i18n");
 
 /** Translate stored English status / enum values for display (DB value unchanged). */

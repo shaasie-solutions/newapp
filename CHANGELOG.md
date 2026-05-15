@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.1.29] — 2026-05-15
+
+### Fixed
+
+- **All Trips** page: fixed JavaScript crash (`flt` undefined on desk pages), load page scripts via `app_include_js`, sync Page docs on migrate, SQL fallback API, visible error messages.
+
+[0.1.29]: https://github.com/shaasie-solutions/newapp/releases/tag/v0.1.29
+
 ## [0.1.28] — 2026-05-15
 
 ### Fixed

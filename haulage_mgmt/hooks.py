@@ -6,7 +6,7 @@ app_description = (
 )
 app_email = ""
 app_license = "MIT"
-app_version = "0.1.28"
+app_version = "0.1.29"
 app_icon = "truck"
 app_logo_url = "/assets/haulage_mgmt/images/haulage-desk.svg"
 
@@ -16,6 +16,10 @@ app_include_js = [
     "haulage_mgmt/haulage_logistics/haulage_i18n.js",
     "haulage_mgmt/haulage_logistics/haulage_trip_hub.js",
     "haulage_mgmt/haulage_logistics/report/report_common.js",
+    # Desk pages (always register routes; avoids missing page bundles on site)
+    "haulage_mgmt/haulage_logistics/page/trip_operations/trip_operations.js",
+    "haulage_mgmt/haulage_logistics/page/trip_accounting/trip_accounting.js",
+    "haulage_mgmt/haulage_logistics/page/trip_accounting_entry/trip_accounting_entry.js",
 ]
 
 add_to_apps_screen = [

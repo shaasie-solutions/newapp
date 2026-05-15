@@ -46,7 +46,7 @@ Net income = Revenue − Expenses − Custody
 
 ```bash
 cd /path/to/frappe-bench
-bench get-app https://github.com/shaasie-solutions/newapp.git --branch v0.1.28
+bench get-app https://github.com/shaasie-solutions/newapp.git --branch v0.1.29
 
 bench --site yoursite.com install-app haulage_mgmt
 bench --site yoursite.com migrate

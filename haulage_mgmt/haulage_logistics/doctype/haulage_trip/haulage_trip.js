@@ -24,7 +24,6 @@ const OPERATIONAL_FIELDS = [
 	"departure_date",
 	"section_break_shipments",
 	"shipments",
-	"operational_notes",
 ];
 
 const ACCOUNTING_HEADER_READONLY = [

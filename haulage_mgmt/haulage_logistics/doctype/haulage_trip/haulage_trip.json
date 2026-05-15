@@ -15,7 +15,6 @@
   "departure_date",
   "section_break_shipments",
   "shipments",
-  "operational_notes",
   "section_break_trip_accounting",
   "trip_revenue_summary",
   "section_break_expenses",
@@ -88,11 +87,6 @@
    "label": "Shipping Requests on Trip",
    "description": "Pickup and delivery on each line are loaded from the linked Shipping Request (edit them on the request).",
    "options": "Haulage Trip Shipment"
-  },
-  {
-   "fieldname": "operational_notes",
-   "fieldtype": "Text",
-   "label": "Operational Notes"
   },
   {
    "fieldname": "section_break_trip_accounting",

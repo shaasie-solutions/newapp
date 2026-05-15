@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.1.21] — 2026-05-15
+
+### Removed
+
+- **Operational Notes** field on **Haulage Trip** (operational form) and from dispatch print format.
+
+[0.1.21]: https://github.com/shaasie-solutions/newapp/releases/tag/v0.1.21
+
 ## [0.1.20] — 2026-05-15
 
 ### Fixed

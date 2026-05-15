@@ -3,7 +3,7 @@
 Custom Frappe app (**`haulage_mgmt`**) for fleet haulage companies: master data, customer shipping requests, trip operations, per-trip financial allocation (revenue, expenses, custody), ERPNext billing, and operational reports.
 
 **Repository:** [shaasie-solutions/newapp](https://github.com/shaasie-solutions/newapp)  
-**Version:** see `haulage_mgmt/__init__.py` and Git tags (e.g. `v0.1.20`).  
+**Version:** see `haulage_mgmt/__init__.py` and Git tags (e.g. `v0.1.21`).  
 **Requires:** [ERPNext](https://erpnext.com/) on the site.
 
 ---
@@ -47,7 +47,7 @@ Net income = Revenue − Expenses − Custody
 
 ```bash
 cd /path/to/frappe-bench
-bench get-app https://github.com/shaasie-solutions/newapp.git --branch v0.1.20
+bench get-app https://github.com/shaasie-solutions/newapp.git --branch v0.1.21
 
 bench --site yoursite.com install-app haulage_mgmt
 bench --site yoursite.com migrate

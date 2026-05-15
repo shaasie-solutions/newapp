@@ -62,7 +62,8 @@ class TripOperationsHub {
 		const status = this.page.fields_dict.trip_status?.get_value();
 		if (this.view === "accounting") {
 			frappe.call({
-				method: "haulage_mgmt.haulage_logistics.page.trip_accounting.trip_accounting.get_trip_accounting_list",
+				method:
+					"haulage_mgmt.haulage_logistics.page.trip_operations.trip_operations.get_trip_accounting_list",
 				args: { status: status || null },
 				freeze: true,
 				callback: (r) => this.render_accounting(r.message || []),
@@ -91,17 +92,7 @@ class TripOperationsHub {
 	}
 
 	status_badge(status) {
-		const colors = {
-			Preparing: "orange",
-			Started: "blue",
-			Paused: "yellow",
-			Completed: "green",
-			Cancelled: "red",
-		};
-		const color = colors[status] || "grey";
-		return `<span class="indicator-pill ${color} filterable ellipsis">${frappe.utils.escape_html(
-			__(status || ""),
-		)}</span>`;
+		return haulage_mgmt.i18n ? haulage_mgmt.i18n.status_badge(status) : __(status || "");
 	}
 
 	render_operations(rows) {

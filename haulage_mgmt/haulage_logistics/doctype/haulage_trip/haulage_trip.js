@@ -356,7 +356,7 @@ haulage_mgmt.trip.render_revenue_summary = function (frm) {
 		return;
 	}
 	frappe.call({
-		method: "haulage_mgmt.haulage_logistics.page.trip_accounting.trip_accounting.get_trip_accounting_detail",
+		method: "haulage_mgmt.haulage_logistics.page.trip_operations.trip_operations.get_trip_accounting_detail",
 		args: { trip_name: frm.doc.name },
 		callback(r) {
 			if (!r.message || !frm.fields_dict.trip_revenue_summary) {

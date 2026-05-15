@@ -3,7 +3,7 @@
 Custom Frappe app (**`haulage_mgmt`**) for fleet haulage companies: master data, customer shipping requests, trip operations, per-trip financial allocation (revenue, expenses, custody), ERPNext billing, and operational reports.
 
 **Repository:** [shaasie-solutions/newapp](https://github.com/shaasie-solutions/newapp)  
-**Version:** see `haulage_mgmt/__init__.py` and Git tags (e.g. `v0.1.25`).  
+**Version:** see `haulage_mgmt/__init__.py` and Git tags (e.g. `v0.1.27`).  
 **Requires:** [ERPNext](https://erpnext.com/) on the site.
 
 ---
@@ -36,8 +36,7 @@ Net income = Revenue − Expenses − Custody
 |--------|----------------|
 | **Master data** | Trucks (name = document ID), drivers, expense types (with GL account), custody types, customers (ERPNext), settings |
 | **Shipping requests** | Customer order: pickup/delivery text, agreed price, status synced when linked to trips |
-| **Trip operations** | Operational **Haulage Trip**: truck, driver, shipment lines, prints — accounting fields hidden |
-| **Trip accounting** | Desk page **Trip Accounting** → list → **Open sheet** → same **Haulage Trip** form in **accounting mode** (revenue HTML + expense/custody grids) |
+| **Trip operations** | **All Trips** hub: operations list + accounting list; trip form with action buttons; two print formats |
 | **ERPNext billing** | Draft **Sales Invoice** per shipment; draft **Journal Entry** for trip expenses (from settings) |
 | **Reports** | Driver / trip / truck aggregates; custody line report |
 
@@ -47,7 +46,7 @@ Net income = Revenue − Expenses − Custody
 
 ```bash
 cd /path/to/frappe-bench
-bench get-app https://github.com/shaasie-solutions/newapp.git --branch v0.1.25
+bench get-app https://github.com/shaasie-solutions/newapp.git --branch v0.1.27
 
 bench --site yoursite.com install-app haulage_mgmt
 bench --site yoursite.com migrate
@@ -178,25 +177,34 @@ Default period: current month. Summary cards show period totals where applicable
 ```text
 newapp/
 ├── haulage_mgmt/
-│   ├── hooks.py                 # app version, migrate hooks, ERPNext dependency
-│   ├── install.py               # migrations, workspace sync, legacy cleanup
-│   ├── boot.py                  # app tile permission
+│   ├── hooks.py
+│   ├── install.py              # migrations, workspace sync, legacy purge
+│   ├── boot.py
 │   ├── haulage_logistics/
-│   │   ├── api.py               # Sales Invoice + Journal Entry whitelisted APIs
-│   │   ├── tasks.py             # daily fleet expiry reminders
-│   │   ├── doctype/             # all DocTypes + haulage_trip.js (dual layout)
+│   │   ├── api.py              # set_trip_status, SI, journal entry
+│   │   ├── trip_status.py      # status transitions (start/pause/arrive/cancel)
+│   │   ├── trip_financials.py  # revenue / expenses / custody (single source)
+│   │   ├── haulage_i18n.js     # shared status labels (desk JS)
+│   │   ├── doctype/            # DocTypes + list views + haulage_trip.js
 │   │   ├── page/
-│   │   │   ├── trip_accounting/       # list + APIs
-│   │   │   └── trip_accounting_entry/ # redirect → Form accounting mode
-│   │   ├── report/              # script reports + report_utils.py + report_common.js
-│   │   ├── workspace/haulage_logistics/
-│   │   ├── print_format/        # trip operations + trip summary
-│   │   ├── trip_financials.py   # shared revenue/expense/custody totals
-│   │   └── dashboard/           # Customer dashboard extension
+│   │   │   ├── trip_operations/    # main hub (operations + accounting lists)
+│   │   │   ├── trip_accounting/    # re-exports API (compat)
+│   │   │   └── trip_accounting_entry/  # redirect only
+│   │   ├── report/             # report_utils.py, report_common.js, 4 reports
+│   │   ├── print_format/       # Haulage Trip Operations | Haulage Trip Summary
+│   │   └── workspace/
 │   └── translations/ar.csv
 ├── README.md
 └── CHANGELOG.md
 ```
+
+### Code organization principles
+
+- **One financial source:** `trip_financials.py` for list, form HTML, and print summary.
+- **One trip hub:** `trip-operations` page (legacy `trip-accounting` URL redirects).
+- **Status via buttons only:** `trip_status.py` + `api.set_trip_status` (no manual select on form).
+- **Two prints per trip:** operations sheet (shipments) and summary (status + money).
+- **after_migrate** removes obsolete reports, print formats, and duplicate desk pages.
 
 ---
 
@@ -208,7 +216,9 @@ newapp/
 | `haulage_mgmt.haulage_logistics.api.create_trip_expense_journal_entry` | Draft JE from `trip_expenses`; sets `trip_journal_entry` |
 | `haulage_mgmt.haulage_logistics.api.set_trip_status` | Trip action: `start`, `pause`, `arrive`, `cancel` |
 | `haulage_mgmt.haulage_logistics.page.trip_operations.trip_operations.get_trip_operations_list` | All trips list for operations desk |
-| `haulage_mgmt.haulage_logistics.page.trip_accounting.trip_accounting.get_trip_accounting_list` | Trip accounting list rows |
+| `haulage_mgmt.haulage_logistics.page.trip_operations.trip_operations.get_trip_accounting_list` | Trip accounting list (hub) |
+| `haulage_mgmt.haulage_logistics.page.trip_operations.trip_operations.get_trip_operations_list` | Operations list (hub) |
+| `haulage_mgmt.haulage_logistics.page.trip_operations.trip_operations.get_trip_accounting_detail` | Trip financial breakdown |
 | `haulage_mgmt.haulage_logistics.page.trip_accounting.trip_accounting.get_trip_accounting_detail` | Revenue lines + totals for accounting form |
 
 ---

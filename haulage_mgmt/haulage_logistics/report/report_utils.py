@@ -85,6 +85,29 @@ def trip_metrics_subquery(where_clause):
     """
 
 
+def money_report_summary(data):
+    """Desk summary cards for revenue / expenses / custody / net income."""
+    from frappe import _
+
+    if not data:
+        return []
+    revenue = sum(flt(row.get("revenue")) for row in data)
+    expenses = sum(flt(row.get("expenses")) for row in data)
+    custody = sum(flt(row.get("custody_total")) for row in data)
+    net = sum(flt(row.get("net_income")) for row in data)
+    return [
+        {"label": _("Total revenue"), "value": revenue, "datatype": "Currency", "indicator": "Blue"},
+        {"label": _("Total expenses"), "value": expenses, "datatype": "Currency", "indicator": "Orange"},
+        {"label": _("Total custody"), "value": custody, "datatype": "Currency", "indicator": "Grey"},
+        {
+            "label": _("Total net income"),
+            "value": net,
+            "datatype": "Currency",
+            "indicator": "Green" if net >= 0 else "Red",
+        },
+    ]
+
+
 def normalize_money_rows(data):
     for row in data:
         row["revenue"] = flt(row.get("revenue"))

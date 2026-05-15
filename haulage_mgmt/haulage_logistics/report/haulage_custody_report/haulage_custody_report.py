@@ -102,4 +102,10 @@ def execute(filters=None):
     )
     for row in data:
         row["amount"] = flt(row.get("amount"))
-    return columns, data
+    total = sum(flt(row.get("amount")) for row in data)
+    report_summary = (
+        [{"label": _("Total custody"), "value": total, "datatype": "Currency", "indicator": "Blue"}]
+        if data
+        else []
+    )
+    return columns, data, None, None, report_summary

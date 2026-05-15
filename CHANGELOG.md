@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.1.19] — 2026-05-15
+
+### Fixed
+
+- **Trip accounting**: list **Open sheet** opens the standard **Haulage Trip** form in accounting mode (reliable after uninstall/reinstall). Legacy `trip-accounting-entry` page redirects to the same form.
+- Revenue summary HTML on the accounting form (closing tag fix).
+
+### Changed
+
+- **Workspace**: section **2 · Trip operations** (تشغيل رحلات الشحن) instead of **Trips**.
+- **Reports**: default period to current month on open; net income highlighted (green/red); summary cards for totals on driver, trip, truck, and custody reports.
+
+[0.1.19]: https://github.com/shaasie-solutions/newapp/releases/tag/v0.1.19
+
 ## [0.1.18] — 2026-05-15
 
 ### Changed

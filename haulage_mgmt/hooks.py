@@ -6,11 +6,13 @@ app_description = (
 )
 app_email = ""
 app_license = "MIT"
-app_version = "0.1.18"
+app_version = "0.1.19"
 app_icon = "truck"
 app_logo_url = "/assets/haulage_mgmt/images/haulage-desk.svg"
 
 required_apps = ["erpnext"]
+
+app_include_js = "haulage_mgmt/haulage_logistics/report/report_common.js"
 
 add_to_apps_screen = [
     {

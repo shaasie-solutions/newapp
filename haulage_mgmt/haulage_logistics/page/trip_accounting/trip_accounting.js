@@ -47,8 +47,8 @@ class TripAccountingPage {
 	}
 
 	open_entry(trip) {
-		frappe.route_options = { trip };
-		frappe.set_route("trip-accounting-entry");
+		frappe.route_options = { haulage_accounting_entry: 1 };
+		frappe.set_route("Form", "Haulage Trip", trip);
 	}
 
 	render(rows) {

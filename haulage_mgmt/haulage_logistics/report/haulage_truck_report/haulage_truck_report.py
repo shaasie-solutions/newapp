@@ -4,6 +4,7 @@ from frappe import _
 from haulage_mgmt.haulage_logistics.report.report_utils import (
     build_trip_where,
     driver_date_filters,
+    money_report_summary,
     normalize_money_rows,
     trip_metrics_subquery,
 )
@@ -50,7 +51,7 @@ def execute(filters=None):
         as_dict=True,
     )
     normalize_money_rows(data)
-    return columns, data
+    return columns, data, None, None, money_report_summary(data)
 
 
 def get_filters():

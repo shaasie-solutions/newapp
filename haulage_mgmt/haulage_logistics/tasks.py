@@ -13,7 +13,7 @@ def send_fleet_expiry_reminders():
             ["license_end_date", "<=", horizon],
             ["insurance_end_date", "<=", horizon],
         ],
-        fields=["name", "license_plate", "license_end_date", "insurance_end_date"],
+        fields=["name", "truck_name", "license_plate", "license_end_date", "insurance_end_date"],
         limit=200,
     )
     drivers = frappe.get_all(
@@ -30,11 +30,11 @@ def send_fleet_expiry_reminders():
     for t in trucks:
         if t.license_end_date and getdate(t.license_end_date) <= getdate(horizon):
             lines.append(
-                _("Truck {0}: license expires {1}").format(t.license_plate or t.name, t.license_end_date)
+                _("Truck {0}: license expires {1}").format(t.truck_name or t.name, t.license_end_date)
             )
         if t.insurance_end_date and getdate(t.insurance_end_date) <= getdate(horizon):
             lines.append(
-                _("Truck {0}: insurance expires {1}").format(t.license_plate or t.name, t.insurance_end_date)
+                _("Truck {0}: insurance expires {1}").format(t.truck_name or t.name, t.insurance_end_date)
             )
     for d in drivers:
         if d.license_expiry and getdate(d.license_expiry) <= getdate(horizon):

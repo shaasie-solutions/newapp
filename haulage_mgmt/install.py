@@ -10,8 +10,9 @@ def _first_company_name():
 
 
 def before_migrate():
-    """Backfill SR locations from Shipping Route; clear legacy tables; create Fleet Manager role."""
+    """Backfill SR locations; truck/driver name columns; clear legacy tables; Fleet Manager role."""
     _migrate_shipping_route_to_sr_locations()
+    _prepare_truck_name_column()
     if frappe.db.exists("DocType", "Shipment Preparation"):
         try:
             frappe.db.sql("DELETE FROM `tabShipment Preparation`")
@@ -60,6 +61,7 @@ def _migrate_shipping_route_to_sr_locations():
 
 def after_migrate():
     """Purge replaced desk artifacts; sync workspace from app JSON; backfill Company on legacy trips."""
+    _migrate_truck_and_driver_document_names()
     _migrate_truck_busy_to_reserved()
     _purge_legacy_haulage_reports()
     _sync_haulage_workspace_from_json()
@@ -77,6 +79,61 @@ def after_migrate():
         """,
         (company,),
     )
+
+
+def _prepare_truck_name_column():
+    """Add truck_name before schema sync; seed from license plate or legacy document name."""
+    if not frappe.db.exists("DocType", "Truck"):
+        return
+    if not frappe.db.has_column("Truck", "truck_name"):
+        try:
+            frappe.db.add_column("Truck", "truck_name", "Data")
+        except Exception:
+            frappe.log_error(frappe.get_traceback(), "haulage_mgmt: add_column truck_name")
+            return
+    try:
+        frappe.db.sql(
+            """
+            UPDATE `tabTruck`
+            SET truck_name = COALESCE(
+                NULLIF(TRIM(truck_name), ''),
+                NULLIF(TRIM(license_plate), ''),
+                name
+            )
+            WHERE IFNULL(TRIM(truck_name), '') = ''
+            """
+        )
+    except Exception:
+        frappe.log_error(frappe.get_traceback(), "haulage_mgmt: backfill truck_name")
+
+
+def _migrate_truck_and_driver_document_names():
+    """Rename legacy series IDs (TRUCK-.#### / DRV-.####) to human-readable names."""
+    if frappe.db.exists("DocType", "Truck") and frappe.db.has_column("Truck", "truck_name"):
+        _rename_fleet_docs_to_name_field("Truck", "truck_name")
+    if frappe.db.exists("DocType", "Driver") and frappe.db.has_column("Driver", "full_name"):
+        _rename_fleet_docs_to_name_field("Driver", "full_name")
+
+
+def _rename_fleet_docs_to_name_field(doctype, name_field):
+    rows = frappe.get_all(doctype, fields=["name", name_field], order_by="creation asc")
+    for row in rows:
+        target = (row.get(name_field) or "").strip()
+        if not target or row.name == target:
+            continue
+        if frappe.db.exists(doctype, target):
+            frappe.log_error(
+                title=f"haulage_mgmt: skip rename {doctype}",
+                message=f"Cannot rename {row.name} to {target}: name already exists.",
+            )
+            continue
+        try:
+            frappe.rename_doc(doctype, row.name, target, force=True, merge=False)
+        except Exception:
+            frappe.log_error(
+                frappe.get_traceback(),
+                f"haulage_mgmt: rename {doctype} {row.name} -> {target}",
+            )
 
 
 def _migrate_truck_busy_to_reserved():

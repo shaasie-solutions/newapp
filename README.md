@@ -2,7 +2,7 @@
 
 Git repository for the **`haulage_mgmt`** custom app: fleet haulage, shipping requests, trips, expenses, and ERPNext billing (Sales Invoice / Journal Entry).
 
-**Version:** see `haulage_mgmt/__init__.py` and Git tags (e.g. `v0.1.13`).
+**Version:** see `haulage_mgmt/__init__.py` and Git tags (e.g. `v0.1.15`).
 
 ---
 
@@ -12,7 +12,7 @@ Git repository for the **`haulage_mgmt`** custom app: fleet haulage, shipping re
 
 ```bash
 cd /path/to/frappe-bench
-bench get-app https://github.com/shaasie-solutions/newapp.git --branch v0.1.13
+bench get-app https://github.com/shaasie-solutions/newapp.git --branch v0.1.15
 
 bench --site yoursite.com install-app haulage_mgmt
 bench --site yoursite.com migrate

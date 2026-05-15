@@ -13,15 +13,15 @@
   "truck",
   "driver",
   "departure_date",
-  "section_break_accounting",
-  "trip_journal_entry",
   "section_break_shipments",
   "shipments",
-  "section_break_events",
-  "trip_events",
+  "operational_notes",
+  "section_break_trip_accounting",
+  "trip_revenue_summary",
   "section_break_expenses",
   "trip_expenses",
-  "operational_notes"
+  "section_break_accounting",
+  "trip_journal_entry"
  ],
  "fields": [
   {
@@ -76,18 +76,6 @@
    "label": "Departure Date & Time"
   },
   {
-   "fieldname": "section_break_accounting",
-   "fieldtype": "Section Break",
-   "label": "Accounting"
-  },
-  {
-   "fieldname": "trip_journal_entry",
-   "fieldtype": "Link",
-   "label": "Expense Journal Entry",
-   "options": "Journal Entry",
-   "read_only": 1
-  },
-  {
    "fieldname": "section_break_shipments",
    "fieldtype": "Section Break",
    "label": "Shipments"
@@ -100,15 +88,20 @@
    "options": "Haulage Trip Shipment"
   },
   {
-   "fieldname": "section_break_events",
-   "fieldtype": "Section Break",
-   "label": "Trip execution (start / pause / arrival / return)"
+   "fieldname": "operational_notes",
+   "fieldtype": "Text",
+   "label": "Operational Notes"
   },
   {
-   "fieldname": "trip_events",
-   "fieldtype": "Table",
-   "label": "Trip Events",
-   "options": "Haulage Trip Event"
+   "fieldname": "section_break_trip_accounting",
+   "fieldtype": "Section Break",
+   "label": "Trip revenue (shipments)"
+  },
+  {
+   "fieldname": "trip_revenue_summary",
+   "fieldtype": "HTML",
+   "label": "Revenue summary",
+   "read_only": 1
   },
   {
    "fieldname": "section_break_expenses",
@@ -122,14 +115,34 @@
    "options": "Haulage Trip Expense"
   },
   {
-   "fieldname": "operational_notes",
-   "fieldtype": "Text",
-   "label": "Operational Notes"
+   "fieldname": "section_break_accounting",
+   "fieldtype": "Section Break",
+   "label": "Accounting"
+  },
+  {
+   "fieldname": "trip_journal_entry",
+   "fieldtype": "Link",
+   "label": "Expense Journal Entry",
+   "options": "Journal Entry",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_break_events",
+   "fieldtype": "Section Break",
+   "label": "Trip execution (start / pause / arrival / return)",
+   "hidden": 1
+  },
+  {
+   "fieldname": "trip_events",
+   "fieldtype": "Table",
+   "label": "Trip Events",
+   "hidden": 1,
+   "options": "Haulage Trip Event"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-05-13 00:00:00.000000",
+ "modified": "2026-05-15 00:00:00.000000",
  "modified_by": "Administrator",
  "module": "Haulage Logistics",
  "name": "Haulage Trip",

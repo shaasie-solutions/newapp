@@ -1,5 +1,31 @@
 # Changelog
 
+## [0.1.15] — 2026-05-15
+
+### Added
+
+- **Haulage Custody Type** master data (custody name + ledger account), like expense types.
+- **Trip Accounting** desk page: lists trips with revenue, expenses, and **net income**; opens the trip in accounting mode.
+- Trip form **accounting mode**: revenue table per shipment, expense allocation, journal entry actions (via workspace or **Trip accounting** button on the operational form).
+
+### Changed
+
+- **Haulage Trip** operational form: removed **Trip execution** and **Expense allocation** sections (data kept; execution table hidden). Accounting sections shown only in accounting mode.
+- **Haulage Logistics** workspace: **3 · Trip accounting** before **Reports**; **Haulage Custody Types** in master data.
+
+[0.1.15]: https://github.com/shaasie-solutions/newapp/releases/tag/v0.1.15
+
+## [0.1.14] — 2026-05-15
+
+### Changed
+
+- **Truck**: Removed naming series; document name is **Truck Name** (required, unique). **License plate** is optional. **Photo** field (`Attach Image`) with list/form image display.
+- **Driver**: Removed naming series; document name is **Full Name** (required, unique). **Photo** field added. **Driver status** no longer required (defaults to Active).
+- **Links** (trips, reports, reminders): Truck and driver are selected and displayed by name, not `TRUCK-.####` / `DRV-.####` IDs.
+- **Migrate**: `before_migrate` backfills `truck_name` from license plate; `after_migrate` renames legacy series document IDs to the name field when possible.
+
+[0.1.14]: https://github.com/shaasie-solutions/newapp/releases/tag/v0.1.14
+
 ## [0.1.13] — 2026-05-13
 
 ### Removed

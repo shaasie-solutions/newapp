@@ -5,7 +5,7 @@ with open("requirements.txt") as f:
 
 setup(
     name="haulage_mgmt",
-    version="0.1.19",
+    version="0.1.20",
     description="Haulage / fleet logistics for ERPNext",
     author="Haulage Mgmt",
     author_email="",

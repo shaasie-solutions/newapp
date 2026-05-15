@@ -1,5 +1,8 @@
 frappe.provide("haulage_mgmt.trip");
 
+const ACCOUNTING_ROUTE_FLAG = "haulage_accounting_entry";
+const ACCOUNTING_RELOAD_KEY = "haulage_trip_accounting_reload";
+
 const ACCOUNTING_FIELDS = [
 	"section_break_trip_accounting",
 	"trip_revenue_summary",
@@ -11,7 +14,7 @@ const ACCOUNTING_FIELDS = [
 	"trip_journal_entry",
 ];
 
-const OPERATIONAL_ONLY = [
+const OPERATIONAL_FIELDS = [
 	"naming_series",
 	"trip_status",
 	"column_break_head",
@@ -24,44 +27,110 @@ const OPERATIONAL_ONLY = [
 	"operational_notes",
 ];
 
+const ACCOUNTING_HEADER_READONLY = [
+	"naming_series",
+	"trip_status",
+	"company",
+	"truck",
+	"driver",
+	"departure_date",
+];
+
+function clear_form_custom_buttons(frm) {
+	if (typeof frm.clear_custom_buttons === "function") {
+		frm.clear_custom_buttons();
+		return;
+	}
+	if (frm.page && typeof frm.page.clear_custom_actions === "function") {
+		frm.page.clear_custom_actions();
+	}
+}
+
+function enter_accounting_mode(frm) {
+	if (!frm.doc.name) {
+		return;
+	}
+	frm._haulage_accounting_entry = true;
+}
+
+function mark_accounting_reload(frm) {
+	try {
+		sessionStorage.setItem(ACCOUNTING_RELOAD_KEY, frm.doc.name);
+	} catch (e) {
+		/* private browsing */
+	}
+}
+
+function consume_accounting_reload(frm) {
+	try {
+		const pending = sessionStorage.getItem(ACCOUNTING_RELOAD_KEY);
+		if (pending && pending === frm.doc.name) {
+			frm._haulage_accounting_entry = true;
+		}
+		sessionStorage.removeItem(ACCOUNTING_RELOAD_KEY);
+	} catch (e) {
+		/* ignore */
+	}
+}
+
+function sync_accounting_mode_from_route(frm) {
+	if (frm.is_new()) {
+		frm._haulage_accounting_entry = false;
+		return;
+	}
+	if (frappe.route_options && frappe.route_options[ACCOUNTING_ROUTE_FLAG]) {
+		enter_accounting_mode(frm);
+		return;
+	}
+	if (!frm._haulage_accounting_entry) {
+		consume_accounting_reload(frm);
+	}
+}
+
 function is_accounting_entry(frm) {
-	return Boolean(frm._haulage_accounting_entry);
+	return Boolean(frm._haulage_accounting_entry) && !frm.is_new();
 }
 
 function set_operational_layout(frm) {
 	for (const fieldname of ACCOUNTING_FIELDS) {
 		frm.set_df_property(fieldname, "hidden", 1);
 	}
-	for (const fieldname of OPERATIONAL_ONLY) {
+	for (const fieldname of OPERATIONAL_FIELDS) {
 		frm.set_df_property(fieldname, "hidden", 0);
 		frm.set_df_property(fieldname, "read_only", 0);
 	}
 }
 
 function set_accounting_entry_layout(frm) {
-	for (const fieldname of OPERATIONAL_ONLY) {
+	for (const fieldname of OPERATIONAL_FIELDS) {
 		if (fieldname === "section_break_shipments" || fieldname === "shipments") {
 			frm.set_df_property(fieldname, "hidden", 1);
 			continue;
 		}
-		if (
-			["naming_series", "trip_status", "company", "truck", "driver", "departure_date"].includes(
-				fieldname,
-			)
-		) {
-			frm.set_df_property(fieldname, "read_only", 1);
+		if (ACCOUNTING_HEADER_READONLY.includes(fieldname)) {
 			frm.set_df_property(fieldname, "hidden", 0);
+			frm.set_df_property(fieldname, "read_only", 1);
 			continue;
 		}
 		frm.set_df_property(fieldname, "hidden", 1);
 	}
 	for (const fieldname of ACCOUNTING_FIELDS) {
 		frm.set_df_property(fieldname, "hidden", 0);
+		frm.set_df_property(fieldname, "read_only", fieldname === "trip_journal_entry" ? 1 : 0);
 	}
+}
+
+function refresh_accounting_grids(frm) {
+	["trip_expenses", "trip_custodies", "trip_revenue_summary"].forEach((fieldname) => {
+		if (frm.fields_dict[fieldname]) {
+			frm.refresh_field(fieldname);
+		}
+	});
 }
 
 function setup_accounting_entry(frm) {
 	set_accounting_entry_layout(frm);
+	refresh_accounting_grids(frm);
 	frm.dashboard.set_headline_alert(
 		__("Trip accounting: allocate expenses and custody, review revenue from shipments."),
 		"blue",
@@ -70,17 +139,23 @@ function setup_accounting_entry(frm) {
 	haulage_mgmt.trip.add_accounting_buttons(frm);
 	if (!frm.is_new()) {
 		frm.add_custom_button(__("Back to trip accounting list"), () => {
+			frm._haulage_accounting_entry = false;
 			frappe.set_route("trip-accounting");
 		});
 	}
 	frm.page.set_indicator(__("Accounting"), "blue");
 }
 
+function open_trip_accounting_form(trip_name) {
+	frappe.route_options = { [ACCOUNTING_ROUTE_FLAG]: 1 };
+	frappe.set_route("Form", "Haulage Trip", trip_name);
+}
+
+haulage_mgmt.trip.open_accounting = open_trip_accounting_form;
+
 frappe.ui.form.on("Haulage Trip", {
 	onload(frm) {
-		if (frappe.route_options && frappe.route_options.haulage_accounting_entry) {
-			frm._haulage_accounting_entry = true;
-		}
+		sync_accounting_mode_from_route(frm);
 		if (frm.is_new() && !frm.doc.company) {
 			const c = frappe.defaults.get_user_default("company");
 			if (c) {
@@ -88,20 +163,29 @@ frappe.ui.form.on("Haulage Trip", {
 			}
 		}
 	},
+	onload_post_render(frm) {
+		sync_accounting_mode_from_route(frm);
+		if (is_accounting_entry(frm)) {
+			setup_accounting_entry(frm);
+		} else {
+			set_operational_layout(frm);
+		}
+	},
 	refresh(frm) {
+		sync_accounting_mode_from_route(frm);
 		if (is_accounting_entry(frm)) {
 			setup_accounting_entry(frm);
 			return;
 		}
 
+		frm._haulage_accounting_entry = false;
 		set_operational_layout(frm);
 		if (frm.is_new()) {
 			return;
 		}
 
 		frm.add_custom_button(__("Trip accounting"), () => {
-			frappe.route_options = { haulage_accounting_entry: 1 };
-			frappe.set_route("Form", "Haulage Trip", frm.doc.name);
+			open_trip_accounting_form(frm.doc.name);
 		});
 
 		frm.add_custom_button(__("Print dispatch sheet"), () => {
@@ -113,7 +197,9 @@ frappe.ui.form.on("Haulage Trip", {
 	},
 	after_save(frm) {
 		if (is_accounting_entry(frm)) {
-			haulage_mgmt.trip.render_revenue_summary(frm);
+			enter_accounting_mode(frm);
+			mark_accounting_reload(frm);
+			setup_accounting_entry(frm);
 		}
 	},
 });
@@ -142,7 +228,7 @@ frappe.ui.form.on("Haulage Trip Shipment", {
 });
 
 haulage_mgmt.trip.add_accounting_buttons = function (frm) {
-	frm.clear_custom_buttons();
+	clear_form_custom_buttons(frm);
 	frm.add_custom_button(
 		__("Create Sales Invoice for shipment"),
 		() => haulage_mgmt.trip.prompt_sales_invoice(frm),
@@ -176,6 +262,7 @@ haulage_mgmt.trip.render_revenue_summary = function (frm) {
 				return;
 			}
 			const d = r.message;
+			frm._haulage_accounting_detail = d;
 			const fmt = (v) => frappe.format(v, { fieldtype: "Currency" });
 			let rows = "";
 			for (const line of d.revenue_lines || []) {
@@ -187,6 +274,7 @@ haulage_mgmt.trip.render_revenue_summary = function (frm) {
 					<td class="text-right">${fmt(line.agreed_price)}</td>
 				</tr>`;
 			}
+			const net_class = flt(d.net_income) < 0 ? "text-danger" : "text-success";
 			const html = `<div class="trip-revenue-summary">
 				<p class="text-muted small">${__(
 					"Revenue is taken from agreed prices on shipping requests linked to this trip."
@@ -204,7 +292,7 @@ haulage_mgmt.trip.render_revenue_summary = function (frm) {
 					<tr><th colspan="4" class="text-right">${__("Total revenue")}</th><th class="text-right">${fmt(d.total_revenue)}</th></tr>
 					<tr><th colspan="4" class="text-right">${__("Total expenses")}</th><th class="text-right">${fmt(d.total_expenses)}</th></tr>
 					<tr><th colspan="4" class="text-right">${__("Total custody")}</th><th class="text-right">${fmt(d.total_custody)}</th></tr>
-					<tr><th colspan="4" class="text-right">${__("Net income")}</th><th class="text-right"><b>${fmt(d.net_income)}</b></th></tr>
+					<tr><th colspan="4" class="text-right">${__("Net income")}</th><th class="text-right ${net_class}"><b>${fmt(d.net_income)}</b></th></tr>
 					</tfoot>
 				</table>
 			</div>`;
@@ -221,15 +309,21 @@ haulage_mgmt.trip.create_expense_je = function (frm) {
 		freeze_message: __("Creating journal entry..."),
 		callback(r) {
 			if (!r.exc && r.message && r.message.name) {
-				frm.reload_doc();
-				frappe.set_route("Form", "Journal Entry", r.message.name);
+				enter_accounting_mode(frm);
+				frm.reload_doc().then(() => {
+					frappe.set_route("Form", "Journal Entry", r.message.name);
+				});
 			}
 		},
 	});
 };
 
 haulage_mgmt.trip.prompt_sales_invoice = function (frm) {
-	const requests = (frm.doc.shipments || []).map((r) => r.shipping_request).filter(Boolean);
+	const from_doc = (frm.doc.shipments || []).map((r) => r.shipping_request).filter(Boolean);
+	const from_api = (frm._haulage_accounting_detail && frm._haulage_accounting_detail.revenue_lines || []).map(
+		(l) => l.shipping_request,
+	);
+	const requests = [...new Set([...from_doc, ...from_api])];
 	if (!requests.length) {
 		frappe.msgprint(__("No shipments linked to this trip."));
 		return;

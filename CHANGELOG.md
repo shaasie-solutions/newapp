@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.1.20] — 2026-05-15
+
+### Fixed
+
+- **Trip accounting** sheet: accounting fields hidden by default in DocType; reliable show/hide of expense and custody grids; mode survives save and reload; revenue summary HTML fix; invoice dialog uses API shipment list when grids are hidden.
+
+### Changed
+
+- **README**: full application concept, architecture, workflows, and structure (EN + AR overview).
+
+[0.1.20]: https://github.com/shaasie-solutions/newapp/releases/tag/v0.1.20
+
 ## [0.1.19] — 2026-05-15
 
 ### Fixed

@@ -97,44 +97,52 @@
   {
    "fieldname": "section_break_trip_accounting",
    "fieldtype": "Section Break",
+   "hidden": 1,
    "label": "Trip revenue (shipments)"
   },
   {
    "fieldname": "trip_revenue_summary",
    "fieldtype": "HTML",
+   "hidden": 1,
    "label": "Revenue summary",
    "read_only": 1
   },
   {
    "fieldname": "section_break_expenses",
    "fieldtype": "Section Break",
+   "hidden": 1,
    "label": "Expense allocation (per trip)"
   },
   {
    "fieldname": "trip_expenses",
    "fieldtype": "Table",
+   "hidden": 1,
    "label": "Expense Allocation",
    "options": "Haulage Trip Expense"
   },
   {
    "fieldname": "section_break_custodies",
    "fieldtype": "Section Break",
+   "hidden": 1,
    "label": "Custody allocation (per trip)"
   },
   {
    "fieldname": "trip_custodies",
    "fieldtype": "Table",
+   "hidden": 1,
    "label": "Custody Allocation",
    "options": "Haulage Trip Custody"
   },
   {
    "fieldname": "section_break_accounting",
    "fieldtype": "Section Break",
+   "hidden": 1,
    "label": "Accounting"
   },
   {
    "fieldname": "trip_journal_entry",
    "fieldtype": "Link",
+   "hidden": 1,
    "label": "Expense Journal Entry",
    "options": "Journal Entry",
    "read_only": 1

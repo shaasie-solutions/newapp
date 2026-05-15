@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.1.24] — 2026-05-15
+
+### Changed
+
+- Removed workspace **section 3 · Trip accounting**; operations and accounting merged under **section 2** via **All Trips** page (Operations list / Trip accounting toolbar).
+- Legacy `trip-accounting` route redirects to the unified hub.
+
+[0.1.24]: https://github.com/shaasie-solutions/newapp/releases/tag/v0.1.24
+
 ## [0.1.23] — 2026-05-15
 
 ### Added

@@ -6,7 +6,7 @@ app_description = (
 )
 app_email = ""
 app_license = "MIT"
-app_version = "0.1.23"
+app_version = "0.1.24"
 app_icon = "truck"
 app_logo_url = "/assets/haulage_mgmt/images/haulage-desk.svg"
 

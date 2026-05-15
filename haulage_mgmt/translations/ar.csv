@@ -304,3 +304,7 @@
 "Unknown trip action: {0}","إجراء رحلة غير معروف: {0}",""
 "Cannot perform «{0}» while trip status is {1}.","لا يمكن تنفيذ «{0}» والحالة الحالية {1}.",""
 "Trip is completed but the last logged event is not Arrival. Use the Trip arrival action to close the trip.","الرحلة مكتملة لكن آخر حدث مسجّل ليس «وصول». استخدم زر وصول الرحلة لإغلاقها.",""
+"Operations list","قائمة التشغيل",""
+"Open a trip to run it (start, pause, arrival, cancel) or switch to Trip accounting for revenue and expenses.","افتح الرحلة لتشغيلها (بدء، إيقاف، وصول، إلغاء) أو انتقل إلى حساب الرحلات للإيرادات والمصروفات.",""
+"Open the accounting sheet to allocate expenses and custody and review shipment revenue.","افتح بيان الحساب لتخصيص المصروفات والعهد ومراجعة إيرادات الشحنات.",""
+"Back to trip list","العودة لقائمة الرحلات",""

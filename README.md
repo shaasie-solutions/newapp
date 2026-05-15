@@ -3,7 +3,7 @@
 Custom Frappe app (**`haulage_mgmt`**) for fleet haulage companies: master data, customer shipping requests, trip operations, per-trip financial allocation (revenue, expenses, custody), ERPNext billing, and operational reports.
 
 **Repository:** [shaasie-solutions/newapp](https://github.com/shaasie-solutions/newapp)  
-**Version:** see `haulage_mgmt/__init__.py` and Git tags (e.g. `v0.1.23`).  
+**Version:** see `haulage_mgmt/__init__.py` and Git tags (e.g. `v0.1.24`).  
 **Requires:** [ERPNext](https://erpnext.com/) on the site.
 
 ---
@@ -47,7 +47,7 @@ Net income = Revenue − Expenses − Custody
 
 ```bash
 cd /path/to/frappe-bench
-bench get-app https://github.com/shaasie-solutions/newapp.git --branch v0.1.23
+bench get-app https://github.com/shaasie-solutions/newapp.git --branch v0.1.24
 
 bench --site yoursite.com install-app haulage_mgmt
 bench --site yoursite.com migrate
@@ -85,8 +85,7 @@ Trip statuses, request statuses, truck/driver statuses, list views, reports, and
 |---|----------------|---------|----------|
 | — | Master data | البيانات الأساسية | Truck, Driver, Haulage Expense Type, Haulage Custody Type, Customer, Haulage Logistics Settings |
 | 1 | Shipping requests | طلبات الشحن | **Shipping Request** |
-| 2 | Trip operations | تشغيل رحلات الشحن | **All Trips** list, **New Haulage Trip**, action buttons (start / pause / arrival / cancel) |
-| 3 | Trip accounting | حساب الرحلات | Page **trip-accounting** → accounting sheet per trip |
+| 2 | Trip operations | تشغيل رحلات الشحن | **All Trips** hub (operations list + trip accounting), **New Haulage Trip**, action buttons on each trip |
 | — | Reports | التقارير | Driver, Trip, Truck, Custody script reports |
 
 ---
@@ -147,9 +146,9 @@ Shipping Request ──► Customer (ERPNext)
 3. Use **Trip actions** on the trip form: **Start trip**, **Pause trip**, **Trip arrival**, **Cancel trip** (or open from **All Trips** list).
 4. Print **Dispatch** / **Shipments** sheets when needed.
 
-### C. Trip accounting
+### C. Trip accounting (same section 2)
 
-1. Open **Trip Accounting** (workspace section 3).
+1. Open **All Trips** → toolbar **Trip accounting** (or legacy route `trip-accounting` redirects here).
 2. Filter by status if needed → click trip or **Open sheet**.
 3. Accounting form shows:
    - Read-only header (trip, truck, driver, date)

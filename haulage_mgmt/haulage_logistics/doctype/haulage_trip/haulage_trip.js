@@ -149,9 +149,10 @@ function setup_accounting_entry(frm) {
 	haulage_mgmt.trip.render_revenue_summary(frm);
 	haulage_mgmt.trip.add_accounting_buttons(frm);
 	if (!frm.is_new()) {
-		frm.add_custom_button(__("Back to trip accounting list"), () => {
+		frm.add_custom_button(__("Back to trip list"), () => {
 			frm._haulage_accounting_entry = false;
-			frappe.set_route("trip-accounting");
+			frappe.route_options = { view: "accounting" };
+			frappe.set_route("trip-operations");
 		});
 	}
 }

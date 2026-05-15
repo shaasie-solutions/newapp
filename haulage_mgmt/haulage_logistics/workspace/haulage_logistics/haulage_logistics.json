@@ -1,7 +1,7 @@
 {
  "app": "haulage_mgmt",
  "charts": [],
- "content": "[{\"id\":\"w0\",\"type\":\"header\",\"data\":{\"text\":\"Master data\",\"col\":12}},{\"id\":\"w0a\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Trucks\",\"col\":3}},{\"id\":\"w0b\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Drivers\",\"col\":3}},{\"id\":\"w0d\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Haulage Expense Types\",\"col\":3}},{\"id\":\"w0g\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Haulage Custody Types\",\"col\":3}},{\"id\":\"w0e\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Customers\",\"col\":3}},{\"id\":\"w0f\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Haulage Logistics Settings\",\"col\":3}},{\"id\":\"w1\",\"type\":\"header\",\"data\":{\"text\":\"1 \\u00b7 Shipping requests\",\"col\":12}},{\"id\":\"w1a\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Shipping Requests\",\"col\":3}},{\"id\":\"w1b\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"New Shipping Request\",\"col\":3}},{\"id\":\"w2\",\"type\":\"header\",\"data\":{\"text\":\"2 \\u00b7 Trip operations\",\"col\":12}},{\"id\":\"w2b\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"New Haulage Trip\",\"col\":3}},{\"id\":\"w2c\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"All Trips\",\"col\":3}},{\"id\":\"w4\",\"type\":\"header\",\"data\":{\"text\":\"Reports\",\"col\":12}},{\"id\":\"w4a\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Haulage Driver Report\",\"col\":3}},{\"id\":\"w4b\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Haulage Trip Report\",\"col\":3}},{\"id\":\"w4c\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Haulage Truck Report\",\"col\":3}},{\"id\":\"w4d\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Haulage Custody Report\",\"col\":3}}]",
+ "content": "[{\"id\":\"w0\",\"type\":\"header\",\"data\":{\"text\":\"Master data\",\"col\":12}},{\"id\":\"w0a\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Trucks\",\"col\":3}},{\"id\":\"w0b\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Drivers\",\"col\":3}},{\"id\":\"w0d\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Haulage Expense Types\",\"col\":3}},{\"id\":\"w0g\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Haulage Custody Types\",\"col\":3}},{\"id\":\"w0e\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Customers\",\"col\":3}},{\"id\":\"w0f\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Haulage Logistics Settings\",\"col\":3}},{\"id\":\"w1\",\"type\":\"header\",\"data\":{\"text\":\"1 \\u00b7 Shipping requests\",\"col\":12}},{\"id\":\"w1a\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Shipping Requests\",\"col\":3}},{\"id\":\"w1b\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"New Shipping Request\",\"col\":3}},{\"id\":\"w2\",\"type\":\"header\",\"data\":{\"text\":\"2 \\u00b7 Trip operations\",\"col\":12}},{\"id\":\"w2a\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"New Haulage Trip\",\"col\":4}},{\"id\":\"w2b\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"All Trips\",\"col\":4}},{\"id\":\"w4\",\"type\":\"header\",\"data\":{\"text\":\"Reports\",\"col\":12}},{\"id\":\"w4a\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Haulage Driver Report\",\"col\":3}},{\"id\":\"w4b\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Haulage Trip Report\",\"col\":3}},{\"id\":\"w4c\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Haulage Truck Report\",\"col\":3}},{\"id\":\"w4d\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Haulage Custody Report\",\"col\":3}}]",
  "creation": "2026-05-13 15:00:00",
  "custom_blocks": [],
  "docstatus": 0,
@@ -98,25 +98,6 @@
    "link_count": 0,
    "link_to": "Shipping Request",
    "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Trip operations",
-   "link_count": 1,
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Card Break"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "All Trips",
-   "link_count": 0,
-   "link_to": "trip-operations",
-   "link_type": "Page",
    "onboard": 0,
    "type": "Link"
   },

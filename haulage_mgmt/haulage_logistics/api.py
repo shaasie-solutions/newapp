@@ -4,6 +4,23 @@ import frappe
 from frappe import _
 from frappe.utils import flt
 
+from haulage_mgmt.haulage_logistics.trip_status import apply_trip_status_action
+
+
+@frappe.whitelist()
+def set_trip_status(trip_name, action):
+    """Set trip status via action button: start | pause | arrive | cancel."""
+    trip_name = (trip_name or "").strip()
+    if not trip_name or not frappe.db.exists("Haulage Trip", trip_name):
+        frappe.throw(_("Trip {0} does not exist.").format(trip_name))
+    if not frappe.has_permission("Haulage Trip", "write", doc=trip_name):
+        frappe.throw(_("You do not have permission to edit this trip."), frappe.PermissionError)
+
+    trip = frappe.get_doc("Haulage Trip", trip_name)
+    apply_trip_status_action(trip, action)
+    trip.save()
+    return {"name": trip.name, "trip_status": trip.trip_status}
+
 
 @frappe.whitelist()
 def create_sales_invoice_from_shipment(trip_name, shipping_request_name):

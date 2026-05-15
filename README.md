@@ -3,7 +3,7 @@
 Custom Frappe app (**`haulage_mgmt`**) for fleet haulage companies: master data, customer shipping requests, trip operations, per-trip financial allocation (revenue, expenses, custody), ERPNext billing, and operational reports.
 
 **Repository:** [shaasie-solutions/newapp](https://github.com/shaasie-solutions/newapp)  
-**Version:** see `haulage_mgmt/__init__.py` and Git tags (e.g. `v0.1.22`).  
+**Version:** see `haulage_mgmt/__init__.py` and Git tags (e.g. `v0.1.23`).  
 **Requires:** [ERPNext](https://erpnext.com/) on the site.
 
 ---
@@ -47,7 +47,7 @@ Net income = Revenue − Expenses − Custody
 
 ```bash
 cd /path/to/frappe-bench
-bench get-app https://github.com/shaasie-solutions/newapp.git --branch v0.1.22
+bench get-app https://github.com/shaasie-solutions/newapp.git --branch v0.1.23
 
 bench --site yoursite.com install-app haulage_mgmt
 bench --site yoursite.com migrate
@@ -85,7 +85,7 @@ Trip statuses, request statuses, truck/driver statuses, list views, reports, and
 |---|----------------|---------|----------|
 | — | Master data | البيانات الأساسية | Truck, Driver, Haulage Expense Type, Haulage Custody Type, Customer, Haulage Logistics Settings |
 | 1 | Shipping requests | طلبات الشحن | **Shipping Request** |
-| 2 | Trip operations | تشغيل رحلات الشحن | **Haulage Trip** (operational form only) |
+| 2 | Trip operations | تشغيل رحلات الشحن | **All Trips** list, **New Haulage Trip**, action buttons (start / pause / arrival / cancel) |
 | 3 | Trip accounting | حساب الرحلات | Page **trip-accounting** → accounting sheet per trip |
 | — | Reports | التقارير | Driver, Trip, Truck, Custody script reports |
 
@@ -144,7 +144,8 @@ Shipping Request ──► Customer (ERPNext)
 
 1. Create **Shipping Request** (customer, locations, agreed price).
 2. Create **Haulage Trip** (truck, driver, add shipment lines = shipping requests).
-3. Update **trip status** as the run progresses; print **Dispatch** / **Shipments** sheets.
+3. Use **Trip actions** on the trip form: **Start trip**, **Pause trip**, **Trip arrival**, **Cancel trip** (or open from **All Trips** list).
+4. Print **Dispatch** / **Shipments** sheets when needed.
 
 ### C. Trip accounting
 
@@ -205,6 +206,8 @@ newapp/
 |--------|---------|
 | `haulage_mgmt.haulage_logistics.api.create_sales_invoice_from_shipment` | Draft SI for one shipment on a trip |
 | `haulage_mgmt.haulage_logistics.api.create_trip_expense_journal_entry` | Draft JE from `trip_expenses`; sets `trip_journal_entry` |
+| `haulage_mgmt.haulage_logistics.api.set_trip_status` | Trip action: `start`, `pause`, `arrive`, `cancel` |
+| `haulage_mgmt.haulage_logistics.page.trip_operations.trip_operations.get_trip_operations_list` | All trips list for operations desk |
 | `haulage_mgmt.haulage_logistics.page.trip_accounting.trip_accounting.get_trip_accounting_list` | Trip accounting list rows |
 | `haulage_mgmt.haulage_logistics.page.trip_accounting.trip_accounting.get_trip_accounting_detail` | Revenue lines + totals for accounting form |
 

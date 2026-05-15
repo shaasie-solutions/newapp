@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.1.23] — 2026-05-15
+
+### Added
+
+- **All Trips** page in workspace section 2 (list with status badges; next to **New Haulage Trip**).
+- **Trip action buttons** on each trip: Start, Pause, Arrival, Cancel (replaces manual status dropdown).
+
+### Changed
+
+- `trip_status` is system-managed (hidden field); shipping requests and fleet status follow button actions.
+
+[0.1.23]: https://github.com/shaasie-solutions/newapp/releases/tag/v0.1.23
+
 ## [0.1.22] — 2026-05-15
 
 ### Fixed

@@ -16,7 +16,6 @@ const ACCOUNTING_FIELDS = [
 
 const OPERATIONAL_FIELDS = [
 	"naming_series",
-	"trip_status",
 	"column_break_head",
 	"company",
 	"truck",
@@ -28,12 +27,19 @@ const OPERATIONAL_FIELDS = [
 
 const ACCOUNTING_HEADER_READONLY = [
 	"naming_series",
-	"trip_status",
 	"company",
 	"truck",
 	"driver",
 	"departure_date",
 ];
+
+const TRIP_STATUS_COLORS = {
+	Preparing: "orange",
+	Started: "blue",
+	Paused: "yellow",
+	Completed: "green",
+	Cancelled: "red",
+};
 
 function clear_form_custom_buttons(frm) {
 	if (typeof frm.clear_custom_buttons === "function") {
@@ -98,6 +104,9 @@ function set_operational_layout(frm) {
 		frm.set_df_property(fieldname, "hidden", 0);
 		frm.set_df_property(fieldname, "read_only", 0);
 	}
+	if (frm.fields_dict.trip_status) {
+		frm.set_df_property("trip_status", "hidden", 1);
+	}
 }
 
 function set_accounting_entry_layout(frm) {
@@ -116,6 +125,9 @@ function set_accounting_entry_layout(frm) {
 	for (const fieldname of ACCOUNTING_FIELDS) {
 		frm.set_df_property(fieldname, "hidden", 0);
 		frm.set_df_property(fieldname, "read_only", fieldname === "trip_journal_entry" ? 1 : 0);
+	}
+	if (frm.fields_dict.trip_status) {
+		frm.set_df_property("trip_status", "hidden", 1);
 	}
 }
 
@@ -142,7 +154,6 @@ function setup_accounting_entry(frm) {
 			frappe.set_route("trip-accounting");
 		});
 	}
-	frm.page.set_indicator(__("Accounting"), "blue");
 }
 
 function open_trip_accounting_form(trip_name) {
@@ -151,6 +162,78 @@ function open_trip_accounting_form(trip_name) {
 }
 
 haulage_mgmt.trip.open_accounting = open_trip_accounting_form;
+
+haulage_mgmt.trip.set_status_indicator = function (frm) {
+	if (!frm.doc.trip_status) {
+		return;
+	}
+	const color = TRIP_STATUS_COLORS[frm.doc.trip_status] || "grey";
+	frm.page.set_indicator(__(frm.doc.trip_status), color);
+};
+
+haulage_mgmt.trip.run_status_action = function (frm, action, confirm_message) {
+	const run = () => {
+		frappe.call({
+			method: "haulage_mgmt.haulage_logistics.api.set_trip_status",
+			args: { trip_name: frm.doc.name, action },
+			freeze: true,
+			callback(r) {
+				if (!r.exc) {
+					frm.reload_doc();
+				}
+			},
+		});
+	};
+	if (confirm_message) {
+		frappe.confirm(confirm_message, run);
+		return;
+	}
+	run();
+};
+
+haulage_mgmt.trip.add_status_action_buttons = function (frm) {
+	const status = frm.doc.trip_status || "Preparing";
+	const group = __("Trip actions");
+
+	if (status === "Preparing" || status === "Paused") {
+		frm.add_custom_button(
+			__("Start trip"),
+			() => haulage_mgmt.trip.run_status_action(frm, "start"),
+			group,
+		);
+	}
+	if (status === "Started") {
+		frm.add_custom_button(
+			__("Pause trip"),
+			() => haulage_mgmt.trip.run_status_action(frm, "pause"),
+			group,
+		);
+	}
+	if (status === "Started" || status === "Paused") {
+		frm.add_custom_button(
+			__("Trip arrival"),
+			() =>
+				haulage_mgmt.trip.run_status_action(
+					frm,
+					"arrive",
+					__("Mark this trip as completed (arrival)?"),
+				),
+			group,
+		);
+	}
+	if (status !== "Completed" && status !== "Cancelled") {
+		frm.add_custom_button(
+			__("Cancel trip"),
+			() =>
+				haulage_mgmt.trip.run_status_action(
+					frm,
+					"cancel",
+					__("Cancel this trip? Linked shipping requests will return to Goods Prepared."),
+				),
+			group,
+		);
+	}
+};
 
 frappe.ui.form.on("Haulage Trip", {
 	onload(frm) {
@@ -169,22 +252,24 @@ frappe.ui.form.on("Haulage Trip", {
 		} else {
 			set_operational_layout(frm);
 		}
-		if (frm.fields_dict.trip_status) {
-			frm.refresh_field("trip_status");
-		}
 	},
 	refresh(frm) {
 		sync_accounting_mode_from_route(frm);
 		if (is_accounting_entry(frm)) {
 			setup_accounting_entry(frm);
+			haulage_mgmt.trip.set_status_indicator(frm);
 			return;
 		}
 
 		frm._haulage_accounting_entry = false;
 		set_operational_layout(frm);
 		if (frm.is_new()) {
+			frm.page.set_indicator(__("Preparing"), "orange");
 			return;
 		}
+
+		haulage_mgmt.trip.set_status_indicator(frm);
+		haulage_mgmt.trip.add_status_action_buttons(frm);
 
 		frm.add_custom_button(__("Trip accounting"), () => {
 			open_trip_accounting_form(frm.doc.name);

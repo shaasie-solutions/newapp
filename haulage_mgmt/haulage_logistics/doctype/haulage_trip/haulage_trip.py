@@ -108,10 +108,10 @@ class HaulageTrip(Document):
         if self.trip_status != "Completed":
             return
         events = [e.event_type for e in (self.get("trip_events") or []) if e.event_type]
-        if events and events[-1] != "Return":
+        if events and events[-1] not in ("Arrival", "Return"):
             frappe.msgprint(
                 _(
-                    "Trip is set to Completed but the last event is not Return. Prefer logging Return to close the trip."
+                    "Trip is completed but the last logged event is not Arrival. Use the Trip arrival action to close the trip."
                 ),
                 indicator="orange",
                 title=_("Trip event reminder"),

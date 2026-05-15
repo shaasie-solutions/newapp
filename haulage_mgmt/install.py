@@ -64,6 +64,7 @@ def after_migrate():
     _migrate_truck_and_driver_document_names()
     _migrate_truck_busy_to_reserved()
     _purge_legacy_haulage_reports()
+    _purge_legacy_haulage_print_formats()
     _sync_haulage_workspace_from_json()
     _fix_workspace_sidebar()
     if not frappe.db.exists("DocType", "Haulage Trip"):
@@ -144,6 +145,22 @@ def _migrate_truck_busy_to_reserved():
         "UPDATE `tabTruck` SET truck_status = %s WHERE truck_status = %s",
         ("Reserved for Trip", "Busy"),
     )
+
+
+def _purge_legacy_haulage_print_formats():
+    """Remove replaced trip print formats (merged into Operations + Summary)."""
+    if not frappe.db.exists("DocType", "Print Format"):
+        return
+    for pf in (
+        "Haulage Trip Dispatch",
+        "Haulage Trip Shipments Sheet",
+    ):
+        if not frappe.db.exists("Print Format", pf):
+            continue
+        try:
+            frappe.delete_doc("Print Format", pf, force=True, ignore_permissions=True)
+        except Exception:
+            frappe.log_error(frappe.get_traceback(), f"haulage_mgmt: purge legacy print format {pf}")
 
 
 def _purge_legacy_haulage_reports():

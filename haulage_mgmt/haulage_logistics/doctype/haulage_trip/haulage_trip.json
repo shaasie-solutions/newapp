@@ -164,7 +164,7 @@
  "module": "Haulage Logistics",
  "name": "Haulage Trip",
  "naming_rule": "By \"Naming Series\" field",
- "default_print_format": "Haulage Trip Dispatch",
+ "default_print_format": "Haulage Trip Operations",
  "owner": "Administrator",
  "permissions": [
   {

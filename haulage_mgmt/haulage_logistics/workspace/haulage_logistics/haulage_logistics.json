@@ -105,7 +105,7 @@
    "hidden": 0,
    "is_query_report": 0,
    "label": "Trip operations",
-   "link_count": 2,
+   "link_count": 1,
    "link_type": "DocType",
    "onboard": 0,
    "type": "Card Break"
@@ -117,16 +117,6 @@
    "link_count": 0,
    "link_to": "trip-operations",
    "link_type": "Page",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Haulage Trip",
-   "link_count": 0,
-   "link_to": "Haulage Trip",
-   "link_type": "DocType",
    "onboard": 0,
    "type": "Link"
   },

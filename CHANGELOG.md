@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.1.25] — 2026-05-15
+
+### Changed
+
+- **Print formats**: two trip prints only — **Haulage Trip Operations** (shipments) and **Haulage Trip Summary** (status, revenue, expenses, custody, net). Removed duplicate Dispatch / Shipments Sheet formats.
+- **Deduplication**: shared `trip_financials.py`; workspace trip card links only **All Trips** (removed parallel Haulage Trip list link).
+
+[0.1.25]: https://github.com/shaasie-solutions/newapp/releases/tag/v0.1.25
+
 ## [0.1.24] — 2026-05-15
 
 ### Changed

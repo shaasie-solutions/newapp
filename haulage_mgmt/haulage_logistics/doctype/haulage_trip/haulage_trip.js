@@ -148,6 +148,7 @@ function setup_accounting_entry(frm) {
 	);
 	haulage_mgmt.trip.render_revenue_summary(frm);
 	haulage_mgmt.trip.add_accounting_buttons(frm);
+	haulage_mgmt.trip.add_print_buttons(frm);
 	if (!frm.is_new()) {
 		frm.add_custom_button(__("Back to trip list"), () => {
 			frm._haulage_accounting_entry = false;
@@ -190,6 +191,23 @@ haulage_mgmt.trip.run_status_action = function (frm, action, confirm_message) {
 		return;
 	}
 	run();
+};
+
+haulage_mgmt.trip.add_print_buttons = function (frm) {
+	if (frm.is_new()) {
+		return;
+	}
+	const group = __("Print");
+	frm.add_custom_button(
+		__("Trip operations sheet"),
+		() => frappe.set_route("print", frm.doctype, frm.doc.name, "Haulage Trip Operations"),
+		group,
+	);
+	frm.add_custom_button(
+		__("Trip summary"),
+		() => frappe.set_route("print", frm.doctype, frm.doc.name, "Haulage Trip Summary"),
+		group,
+	);
 };
 
 haulage_mgmt.trip.add_status_action_buttons = function (frm) {
@@ -276,12 +294,7 @@ frappe.ui.form.on("Haulage Trip", {
 			open_trip_accounting_form(frm.doc.name);
 		});
 
-		frm.add_custom_button(__("Print dispatch sheet"), () => {
-			frappe.set_route("print", frm.doctype, frm.doc.name, "Haulage Trip Dispatch");
-		});
-		frm.add_custom_button(__("Print shipments sheet"), () => {
-			frappe.set_route("print", frm.doctype, frm.doc.name, "Haulage Trip Shipments Sheet");
-		});
+		haulage_mgmt.trip.add_print_buttons(frm);
 	},
 	after_save(frm) {
 		if (is_accounting_entry(frm)) {

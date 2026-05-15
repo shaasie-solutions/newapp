@@ -3,7 +3,7 @@
 Custom Frappe app (**`haulage_mgmt`**) for fleet haulage companies: master data, customer shipping requests, trip operations, per-trip financial allocation (revenue, expenses, custody), ERPNext billing, and operational reports.
 
 **Repository:** [shaasie-solutions/newapp](https://github.com/shaasie-solutions/newapp)  
-**Version:** see `haulage_mgmt/__init__.py` and Git tags (e.g. `v0.1.24`).  
+**Version:** see `haulage_mgmt/__init__.py` and Git tags (e.g. `v0.1.25`).  
 **Requires:** [ERPNext](https://erpnext.com/) on the site.
 
 ---
@@ -47,7 +47,7 @@ Net income = Revenue − Expenses − Custody
 
 ```bash
 cd /path/to/frappe-bench
-bench get-app https://github.com/shaasie-solutions/newapp.git --branch v0.1.24
+bench get-app https://github.com/shaasie-solutions/newapp.git --branch v0.1.25
 
 bench --site yoursite.com install-app haulage_mgmt
 bench --site yoursite.com migrate
@@ -144,7 +144,7 @@ Shipping Request ──► Customer (ERPNext)
 1. Create **Shipping Request** (customer, locations, agreed price).
 2. Create **Haulage Trip** (truck, driver, add shipment lines = shipping requests).
 3. Use **Trip actions** on the trip form: **Start trip**, **Pause trip**, **Trip arrival**, **Cancel trip** (or open from **All Trips** list).
-4. Print **Dispatch** / **Shipments** sheets when needed.
+4. Print **Trip operations sheet** (shipments) or **Trip summary** (status, revenue, expenses, custody, net income).
 
 ### C. Trip accounting (same section 2)
 
@@ -190,7 +190,8 @@ newapp/
 │   │   │   └── trip_accounting_entry/ # redirect → Form accounting mode
 │   │   ├── report/              # script reports + report_utils.py + report_common.js
 │   │   ├── workspace/haulage_logistics/
-│   │   ├── print_format/        # dispatch + shipments sheets
+│   │   ├── print_format/        # trip operations + trip summary
+│   │   ├── trip_financials.py   # shared revenue/expense/custody totals
 │   │   └── dashboard/           # Customer dashboard extension
 │   └── translations/ar.csv
 ├── README.md
